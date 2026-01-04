@@ -1,0 +1,34 @@
+{% load static %}
+
+<div class="video-container">
+
+  <div class="video-grid">
+
+    {% for v in video %}
+    <div class="video-card">
+
+      <div class="video-thumb">
+        <iframe
+          src="https://www.youtube.com/embed/{{ v.youtube_id }}"
+          title="{{ v.judul }}"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <h5 class="video-title">
+        {{ v.judul }}
+      </h5>
+
+      <span class="video-date">
+        <i class="bi bi-calendar-event"></i>
+        {{ v.tanggal_upload|date:"d M Y" }}
+      </span>
+
+    </div>
+    {% endfor %}
+
+  </div>
+
+</div>

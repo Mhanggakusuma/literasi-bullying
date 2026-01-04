@@ -1,0 +1,45 @@
+<div class="container kuis-container">
+
+  <div class="row g-4">
+
+    {% for k in kuis %}
+    <div class="col-lg-4 col-md-6">
+
+      <div class="kuis-card h-100">
+
+        <!-- ICON -->
+        <div class="kuis-icon">
+          <i class="bi bi-question-circle"></i>
+        </div>
+
+        <!-- TITLE -->
+        <h5 class="kuis-title">
+          {{ k.judul }}
+        </h5>
+
+        <!-- DESKRIPSI -->
+        <p class="kuis-deskripsi">
+          {{ k.deskripsi|truncatewords:18 }}
+        </p>
+
+        <!-- BADGE -->
+        <div class="kuis-badge mt-auto">
+          <span class="badge badge-soal">
+            {{ k.pertanyaan.count }} Soal
+          </span>
+        </div>
+
+        <!-- BUTTON -->
+        <a href="{% url 'konten_kuis_detail' k.id %}"
+           class="kuis-btn mt-3">
+          Mulai Kuis
+        </a>
+
+      </div>
+
+    </div>
+    {% endfor %}
+
+  </div>
+
+</div>

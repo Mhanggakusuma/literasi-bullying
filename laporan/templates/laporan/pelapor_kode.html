@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Laporan Berhasil Dikirim{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+  <div class="container text-center">
+
+    <h1 class="hero-title">Laporan Berhasil Dikirim</h1>
+    <p class="hero-subtitle">
+      Selalu menjaga kerahasiaan agar merasa aman dan terlindungi
+    </p>
+
+    <!-- SUCCESS CARD -->
+    <div class="success-card mx-auto mt-5">
+
+      <img src="{% static 'img/check.png' %}" class="success-icon" alt="Berhasil">
+
+      <p class="success-text">
+        Gunakan dan simpan Kode Berikut Untuk mengecek Status Laporan Anda
+      </p>
+
+      <div class="code-box">
+        {{ kode }}
+      </div>
+
+      <a href="{% url 'laporan_home' %}" class="btn btn-outline-primary w-100 mt-3">
+        Kembali
+      </a>
+
+    </div>
+
+  </div>
+</section>
+{% endblock %}

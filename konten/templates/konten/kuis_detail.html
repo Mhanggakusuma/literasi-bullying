@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load konten_extras %}
+
+{% block title %}{{ kuis.judul }}{% endblock %}
+
+{% block content %}
+<div class="container kuis-detail-page">
+
+  <!-- ================= HEADER ================= -->
+  <div class="kuis-detail-header">
+    <div class="text-start mb-2">
+      <span class="kuis-badge-header">📝 Modul Kuis</span>
+
+      <h1 class="kuis-judul mt-2">{{ kuis.judul }}</h1>
+
+      <p class="kuis-deskripsi-header mb-2">{{ kuis.deskripsi }}</p>
+
+      <div class="mt-2">
+        <a href="{% url 'konten_index' %}?tab=kuis" class="btn btn-outline-secondary btn-sm">← Kembali</a>
+      </div>
+
+      {% if skor != None %}
+      <div class="alert alert-success mt-3">
+        <strong>Hasil Kuis:</strong> {{ skor }}/{{ total }}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ================= SOAL ================= -->
+  <div class="kuis-soal-wrapper">
+
+    <form method="post">
+      {% csrf_token %}
+
+      {% for p in kuis.pertanyaan.all %}
+      <div class="kuis-question-card">
+
+        <div class="kuis-question-title">
+          {{ forloop.counter }}. {{ p.teks }}
+        </div>
+
+        <div class="kuis-options">
+          {% for o in p.opsi.all %}
+          <label class="kuis-option">
+            <input
+              type="radio"
+              name="pertanyaan_{{ p.id }}"
+              value="{{ o.id }}"
+              {% if hasil %}
+                disabled
+                {% if hasil|get_item:p.id == o.id %}checked{% endif %}
+              {% endif %}
+              required
+            >
+            <span>
+              {{ o.teks_opsi }}
+
+              {% if hasil %}
+                {% if o.is_benar %}
+                  <span class="text-success fw-bold ms-2">✔</span>
+                {% elif hasil|get_item:p.id == o.id %}
+                  <span class="text-danger fw-bold ms-2">✖</span>
+                {% endif %}
+              {% endif %}
+            </span>
+          </label>
+          {% endfor %}
+        </div>
+
+      </div>
+      {% endfor %}
+
+      {% if not hasil %}
+      <button type="submit" class="btn btn-success kuis-submit">
+        ✅ Submit Kuis
+      </button>
+      {% endif %}
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Beranda Siswa{% endblock %}
+
+{% block content %}
+
+<section class="hero-welcome">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <!-- ICON KIRI -->
+      <div class="col-lg-4 text-center mb-4 mb-lg-0">
+        <img
+          src="{% static 'img/icons.png' %}"
+          alt="Ilustrasi Literasi Digital"
+          class="hero-welcome-icon"
+        >
+      </div>
+
+      <!-- TEKS KANAN -->
+      <div class="col-lg-8">
+        <h2 class="hero-welcome-title">
+          SELAMAT DATANG <span>{{ user.first_name|upper }}</span>
+        </h2>
+
+        <p class="hero-welcome-desc">
+          Belajar literasi digital, pahami anti-bullying, dan laporkan kejadian
+          dengan aman, bertanggung jawab, dan beretika dalam kehidupan sehari-hari
+          di lingkungan sekolah maupun di luar sekolah.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% include "dashboard/home_sections.html" %}
+
+{% endblock %}

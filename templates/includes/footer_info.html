@@ -1,0 +1,86 @@
+{% load static %}
+<section class="footer-info-section">
+  <div class="container">
+    <div class="row align-items-center g-4">
+
+      <!-- ================= KIRI : PROFIL + MAP ================= -->
+      <div class="col-lg-4">
+        <div class="footer-info-brand">
+          <img src="{% static 'img/logo.png' %}">
+          <div>
+            <h6>SMP Negeri 1 Madang Suku III</h6>
+            <small>Kab. Ogan Komering Ulu Timur</small>
+          </div>
+        </div>
+
+        <h6 class="mt-3">Lokasi Sekolah</h6>
+        <iframe
+        class="footer-info-map"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d994.8803438169729!2d104.35002166954831!3d-4.11726399974102!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e39063eb0184fa9%3A0x668c9549791e8d1a!2sNiluh%20widiya%20putri%20kusuma%20wardani!5e0!3m2!1sen!2sid!4v1766762272156!5m2!1sen!2sid"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+
+        <div class="footer-info-social">
+          <a href="https://www.instagram.com/official_smpn1_madsuga/?igshid=ZGUzMzM3NWJiOQ%3D%3D" target="_blank" rel="noopener"><i class="bi bi-instagram"></i></a>
+        </div>
+      </div>
+
+      <!-- ================= TENGAH : LINK (CENTER) ================= -->
+      <div class="col-lg-4 footer-info-center">
+        <h6>Link Informasi</h6>
+        <ul class="footer-info-links">
+          <li><a href="https://www.smpn1ms3.com/" target="_blank" rel="noopener">Profil Sekolah</a></li>
+          {% if request.user.is_authenticated %}
+            {# After login: Beranda -> role-specific dashboard #}
+            {% if request.user.profile.role == 'siswa' %}
+              <li><a href="{% url 'dashboard_siswa' %}">Beranda</a></li>
+            {% elif request.user.profile.role == 'gurubk' %}
+              <li><a href="{% url 'dashboard_guru' %}">Beranda</a></li>
+            {% else %}
+              <li><a href="{% url 'dashboard_admin' %}">Beranda</a></li>
+            {% endif %}
+
+            <li><a href="{% url 'tentang_bullying_login' %}">Tentang Bullying</a></li>
+            <li><a href="{% url 'konten_index' %}">Literasi</a></li>
+            {# Laporan: siswa -> laporan_home, guru -> bk_dashboard, default -> laporan_home #}
+            {% if request.user.profile.role == 'gurubk' %}
+              <li><a href="{% url 'bk_dashboard' %}">Laporan</a></li>
+            {% else %}
+              <li><a href="{% url 'laporan_home' %}">Laporan</a></li>
+            {% endif %}
+
+          {% else %}
+            {# Before login: public home and tentang, other links go to login #}
+            <li><a href="{% url 'dashboard_home' %}">Beranda</a></li>
+            <li><a href="{% url 'tentang_bullying_public' %}">Tentang Bullying</a></li>
+            <li><a class="footer-link-locked" href="{% url 'login' %}?next={% url 'konten_index' %}">Literasi</a></li>
+            <li><a class="footer-link-locked" href="{% url 'login' %}?next={% url 'laporan_home' %}">Laporan</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <!-- ================= KANAN : LOGO + JAM ================= -->
+      <div class="col-lg-4">
+        <div class="footer-info-clock-wrapper">
+
+          <div class="footer-info-clock-header">
+            <img src="{% static 'img/logo.png' %}">
+            <div>
+              <strong>SMP Negeri 1 Madang Suku III</strong>
+              <small>Kab. Ogan Komering Ulu Timur</small>
+            </div>
+          </div>
+
+          <div class="footer-info-clock">
+            <p>Waktu Saat Ini OKU TIMUR (WIB)</p>
+            <h2 id="clock">00:00:00</h2>
+            <span id="date">---</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

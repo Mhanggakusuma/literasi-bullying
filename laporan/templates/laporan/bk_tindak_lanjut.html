@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Tindak Lanjut Kasus{% endblock %}
+
+{% block content %}
+<section class="bk-tindak-lanjut">
+  <div class="bk-tl-hero">
+    <div class="container text-center">
+
+      <h1 class="bk-tl-title">Tindak Lanjut Kasus</h1>
+      <p class="bk-tl-subtitle">
+        Selalu menjaga kerahasiaan agar merasa aman dan terlindungi
+      </p>
+
+      <div class="bk-tl-card mx-auto mt-5">
+        <img src="{% static 'img/ribbon.png' %}" class="bk-tl-icon" alt="Icon">
+
+        <div class="bk-tl-info text-start">
+
+          <p><strong>Kode :</strong> {{ laporan.kode_laporan }}</p>
+          <p><strong>Pelapor :</strong> {{ laporan.nama_pelapor }}</p>
+          <p><strong>NIS :</strong> {{ laporan.nis_pelapor }}</p>
+          <p><strong>Kelas :</strong> {{ laporan.kelas_pelapor }}</p>
+          <p><strong>Terlapor :</strong> {{ laporan.terlapor }}</p>
+
+          <p>
+            <strong>Jenis Bullying :</strong>
+            {{ laporan.get_jenis_bullying_display }}
+          </p>
+
+          <hr>
+
+          <p>
+            <strong>Isi Laporan :</strong><br>
+            {{ laporan.isi_laporan }}
+          </p>
+
+          {% if laporan.bukti %}
+            <a href="{{ laporan.bukti.url }}" target="_blank"
+               class="bk-tl-btn-success w-100 my-3">
+              Lihat Bukti Pelapor
+            </a>
+          {% endif %}
+
+          <hr>
+
+          <!-- ================= FORM TINDAK LANJUT ================= -->
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- CATATAN BK -->
+            <label class="bk-tl-label">Catatan BK :</label>
+            <textarea name="catatan_bk"
+                      class="bk-tl-textarea"
+                      placeholder="Tuliskan hasil penanganan atau tindak lanjut..."
+            >{{ laporan.catatan_bk }}</textarea>
+
+            <!-- BUKTI TINDAK LANJUT -->
+            <label class="bk-tl-label mt-3">Bukti Tindak Lanjut (Opsional)</label>
+            <input type="file" name="bukti_tindak_lanjut" class="bk-tl-file">
+
+            {% if form and form.bukti_tindak_lanjut.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.bukti_tindak_lanjut.errors.0 }}
+              </div>
+            {% endif %}
+
+            <small class="text-muted">
+              File bebas (PDF, gambar, audio, video). Maksimal 10 MB.
+            </small>
+
+            <button type="submit" class="bk-tl-btn-primary w-100 mt-3">
+              Simpan
+            </button>
+          </form>
+
+          <a href="{% url 'bk_dashboard' %}"
+             class="btn btn-outline-secondary w-100 mt-3">
+            ← Kembali
+          </a>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}

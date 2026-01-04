@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Dashboard Guru BK{% endblock %}
+
+{% block content %}
+<div class="bk-dashboard-page">
+
+  <div class="bk-dashboard">
+
+    <!-- ================= HEADER ================= -->
+    <header class="dashboard-header">
+      <div>
+        <span class="bk-badge">Akses Khusus Guru BK</span>
+        <h1>Dashboard Guru BK</h1>
+        <p>Kelola dan pantau laporan bullying dari siswa</p>
+      </div>
+
+      <a href="{% url 'bk_download_laporan' %}" class="btn-download">
+        <i class="bi bi-download"></i> Download Laporan
+      </a>
+
+    </header>
+
+    <!-- ================= SUMMARY ================= -->
+    <section class="dashboard-cards">
+
+      <div class="summary-card">
+        <div class="summary-header">
+          <span class="icon bg-blue"><i class="bi bi-file-earmark-text"></i></span>
+          <p>Total Laporan</p>
+        </div>
+        <h2>{{ total_laporan }}</h2>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-header">
+          <span class="icon bg-orange"><i class="bi bi-patch-plus"></i></span>
+          <p>Laporan Baru</p>
+        </div>
+        <h2>{{ laporan_baru }}</h2>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-header">
+          <span class="icon bg-purple"><i class="bi bi-hourglass-split"></i></span>
+          <p>Sedang Diproses</p>
+        </div>
+        <h2>{{ sedang_diproses }}</h2>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-header">
+          <span class="icon bg-green"><i class="bi bi-check-circle"></i></span>
+          <p>Selesai Ditangani</p>
+        </div>
+        <h2>{{ selesai }}</h2>
+      </div>
+
+    </section>
+
+    <!-- ================= MAIN ================= -->
+    <main class="dashboard-content">
+
+      <!-- LEFT -->
+      <section class="dashboard-left">
+
+        <form method="get" class="search-box">
+          <input type="hidden" name="status" value="{{ status_filter }}">
+          <input type="text" name="q" placeholder="Cari laporan..." value="{{ query|default:'' }}">
+          <button type="submit"><i class="bi bi-search"></i></button>
+        </form>
+
+        <div class="filter-bar">
+          <a href="?status=all" class="filter-btn {% if status_filter == 'all' %}active{% endif %}">Semua</a>
+          <a href="?status=baru" class="filter-btn {% if status_filter == 'baru' %}active{% endif %}">Baru</a>
+          <a href="?status=selesai" class="filter-btn {% if status_filter == 'selesai' %}active{% endif %}">Selesai</a>
+        </div>
+
+        <div class="laporan-card">
+          <h3>Daftar Laporan</h3>
+
+          {% for lap in laporan %}
+          <div class="laporan-item">
+            <div class="laporan-top">
+              <strong>{{ lap.kode_laporan }}</strong>
+              <span class="status {% if lap.status == 'Sudah Ditindaklanjuti' %}selesai{% else %}proses{% endif %}">
+                {{ lap.status }}
+              </span>
+            </div>
+
+            <p class="laporan-meta">
+              {{ lap.get_jenis_bullying_display }} •
+              {{ lap.kelas_pelapor }} •
+              {{ lap.tanggal|date:"d M Y" }}
+            </p>
+
+            <a href="{% url 'bk_tindak_lanjut' lap.id %}" class="btn-detail">
+              <i class="bi bi-eye"></i> Lihat Detail
+            </a>
+          </div>
+          {% empty %}
+          <p class="empty">Tidak ada laporan</p>
+          {% endfor %}
+        </div>
+
+      </section>
+
+      <!-- RIGHT -->
+      <aside class="dashboard-right">
+
+        <div class="side-card">
+          <h4><i class="bi bi-graph-up"></i> Tren Laporan</h4>
+          <canvas id="trenChart" height="200"></canvas>
+        </div>
+
+        <div class="side-card">
+          <h4><i class="bi bi-bar-chart"></i> Statistik Kelas</h4>
+          {% for k in statistik_kelas %}
+          <div class="stat-row">
+            <span>{{ k.kelas_pelapor }}</span>
+            <span>{{ k.total }}</span>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="side-card">
+          <h4><i class="bi bi-clock-history"></i> Aktivitas Terkini</h4>
+          <ul class="activity-list">
+            {% for a in aktivitas_terkini %}
+            <li>
+              <strong>{{ a.kode_laporan }}</strong><br>
+              <small>{{ a.tanggal|timesince }} lalu</small>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+      </aside>
+
+    </main>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block content %}
+
+<section
+  class="hero d-flex align-items-center"
+  style="
+    background: linear-gradient(
+      180deg,
+      rgba(13,106,198,0.81),
+      rgba(7,51,96,0.81)
+    );
+    color:#fff;
+    padding:5rem 1rem;
+    text-align:center;
+  "
+>
+  <div class="container">
+    <h2 class="fw-bold">Dashboard Admin</h2>
+    <p>
+      Kelola data pengguna, konten literasi,
+      dan sistem pelaporan sekolah.
+    </p>
+  </div>
+</section>
+
+{% include "dashboard/home_sections.html" %}
+
+{% endblock %}

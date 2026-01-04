@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Formulir Laporan Bullying{% endblock %}
+
+{% block content %}
+<div class="buat-laporan-page">
+
+  <!-- ================= HERO ================= -->
+  <section class="buat-laporan-hero">
+    <div class="container text-center">
+
+      <h1 class="hero-title">Formulir Laporan Bullying</h1>
+      <p class="hero-subtitle">
+        Isi laporan sesuai kejadian yang dialami atau disaksikan
+      </p>
+
+      <!-- ================= FORM CARD ================= -->
+      <div class="form-card mx-auto mt-5">
+
+        <img src="{% static 'img/ribbon.png' %}" class="form-icon" alt="Icon">
+        <h3 class="form-title">Laporkan</h3>
+
+        <form method="post" enctype="multipart/form-data" class="text-start">
+          {% csrf_token %}
+
+          <!-- ERROR GLOBAL -->
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+
+          <!-- NAMA -->
+          <div class="mb-3">
+            <label class="form-label">Nama Pelapor</label>
+            {{ form.nama_pelapor }}
+            {% if form.nama_pelapor.errors %}
+              <div class="text-danger small">
+                {{ form.nama_pelapor.errors.0 }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- NIS -->
+          <div class="mb-3">
+            <label class="form-label">NIS</label>
+            {{ form.nis_pelapor }}
+            <small class="text-muted">
+              NIS harus sesuai dengan akun terdaftar
+            </small>
+            {% if form.nis_pelapor.errors %}
+              <div class="text-danger small">
+                {{ form.nis_pelapor.errors.0 }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- KELAS -->
+          <div class="mb-3">
+            <label class="form-label">Kelas Pelapor</label>
+            {{ form.kelas_pelapor }}
+            {% if form.kelas_pelapor.errors %}
+              <div class="text-danger small">
+                {{ form.kelas_pelapor.errors.0 }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- TERLAPOR -->
+          <div class="mb-3">
+            <label class="form-label">Nama Terlapor</label>
+            {{ form.terlapor }}
+            {% if form.terlapor.errors %}
+              <div class="text-danger small">
+                {{ form.terlapor.errors.0 }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- JENIS BULLYING -->
+          <div class="mb-3">
+            <label class="form-label">Jenis Bullying</label>
+            {{ form.jenis_bullying }}
+            {% if form.jenis_bullying.errors %}
+              <div class="text-danger small">
+                {{ form.jenis_bullying.errors.0 }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- ISI LAPORAN -->
+          <div class="mb-3">
+            <label class="form-label">Isi Laporan</label>
+            {{ form.isi_laporan }}
+            {% if form.isi_laporan.errors %}
+              <div class="text-danger small">
+                {{ form.isi_laporan.errors.0 }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- UPLOAD BUKTI -->
+          <div class="mb-4">
+            <label class="form-label">Upload Bukti (Opsional)</label>
+            {{ form.bukti }}
+
+            {% if form.bukti.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.bukti.errors.0 }}
+              </div>
+            {% endif %}
+
+            <small class="text-muted">
+              Format bebas (PDF, gambar, audio, video). Maksimal 10 MB.
+            </small>
+          </div>
+
+          <!-- SUBMIT -->
+          <button type="submit" class="btn btn-submit w-100">
+            Kirim Laporan
+          </button>
+
+          <!-- KEMBALI -->
+           <a href="{% url 'laporan_home' %}" class="btn btn-kembali w-100 mt-3">
+            ← Kembali
+          </a>
+
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

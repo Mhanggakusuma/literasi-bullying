@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Formulir Laporan Bullying | SMP N 1 Madang Suku III{% endblock %}
+
+{% block content %}
+<div class="laporan-home">
+
+  <!-- ================= HERO ================= -->
+  <section class="laporan-hero">
+    <div class="container text-center">
+
+      <div class="hero-icon">
+        <img src="{% static 'img/icon-shield.png' %}" alt="Aman">
+      </div>
+
+      <h1 class="hero-title">Formulir Laporan Bullying</h1>
+
+      <p class="hero-subtitle">
+        Isi laporan sesuai kejadian yang dialami atau disaksikan.<br>
+        Identitas Anda akan kami lindungi.
+      </p>
+
+      <div class="hero-badges">
+        <span class="badge-item">100% Anonim</span>
+        <span class="badge-item">Aman & Terpercaya</span>
+        <span class="badge-item">Ditangani Profesional</span>
+      </div>
+
+    </div>
+
+    <div class="hero-wave"></div>
+  </section>
+
+  <!-- ================= CARD ================= -->
+  <section class="laporan-card-section">
+    <div class="container">
+      <div class="row g-4 justify-content-center">
+
+        <!-- CARD 1 -->
+        <div class="col-lg-5 col-md-6">
+          <div class="report-card text-center">
+            <div class="card-icon-box">
+              <img src="{% static 'img/icon-report.png' %}" alt="">
+            </div>
+
+            <h3>Buat Laporan</h3>
+            <p>
+              Buat laporan bullying dengan aman.
+              Identitas Anda dapat disembunyikan untuk menjaga privasi.
+            </p>
+
+            <a href="{% url 'buat_laporan' %}" class="btn btn-primary w-100">
+              Buat Laporan
+            </a>
+          </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="col-lg-5 col-md-6">
+          <div class="report-card text-center">
+            <div class="card-icon-box">
+              <img src="{% static 'img/icon-search.png' %}" alt="">
+            </div>
+
+            <h3>Cek Status Laporan</h3>
+            <p>
+              Cari laporan Anda menggunakan kode laporan
+              untuk melihat perkembangan terbaru.
+            </p>
+
+            <a href="{% url 'cek_laporan' %}" class="btn btn-outline-primary w-100">
+              Cek Status
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="laporan-note">
+        Semua laporan akan ditangani secara serius dan rahasia oleh tim konseling sekolah.
+      </p>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

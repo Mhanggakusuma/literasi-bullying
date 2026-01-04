@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Beranda Guru BK{% endblock %}
+
+{% block content %}
+
+<section class="hero-welcome">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <!-- ICON KIRI -->
+      <div class="col-lg-4 text-center mb-4 mb-lg-0">
+        <img
+          src="{% static 'img/icons.png' %}"
+          alt="Ilustrasi Guru BK"
+          class="hero-welcome-icon"
+        >
+      </div>
+
+      <!-- TEKS KANAN -->
+      <div class="col-lg-8">
+        <h2 class="hero-welcome-title">
+          SELAMAT DATANG <span>{{ user.first_name|upper }}</span>
+        </h2>
+
+        <p class="hero-welcome-desc">
+          Kelola laporan bullying secara profesional, pantau perkembangan
+          siswa, dan berikan tindak lanjut yang tepat untuk menciptakan
+          lingkungan sekolah yang aman, nyaman, dan beretika digital.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% include "dashboard/home_sections.html" %}
+
+{% endblock %}

@@ -1,0 +1,303 @@
+{% extends "base_public.html" %}
+{% load static %}
+
+{% block title %}Tentang Bullying{% endblock %}
+
+{% block content %}
+<div class="tentang-bullying-page">
+
+<!-- ================= HERO / APA ITU BULLYING ================= -->
+<section class="tb-hero" id="apa-itu">
+  <div class="container">
+    <div class="row align-items-center g-5">
+
+      <div class="col-lg-6">
+        <span class="tb-badge">Bersama Cegah Bullying</span>
+        <h1 class="tb-title">
+          Apa Itu <span>Bullying?</span>
+        </h1>
+        <p class="tb-desc">
+          Bullying adalah perilaku agresif yang dilakukan secara berulang
+          dengan tujuan menyakiti, mengintimidasi, atau mengendalikan orang lain.
+          Bullying dapat terjadi secara verbal, fisik, sosial, maupun melalui media digital.
+        </p>
+
+        <div class="tb-stats">
+          <div>
+            <strong>1 dari 3</strong>
+            <span>Siswa pernah mengalami bullying</span>
+          </div>
+          <div>
+            <strong>80%</strong>
+            <span>Korban merasa takut dan tertekan</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 text-center">
+        <img src="{% static 'img/hero-illustration.png' %}" class="tb-hero-img" alt="Stop Bullying">
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= BENTUK BULLYING ================= -->
+<section class="tb-section tb-section-blue" id="bentuk">
+  <div class="container text-center">
+
+    <h2 class="tb-section-title text-white">Bentuk-Bentuk Bullying</h2>
+    <p class="tb-section-desc text-white">
+      Bullying dapat muncul dalam berbagai bentuk berikut.
+    </p>
+
+    <div class="row g-4 mt-4">
+
+      <div class="col-md-6 col-lg-3">
+        <div class="tb-card">
+          <img src="{% static 'img/verbal-bullying.png' %}">
+          <h3>Verbal Bullying</h3>
+          <p>Mengejek, menghina, memanggil dengan sebutan buruk, dan mengancam.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="tb-card">
+          <img src="{% static 'img/physical-bullying.png' %}">
+          <h3>Physical Bullying</h3>
+          <p>Memukul, menendang, mendorong, atau menyakiti secara fisik.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="tb-card">
+          <img src="{% static 'img/social-bullying.png' %}">
+          <h3>Social Bullying</h3>
+          <p>Mengucilkan, menyebarkan gosip, merusak reputasi korban.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="tb-card">
+          <img src="{% static 'img/cyber-bullying.png' %}">
+          <h3>Cyber Bullying</h3>
+          <p>Perundungan melalui media sosial, pesan, dan platform digital.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- ================= GEJALA ================= -->
+<section class="tb-section" id="gejala">
+  <div class="container">
+
+    <div class="text-center mb-5">
+      <h2 class="tb-section-title">Gejala Korban Bullying</h2>
+      <p class="tb-section-desc">
+        Perhatikan tanda-tanda berikut. Deteksi dini dapat mencegah dampak yang lebih buruk.
+      </p>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- Emosional -->
+      <div class="col-md-6 col-lg-3">
+        <div class="tb-symptom">
+          <div class="tb-symptom-icon">
+            <i class="bi bi-emoji-frown"></i>
+          </div>
+          <span class="tb-symptom-cat">Emosional</span>
+          <p>Sering terlihat sedih atau cemas</p>
+        </div>
+      </div>
+
+      <!-- Fisik -->
+      <div class="col-md-6 col-lg-3">
+        <div class="tb-symptom">
+          <div class="tb-symptom-icon">
+            <i class="bi bi-moon-stars"></i>
+          </div>
+          <span class="tb-symptom-cat">Fisik</span>
+          <p>Gangguan tidur atau mimpi buruk</p>
+        </div>
+      </div>
+
+      <!-- Perilaku -->
+      <div class="col-md-6 col-lg-3">
+        <div class="tb-symptom">
+          <div class="tb-symptom-icon">
+            <i class="bi bi-exclamation-circle"></i>
+          </div>
+          <span class="tb-symptom-cat">Perilaku</span>
+          <p>Enggan pergi ke sekolah</p>
+        </div>
+      </div>
+
+      <!-- Sosial -->
+      <div class="col-md-6 col-lg-3">
+        <div class="tb-symptom">
+          <div class="tb-symptom-icon">
+            <i class="bi bi-people"></i>
+          </div>
+          <span class="tb-symptom-cat">Sosial</span>
+          <p>Menarik diri dari teman</p>
+        </div>
+      </div>
+
+      <!-- Akademik -->
+      <div class="col-md-6 col-lg-3">
+        <div class="tb-symptom">
+          <div class="tb-symptom-icon">
+            <i class="bi bi-graph-down"></i>
+          </div>
+          <span class="tb-symptom-cat">Akademik</span>
+          <p>Penurunan prestasi akademik</p>
+        </div>
+      </div>
+
+      <!-- Emosional -->
+      <div class="col-md-6 col-lg-3">
+        <div class="tb-symptom">
+          <div class="tb-symptom-icon">
+            <i class="bi bi-heartbreak"></i>
+          </div>
+          <span class="tb-symptom-cat">Emosional</span>
+          <p>Hilang kepercayaan diri</p>
+        </div>
+      </div>
+
+      <!-- Perilaku -->
+      <div class="col-md-6 col-lg-3">
+        <div class="tb-symptom">
+          <div class="tb-symptom-icon">
+            <i class="bi bi-arrow-repeat"></i>
+          </div>
+          <span class="tb-symptom-cat">Perilaku</span>
+          <p>Perubahan perilaku mendadak</p>
+        </div>
+      </div>
+
+      <!-- Kognitif -->
+      <div class="col-md-6 col-lg-3">
+        <div class="tb-symptom">
+          <div class="tb-symptom-icon">
+            <i class="bi bi-lightbulb"></i>
+          </div>
+          <span class="tb-symptom-cat">Kognitif</span>
+          <p>Sulit berkonsentrasi</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- WARNING -->
+    <div class="tb-warning">
+      <h3>Jangan Diabaikan!</h3>
+      <p>
+        Jika Anda melihat tanda-tanda ini pada seseorang,
+        segera ajak berbicara dan tawarkan bantuan.
+        Korban bullying sering merasa sendirian dan takut untuk bercerita.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= BANTUAN ================= -->
+<section class="tb-section tb-section-gray" id="bantuan">
+  <div class="container">
+
+    <div class="text-center mb-5">
+      <h2 class="tb-section-title">Bagaimana Kita Membantu?</h2>
+      <p class="tb-section-desc">
+        Setiap orang memiliki peran penting dalam mencegah bullying.
+      </p>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- Korban -->
+      <div class="col-lg-4">
+        <div class="tb-help">
+          <div class="tb-help-icon">
+            <i class="bi bi-person-heart"></i>
+          </div>
+          <h3>Untuk Korban</h3>
+          <ul>
+            <li>Jangan menyalahkan diri sendiri</li>
+            <li>Ceritakan kepada orang dewasa terpercaya</li>
+            <li>Simpan bukti perundungan</li>
+            <li>Jangan membalas dengan kekerasan</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Orang Tua -->
+      <div class="col-lg-4">
+        <div class="tb-help">
+          <div class="tb-help-icon">
+            <i class="bi bi-people-fill"></i>
+          </div>
+          <h3>Untuk Orang Tua</h3>
+          <ul>
+            <li>Dengarkan anak tanpa menghakimi</li>
+            <li>Perhatikan perubahan perilaku anak</li>
+            <li>Bangun komunikasi dengan sekolah</li>
+            <li>Berikan dukungan emosional</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Guru -->
+      <div class="col-lg-4">
+        <div class="tb-help">
+          <div class="tb-help-icon">
+            <i class="bi bi-mortarboard"></i>
+          </div>
+          <h3>Untuk Guru</h3>
+          <ul>
+            <li>Ciptakan lingkungan belajar yang aman</li>
+            <li>Tanggapi laporan bullying dengan serius</li>
+            <li>Edukasi siswa tentang dampak bullying</li>
+            <li>Terapkan aturan yang tegas dan konsisten</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="tb-cta" id="cta">
+  <div class="container">
+
+    <h2>
+      Mari Kita Cegah Bullying Bersama
+    </h2>
+
+    <p style="
+      max-width: 720px;
+      margin: 20px auto 0;
+      font-size: 20px;
+      color: rgba(255,255,255,.85);
+    ">
+      Setiap tindakan kecil yang kita lakukan dapat membawa perubahan besar.
+      Mari bersama menciptakan lingkungan sekolah yang aman, nyaman,
+      dan saling menghargai bagi semua.
+    </p>
+
+    <div class="tb-school">
+      <img src="{% static 'img/logo.png' %}" alt="Logo Sekolah">
+      <span>SMP N 1 Madang Suku III – Sekolah Ramah Anti-Bullying</span>
+    </div>
+
+  </div>
+</section>
+
+
+
+</div>
+{% endblock %}

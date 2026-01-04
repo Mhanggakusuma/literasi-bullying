@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Literasi Digital{% endblock %}
+
+{% block content %}
+<div class="literasi-page">
+
+  <!-- ================= HERO ================= -->
+  <section class="literasi-hero">
+    <div class="literasi-hero-inner">
+
+      <div class="literasi-hero-illustration">
+        <img src="{% static 'img/student.png' %}" alt="Ilustrasi Siswa">
+      </div>
+
+      <div class="literasi-hero-text">
+        <span class="literasi-badge">Modul Pembelajaran</span>
+        <h1>
+          Bersama SMP Negeri 1 Madang Suku III
+        </h1>
+        <p>
+          Pelajari cara menggunakan teknologi dan internet dengan bijak,
+          aman, dan bertanggung jawab
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= TAB ================= -->
+  <section class="literasi-tab-wrapper">
+    <div class="literasi-tabs">
+      <a href="?tab=artikel"
+         class="literasi-tab {% if tab == 'artikel' %}active{% endif %}">
+        Artikel
+      </a>
+      <a href="?tab=video"
+         class="literasi-tab {% if tab == 'video' %}active{% endif %}">
+        Video
+      </a>
+      <a href="?tab=kuis"
+         class="literasi-tab {% if tab == 'kuis' %}active{% endif %}">
+        Kuis
+      </a>
+    </div>
+  </section>
+
+  <!-- ================= CONTENT ================= -->
+  <section class="literasi-content">
+    {% if tab == "artikel" %}
+      {% include "konten/_artikel.html" %}
+    {% elif tab == "video" %}
+      {% include "konten/_video.html" %}
+    {% elif tab == "kuis" %}
+      {% include "konten/_kuis.html" %}
+    {% endif %}
+  </section>
+
+</div>
+{% endblock %}

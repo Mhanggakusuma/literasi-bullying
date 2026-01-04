@@ -1,0 +1,43 @@
+<div class="container artikel-container">
+
+  <div class="row g-4">
+
+    {% for a in artikel %}
+    <div class="col-lg-4 col-md-6">
+
+      <a href="{% url 'artikel_detail' a.id %}" class="artikel-card">
+
+        <!-- ICON -->
+        <div class="artikel-icon">
+          <i class="bi bi-book"></i>
+        </div>
+
+        <!-- BODY -->
+        <div class="artikel-body">
+
+          <span class="artikel-kategori">
+            Etika Digital
+          </span>
+
+          <h5 class="artikel-title">
+            {{ a.judul }}
+          </h5>
+
+          <p class="artikel-deskripsi">
+            {{ a.deskripsi|truncatewords:18 }}
+          </p>
+
+          <span class="artikel-tanggal">
+            {{ a.tanggal_upload|date:"d M Y" }}
+          </span>
+
+        </div>
+
+      </a>
+
+    </div>
+    {% endfor %}
+
+  </div>
+
+</div>

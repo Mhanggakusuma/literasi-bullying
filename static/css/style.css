@@ -1,0 +1,2059 @@
+/* ================= GLOBAL ================= */
+body {
+  font-family: 'Poppins', sans-serif;
+  margin-top: 76px;
+}
+
+/* ================= FIX NAVBAR ================= */
+.navbar {
+  --bs-navbar-bg: #ffffff;
+  background-color: #ffffff !important;
+}
+
+/* ================= PROFILE NAVBAR ================= */
+.profile-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #1e88e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.profile-menu {
+  min-width: 180px;
+  border-radius: 14px;
+}
+
+/* =====================================================
+   DASHBOARD HOME – FINAL
+===================================================== */
+
+.dashboard-home {
+  overflow-x: hidden;
+}
+
+/* ================= HERO ================= */
+
+.dashboard-home .dh-hero {
+  min-height: 90vh;
+  background:
+    linear-gradient(135deg, rgba(13,106,198,0.9), rgba(7,51,96,0.95)),
+    url("../img/hero-bg.png") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+}
+
+.dashboard-home .dh-badge {
+  background: rgba(255,255,255,0.15);
+  padding: 8px 20px;
+  border-radius: 999px;
+  display: inline-block;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.dashboard-home .dh-title {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.dashboard-home .dh-title span {
+  display: block;
+  margin-top: 14px;
+  color: #ffd54f;
+}
+
+.dashboard-home .dh-desc {
+  max-width: 820px;
+  margin: 26px auto 36px;
+  font-size: 19px;
+  line-height: 1.7;
+}
+
+.dashboard-home .dh-btn {
+  background: #ffffff;
+  color: #0d6ac6;
+  padding: 14px 42px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: .3s;
+}
+
+.dashboard-home .dh-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 30px rgba(0,0,0,0.25);
+}
+
+/* ================= FITUR ================= */
+
+.dashboard-home .dh-features {
+  padding: 120px 0;
+  background: #f8fafc;
+}
+
+.features-badge {
+  background: rgba(26,115,232,0.1);
+  color: #1a73e8;
+  padding: 6px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 36px;
+  font-weight: 800;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #1a73e8, #0b4ea2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.section-subtitle {
+  max-width: 720px;
+  margin: 12px auto 40px;
+  font-size: 18px;
+  color: #6b7280;
+}
+
+.dh-card {
+  background: #ffffff;
+  padding: 42px 30px;
+  border-radius: 20px;
+  height: 100%;
+  text-align: center;
+  box-shadow: 0 25px 45px rgba(0,0,0,0.12);
+  transition: .35s;
+}
+
+.dh-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 35px 60px rgba(0,0,0,0.18);
+}
+
+.dh-card img {
+  width: 64px;
+  margin-bottom: 22px;
+}
+
+.dh-card h5 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.dh-card p {
+  font-size: 16px;
+  color: #6b7280;
+  line-height: 1.7;
+}
+
+/* ================= PESAN KEPALA SEKOLAH ================= */
+
+.principal-section {
+  padding: 120px 0;
+  background: #f8fbff;
+}
+
+.principal-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.principal-badge {
+  background: #e7f0ff;
+  color: #1a73e8;
+  padding: 6px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: inline-block;
+}
+
+.principal-header h2 {
+  font-size: 36px;
+  font-weight: 800;
+}
+
+.principal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.principal-photo-wrapper {
+  position: relative;
+}
+
+.principal-photo-bg {
+  position: absolute;
+  inset: -18px;
+  background: #e7f0ff;
+  border-radius: 28px;
+}
+
+.principal-photo {
+  position: relative;
+  width: 100%;
+  border-radius: 24px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+}
+
+.principal-exp {
+  position: absolute;
+  bottom: -22px;
+  left: 22px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 14px 18px;
+  display: flex;
+  gap: 12px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.exp-icon {
+  width: 42px;
+  height: 42px;
+  background: #1a73e8;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.principal-text h3 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 26px;
+}
+
+.principal-quote {
+  position: relative;
+  padding-left: 40px;
+  margin-bottom: 32px;
+}
+
+.quote-icon {
+  position: absolute;
+  left: 0;
+  top: -10px;
+  font-size: 50px;
+  color: #1a73e8;
+}
+
+.principal-quote p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #475569;
+}
+
+.principal-author {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.principal-author .line {
+  width: 36px;
+  height: 3px;
+  background: #1a73e8;
+}
+
+.principal-author small {
+  color: #64748b;
+}
+
+/* ================= CTA ================= */
+
+.dh-cta {
+  padding: 140px 20px;
+  background: linear-gradient(135deg, #1a73e8, #0b4ea2);
+  color: #ffffff;
+}
+
+.cta-badge {
+  background: rgba(255,255,255,0.15);
+  padding: 8px 20px;
+  border-radius: 999px;
+  display: inline-block;
+  margin-bottom: 18px;
+}
+
+.dh-cta h2 {
+  font-size: 40px;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+
+.dh-cta p {
+  font-size: 20px;
+  max-width: 760px;
+  margin: 0 auto 38px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 992px) {
+  .principal-grid {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+}
+
+
+/* ===================================================== */
+/* ================= AUTH (LOGIN / REGISTER / FORGOT) == */
+/* ===================================================== */
+
+.auth-hero {
+  min-height: calc(100vh - 150px);
+  background: linear-gradient(
+    180deg,
+    rgba(13,106,198,0.81),
+    rgba(7,51,96,0.81)
+  );
+}
+
+.login-card,
+.register-card,
+.forgot-card {
+  background: #88B8D8;
+  border-radius: 12px;
+  box-shadow: 8px 12px 24px rgba(0,0,0,0.32);
+  padding: 35px 40px;
+}
+
+.login-card,
+.register-card {
+  width: 560px;
+}
+
+.forgot-card {
+  width: 480px;
+}
+
+.login-logo {
+  width: 70px;
+}
+
+.login-title {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+/* FORM */
+.form-label {
+  font-size: 13px;
+  color: #000;
+}
+
+.custom-input {
+  border-radius: 12px;
+  border: 1px solid #4285F4;
+  height: 40px;
+  font-size: 13px;
+}
+
+/* BUTTON AUTH (INI YANG TADI HILANG) */
+.btn-login {
+  background: #1C6BEF !important;
+  color: #ffffff !important;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 12px;
+  height: 48px;
+  border: none;
+}
+
+/* ===================================================== */
+/* ================= DASHBOARD ========================= */
+/* ===================================================== */
+
+.hero-welcome {
+  background: linear-gradient(
+    180deg,
+    rgba(13,106,198,0.81),
+    rgba(7,51,96,0.81)
+  );
+  padding: 120px 0 70px;
+}
+
+.hero-welcome-icon {
+  max-width: 260px;
+  width: 100%;
+}
+
+/* ================= FOOTER: locked link for anonymous users (click -> login) ================= */
+.footer-info-links .footer-link-locked {
+  color: #6b7280;
+  cursor: pointer;
+  pointer-events: auto;
+  text-decoration: none;
+  opacity: 0.9;
+}
+.footer-info-links .footer-link-locked:hover {
+  text-decoration: underline;
+  opacity: 1;
+}
+
+.hero-welcome-title {
+  font-weight: 700;
+  font-size: 36px;
+  color: #ffffff;
+  margin-bottom: 14px;
+}
+
+.hero-welcome-title span {
+  color: #facc15;
+}
+
+.hero-welcome-desc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #e5e7eb;
+  max-width: 720px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 992px) {
+  .hero-welcome-title,
+  .hero-welcome-desc {
+    text-align: center;
+    margin: auto;
+  }
+
+  .hero-welcome-icon {
+    max-width: 220px;
+    margin: auto;
+  }
+
+  .login-card,
+  .register-card,
+  .forgot-card {
+    width: 92%;
+    padding: 30px;
+  }
+}
+
+/* ================= FOOTER ================= */
+.footer {
+  background: #0D6AC6;
+  font-size: 18px;
+}
+
+/* ===================================================== */
+/* ============ LAPORAN HOME (SCOPED) ================== */
+/* ===================================================== */
+
+.laporan-home {
+  width: 100%;
+}
+
+/* ================= HERO ================= */
+.laporan-home .laporan-hero {
+  position: relative;
+  padding: 120px 20px 170px;
+  background: linear-gradient(
+    180deg,
+    #0b6bdc,
+    #0a4fa8
+  );
+  text-align: center;
+}
+
+.laporan-home .hero-icon img {
+  width: 56px;
+  margin-bottom: 22px;
+}
+
+.laporan-home .hero-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(36px, 5vw, 54px);
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+.laporan-home .hero-subtitle {
+  font-size: 17px;
+  color: #dbeafe;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+/* BADGE */
+.laporan-home .hero-badges {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.laporan-home .badge-item {
+  background: rgba(255,255,255,0.18);
+  color: #ffffff;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* WAVE */
+.laporan-home .hero-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 95px;
+  background: #ffffff;
+  border-top-left-radius: 100% 100%;
+  border-top-right-radius: 100% 100%;
+}
+
+/* ================= CARD SECTION ================= */
+.laporan-home .laporan-card-section {
+  background: #f9fafb;
+  padding: 90px 20px 70px;
+  margin-top: -45px;
+}
+
+/* CARD */
+.laporan-home .report-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 48px 40px;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.08);
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.laporan-home .report-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 65px rgba(0,0,0,0.12);
+}
+
+/* ICON BOX */
+.laporan-home .card-icon-box {
+  width: 72px;
+  height: 72px;
+  background: #eaf2ff;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 22px;
+}
+
+.laporan-home .card-icon-box img {
+  width: 34px;
+}
+
+/* TEXT */
+.laporan-home .report-card h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
+
+.laporan-home .report-card p {
+  font-size: 15px;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+/* ================= BUTTON (KHUSUS HALAMAN INI) ================= */
+.laporan-home .btn {
+  border-radius: 999px;
+  padding: 12px 0;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.laporan-home .btn-primary {
+  background: #0b6bdc;
+  border: none;
+}
+
+.laporan-home .btn-primary:hover {
+  background: #095ec2;
+}
+
+.laporan-home .btn-outline-primary {
+  background: transparent;
+  color: #0b6bdc;
+  border: 2px solid #0b6bdc;
+}
+
+.laporan-home .btn-outline-primary:hover {
+  background: #0b6bdc;
+  color: #ffffff;
+}
+
+/* NOTE */
+.laporan-home .laporan-note {
+  text-align: center;
+  font-size: 14px;
+  color: #64748b;
+  margin-top: 34px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .laporan-home .laporan-hero {
+    padding-bottom: 140px;
+  }
+
+  .laporan-home .laporan-card-section {
+    margin-top: -25px;
+  }
+}
+
+/* ===================================================== */
+/* ============ BUAT LAPORAN (SCOPED) ================== */
+/* ===================================================== */
+
+.buat-laporan-page {
+  width: 100%;
+}
+
+/* ================= HERO ================= */
+.buat-laporan-page .buat-laporan-hero {
+  min-height: calc(100vh - 70px);
+  padding: 110px 20px 80px;
+  background: linear-gradient(
+    180deg,
+    rgba(13,106,198,0.81),
+    rgba(7,51,96,0.81)
+  );
+  display: flex;
+  align-items: flex-start;
+}
+
+.buat-laporan-page .hero-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(34px, 5vw, 48px);
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.buat-laporan-page .hero-subtitle {
+  font-size: 18px;
+  color: #e5e7eb;
+}
+
+/* ================= FORM CARD ================= */
+.buat-laporan-page .form-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 900px;
+  padding: 50px 60px;
+  border-radius: 18px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+  color: #000000;
+}
+
+/* ICON */
+.buat-laporan-page .form-icon {
+  width: 90px;
+  display: block;
+  margin: 0 auto 15px;
+}
+
+/* TITLE */
+.buat-laporan-page .form-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 34px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* ================= FORM FIELD ================= */
+.buat-laporan-page .form-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #000000;
+  margin-bottom: 6px;
+}
+
+/* INPUT AMAN (TIDAK GLOBAL) */
+.buat-laporan-page .form-control,
+.buat-laporan-page textarea,
+.buat-laporan-page select {
+  width: 100%;
+  border: 1px solid #4285F4;
+  border-radius: 12px;
+  font-size: 14px;
+  padding: 10px 14px;
+}
+
+.buat-laporan-page .form-control::placeholder,
+.buat-laporan-page textarea::placeholder {
+  color: #736A6A;
+}
+
+/* ================= BUTTON ================= */
+.buat-laporan-page .btn-submit {
+  background: #1C6BEF;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+}
+
+.buat-laporan-page .btn-submit:hover {
+  background: #155bd6;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .buat-laporan-page .form-card {
+    padding: 35px 25px;
+  }
+
+  .buat-laporan-page .form-title {
+    font-size: 28px;
+  }
+}
+
+/* ================= BUTTON KEMBALI ================= */
+.buat-laporan-page .btn-kembali {
+  display: block;
+  text-align: center;
+  background: transparent;
+  color: #1C6BEF;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px;
+  border-radius: 14px;
+  border: 2px solid #1C6BEF;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.buat-laporan-page .btn-kembali:hover {
+  background: #1C6BEF;
+  color: #ffffff;
+}
+
+/* ===================================================== */
+/* ============ CEK LAPORAN (FINAL FIXED) ============== */
+/* ===================================================== */
+
+/* Override margin body khusus halaman ini */
+.cek-laporan-page {
+  margin-top: -90px;
+  padding-top: 160px;
+}
+
+/* HERO */
+.cek-laporan-hero {
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    rgba(13, 106, 198, 0.81),
+    rgba(7, 51, 96, 0.81)
+  );
+  padding-bottom: 120px;
+  color: #ffffff;
+}
+
+/* TITLE */
+.cek-laporan-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 52px;
+  font-weight: 700;
+}
+
+.cek-laporan-subtitle {
+  font-size: 18px;
+  color: #e5e7eb;
+  margin-top: 8px;
+}
+
+/* SMALL TEXT */
+.cek-laporan-small {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 5px;
+}
+
+/* CARD */
+.cek-laporan-card,
+.cek-laporan-detail-card {
+  background: #ffffff;
+  max-width: 850px;
+  padding: 45px 55px;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+  color: #000000;
+}
+
+/* ICON */
+.cek-laporan-icon {
+  width: 90px;
+  display: block;
+  margin: 0 auto 15px;
+}
+
+/* TITLES */
+.cek-laporan-card-title {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.cek-laporan-detail-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* TEXT */
+.cek-laporan-text {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.cek-laporan-status {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+/* INPUT (ANTI BOOTSTRAP) */
+.cek-laporan-input {
+  border: 1px solid #4285F4 !important;
+  border-radius: 12px !important;
+  padding: 12px !important;
+  font-size: 15px !important;
+}
+
+.cek-laporan-input::placeholder {
+  color: #9ca3af;
+}
+
+/* BUTTON PRIMARY */
+.cek-laporan-btn-primary {
+  background: #1C6BEF !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-size: 18px !important;
+  font-weight: 700;
+  padding: 14px !important;
+  border-radius: 12px !important;
+}
+
+.cek-laporan-btn-primary:hover {
+  background: #155bd6 !important;
+}
+
+/* BUTTON SUCCESS */
+.cek-laporan-btn-success {
+  background: #209C45;
+  color: #ffffff;
+  display: block;
+  text-align: center;
+  font-size: 17px;
+  padding: 14px;
+  border-radius: 12px;
+  text-decoration: none;
+}
+
+.cek-laporan-btn-success:hover {
+  background: #188a3a;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .cek-laporan-title {
+    font-size: 38px;
+  }
+
+  .cek-laporan-card,
+  .cek-laporan-detail-card {
+    padding: 35px 25px;
+  }
+}
+
+/* ================= DETAIL LAPORAN – FINAL FIX ================= */
+
+.cek-laporan-detail-card p {
+  margin-bottom: 6px;
+}
+
+.cek-laporan-detail-card strong {
+  font-weight: 600;
+}
+
+.cek-laporan-detail-card .cek-laporan-detail-title {
+  margin-bottom: 18px;
+}
+
+
+/* ===================================================== */
+/* ============ LAPORAN BERHASIL (PELAPOR KODE) ========= */
+/* ===================================================== */
+
+.success-card {
+  background: #ffffff;
+  max-width: 900px;
+  padding: 40px 50px;
+  border-radius: 14px;
+  box-shadow: 8px 12px 24px rgba(0, 0, 0, 0.32);
+  color: #000000;
+}
+
+.success-icon {
+  width: 140px;
+  display: block;
+  margin: 0 auto 20px;
+}
+
+.success-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+/* KODE LAPORAN */
+.code-box {
+  background: rgba(28, 107, 239, 0.27);
+  border-radius: 12px;
+  padding: 28px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #054175;
+  letter-spacing: 2px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .success-card {
+    padding: 30px 20px;
+  }
+
+  .code-box {
+    font-size: 26px;
+  }
+}
+
+/* ===================================================== */
+/* ============ BK DASHBOARD FINAL   ========= */
+/* ===================================================== */
+
+/* ================= PAGE ================= */
+.bk-dashboard-page {
+  min-height: 100vh;
+  background: #0d6efd;
+}
+
+/* ================= CONTAINER ================= */
+.bk-dashboard {
+  padding: 120px 80px 80px;
+  background: #f8f9fa;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+}
+
+/* ================= HEADER ================= */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #3d72be;
+  padding: 32px;
+  border-radius: 20px;
+  color: #ffffff;
+  box-shadow: 0 18px 40px rgba(0,0,0,.25);
+}
+
+.dashboard-header p { opacity: .9; }
+
+.bk-badge {
+  background: #ffffff;
+  color: #0d6efd;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.btn-download {
+  background: #ffffff;
+  color: #0d6efd;
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* ================= SUMMARY ================= */
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 20px;
+  margin: 40px 0;
+}
+
+.summary-card {
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 18px;
+  box-shadow: 0 14px 35px rgba(0,0,0,.15);
+}
+
+.summary-header {
+  display: flex;
+  align-items: center; /* SEJAJAR ICON & <p> */
+  gap: 10px;
+}
+
+.summary-header p {
+  margin: 0;
+  font-weight: 700;
+  color: #495057;
+  font-size: 14px;
+}
+
+.icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.bg-blue   { background: #0d6efd; }
+.bg-orange { background: #ff9800; }
+.bg-purple { background: #6f42c1; }
+.bg-green  { background: #198754; }
+
+.summary-card h2 {
+  margin-top: 14px;
+  font-size: 34px;
+  font-weight: 800;
+  color: #0d6efd;
+}
+
+/* ================= MAIN ================= */
+.dashboard-content {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr;
+  gap: 30px;
+}
+
+/* ================= LEFT ================= */
+.dashboard-left {
+  background: #ffffff;
+  padding: 26px;
+  border-radius: 18px;
+  box-shadow: 0 14px 35px rgba(0,0,0,.15);
+}
+
+.search-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.search-box input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ced4da;
+}
+
+.search-box button {
+  background: #0d6efd;
+  color: #ffffff;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 12px;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  background: #e9ecef;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #0d6efd;
+}
+
+.filter-btn.active {
+  background: #0d6efd;
+  color: #ffffff;
+}
+
+/* ================= LAPORAN ================= */
+.laporan-item {
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,.15);
+  margin-bottom: 14px;
+}
+
+.laporan-meta { margin: 10px 0; color: #495057; }
+
+.status {
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.status.proses { background: #ff9800; }
+.status.selesai { background: #198754; }
+
+.btn-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #0d6efd;
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* ================= RIGHT ================= */
+.dashboard-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.side-card {
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 18px;
+  box-shadow: 0 14px 35px rgba(0,0,0,.15);
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.activity-list li {
+  background: #f1f3f5;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 992px) {
+  .dashboard-cards { grid-template-columns: repeat(2,1fr); }
+  .dashboard-content { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 576px) {
+  .dashboard-cards { grid-template-columns: 1fr; }
+}
+
+
+/* ===================================================== */
+/* ============ BK TINDAK LANJUT (FINAL FIX) ============ */
+/* ===================================================== */
+
+.bk-tindak-lanjut {
+  margin-top: -90px;
+}
+
+/* HERO */
+.bk-tl-hero {
+  min-height: 105dvh;
+  background: linear-gradient(
+    180deg,
+    rgba(13,106,198,0.81),
+    rgba(7,51,96,0.81)
+  );
+  padding: 120px 20px 140px;
+  color: #ffffff;
+}
+
+/* TITLE */
+.bk-tl-title {
+  font-size: 52px;
+  font-weight: 700;
+}
+
+.bk-tl-subtitle {
+  font-size: 20px;
+  color: #e5e7eb;
+}
+
+/* CARD */
+.bk-tl-card {
+  background: #ffffff;
+  max-width: 900px;
+  padding: 45px 55px;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+  color: #000;
+}
+
+/* ICON */
+.bk-tl-icon {
+  width: 90px;
+  display: block;
+  margin: 0 auto 25px;
+}
+
+/* INFO */
+.bk-tl-info p {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+/* NIS */
+.bk-tl-nis-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bk-tl-nis {
+  background: #1C6BEF;
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+/* FORM */
+.bk-tl-label {
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.bk-tl-textarea,
+.bk-tl-file {
+  width: 100%;
+  border: 1px solid #000;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+/* BUTTON */
+.bk-tl-btn-primary {
+  background: #1C6BEF;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  font-size: 20px;
+  border-radius: 12px;
+}
+
+.bk-tl-btn-success {
+  background: #209C45;
+  color: #fff;
+  text-align: center;
+  padding: 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  display: block;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .bk-tl-title {
+    font-size: 38px;
+  }
+
+  .bk-tl-card {
+    padding: 30px 22px;
+  }
+
+  .bk-tl-info p {
+    font-size: 18px;
+  }
+}
+/* ===================================================== */
+/* ============ TENTANG BULLYING – FULL CSS ============= */
+/* ===================================================== */
+
+.tentang-bullying-page {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ================= HERO ================= */
+.tentang-bullying-page .tb-hero {
+  padding: 140px 0 100px;
+}
+
+.tentang-bullying-page .tb-badge {
+  display: inline-block;
+  background: rgba(26, 115, 232, 0.1);
+  color: #1a73e8;
+  padding: 8px 20px;
+  border-radius: 999px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.tentang-bullying-page .tb-title {
+  font-size: clamp(42px, 5vw, 60px);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.tentang-bullying-page .tb-title span {
+  background: linear-gradient(135deg, #1a73e8, #f57c00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.tentang-bullying-page .tb-desc {
+  font-size: 18px;
+  color: #555;
+  max-width: 520px;
+  margin-top: 20px;
+}
+
+.tentang-bullying-page .tb-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.tentang-bullying-page .tb-stats strong {
+  display: block;
+  font-size: 28px;
+  font-weight: 800;
+  color: #1a73e8;
+}
+
+.tentang-bullying-page .tb-stats span {
+  font-size: 14px;
+  color: #666;
+}
+
+.tentang-bullying-page .tb-hero-img {
+  max-width: 420px;
+  width: 100%;
+}
+
+/* ================= SECTION GLOBAL ================= */
+.tentang-bullying-page .tb-section {
+  padding: 100px 0;
+}
+
+.tentang-bullying-page .tb-section-title {
+  font-size: 36px;
+  font-weight: 800;
+}
+
+.tentang-bullying-page .tb-section-desc {
+  font-size: 18px;
+  color: #666;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* ================= SECTION COLOR ================= */
+.tentang-bullying-page .tb-section-blue {
+  background: linear-gradient(135deg, #1a73e8, #1557b0);
+}
+
+.tentang-bullying-page .tb-section-gray {
+  background: #f1f5f9;
+}
+
+/* ================= CARD BULLYING ================= */
+.tentang-bullying-page .tb-card {
+  background: #ffffff;
+  padding: 28px 22px;
+  border-radius: 22px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.12);
+  transition: .3s ease;
+  text-align: center;
+  height: 100%;
+}
+
+.tentang-bullying-page .tb-card:hover {
+  transform: translateY(-10px);
+}
+
+.tentang-bullying-page .tb-card img {
+  width: 120px;
+  height: auto;
+  margin-bottom: 16px;
+}
+
+.tentang-bullying-page .tb-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.tentang-bullying-page .tb-card p {
+  font-size: 15px;
+  color: #555;
+}
+
+/* ================= GEJALA ================= */
+.tentang-bullying-page .tb-symptom {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+  text-align: center;
+  height: 100%;
+}
+
+.tentang-bullying-page .tb-symptom h4 {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.tentang-bullying-page .tb-symptom p {
+  font-size: 15px;
+  color: #555;
+}
+/* ===== GEJALA CATEGORY ===== */
+.tentang-bullying-page .tb-symptom-cat {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #f57c00;
+  margin-bottom: 6px;
+}
+
+/* ===== ICON GEJALA ===== */
+.tentang-bullying-page .tb-symptom-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(245,124,0,.15);
+  border-radius: 16px;
+}
+
+.tentang-bullying-page .tb-symptom-icon i {
+  font-size: 28px;
+  color: #f57c00;
+}
+
+/* ================= WARNING ================= */
+.tentang-bullying-page .tb-warning {
+  margin-top: 60px;
+  padding: 40px;
+  border-radius: 24px;
+  text-align: center;
+  background: linear-gradient(135deg, #fde68a, #bfdbfe);
+}
+
+.tentang-bullying-page .tb-warning h3 {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+/* ================= BANTUAN ================= */
+.tentang-bullying-page .tb-help {
+  background: #ffffff;
+  padding: 36px;
+  border-radius: 22px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.12);
+  height: 100%;
+}
+
+.tentang-bullying-page .tb-help h3 {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.tentang-bullying-page .tb-help ul {
+  padding-left: 18px;
+}
+
+.tentang-bullying-page .tb-help li {
+  margin-bottom: 8px;
+  font-size: 15px;
+  color: #555;
+}
+
+/* ===== ICON BANTUAN ===== */
+.tentang-bullying-page .tb-help-icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg,#1a73e8,#1557b0);
+  border-radius: 18px;
+}
+
+.tentang-bullying-page .tb-help-icon i {
+  font-size: 30px;
+  color: #ffffff;
+}
+
+
+/* ================= CTA ================= */
+.tentang-bullying-page .tb-cta {
+  background: #1a73e8; /* WARNA ANTI-BULLYING */
+  padding: 120px 20px;
+  text-align: center;
+}
+
+.tentang-bullying-page .tb-cta h2 {
+  color: #ffffff;
+  font-size: clamp(36px, 5vw, 54px);
+  font-weight: 800;
+}
+
+.tentang-bullying-page .tb-school {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.tentang-bullying-page .tb-school img {
+  width: 64px;
+  height: auto;
+}
+
+.tentang-bullying-page .tb-school span {
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .tentang-bullying-page .tb-stats {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .tentang-bullying-page .tb-hero {
+    padding: 120px 0 80px;
+  }
+}
+
+
+/* ================= LITERASI PAGE ONLY ================= */
+.literasi-page {
+  background: #ffffff;
+}
+
+/* ===== HERO ===== */
+.literasi-hero {
+  background: rgba(106, 147, 188, 0.76);
+  padding: 80px 60px;
+}
+
+.literasi-hero-inner {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.literasi-hero-illustration img {
+  width: 360px;
+}
+
+.literasi-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.88);
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  color: #0D6AC6;
+  margin-bottom: 20px;
+}
+
+.literasi-hero-text h1 {
+  font-size: 56px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.literasi-hero-text p {
+  font-size: 18px;
+  color: #f2f2f2;
+  max-width: 700px;
+}
+
+/* ===== TAB (RESPONSIVE & SEJAJAR HERO) ===== */
+.literasi-tab-wrapper {
+  position: relative;
+  z-index: 5;
+
+  /* naik sejajar vertikal */
+  margin-top: 25px;
+
+  /* sejajar horizontal dengan hero (RESPONSIVE) */
+  padding-left: calc((100vw - 1400px) / 2 + 60px);
+  padding-right: 60px;
+}
+
+.literasi-tabs {
+  display: inline-flex;
+  background: rgba(168, 214, 233, 0.34);
+  border-radius: 25px;
+  padding: 8px;
+  gap: 10px;
+}
+
+.literasi-tab {
+  padding: 12px 28px;
+  border-radius: 22px;
+  font-weight: 700;
+  color: rgba(88,83,83,0.6);
+  text-decoration: none;
+  background: transparent;
+}
+
+.literasi-tab.active {
+  background: #ffffff;
+  color: #585353;
+}
+
+/* ===== CONTENT ===== */
+.literasi-content {
+  padding: 40px 60px 80px;
+}
+
+
+
+/* ===== VIDEO CONTAINER (SAMA DENGAN ARTIKEL) ===== */
+.video-container {
+  max-width: 1300px;   /* sama seperti artikel */
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* GRID */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* CARD */
+.video-card {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  padding: 16px;
+  transition: 0.25s ease;
+}
+
+.video-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 30px rgba(0,0,0,0.1);
+}
+
+/* VIDEO */
+.video-thumb iframe {
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  border: none;
+}
+
+/* TITLE */
+.video-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 12px 0 6px;
+  color: #1f2937;
+}
+
+/* DATE */
+.video-date {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+
+.text-success,
+.text-danger {
+  font-size: 18px;
+}
+
+
+/* =====================================================
+   ===================== ARTIKEL =======================
+   ===================================================== */
+
+/* ===== CONTAINER LIST ===== */
+.artikel-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 8px;
+}
+
+/* ===== CARD ===== */
+.artikel-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.artikel-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(0,0,0,0.1);
+}
+
+/* ===== TOP BAR (OPSIONAL) ===== */
+.artikel-top {
+  height: 46px;
+  background: #1665f3;
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+}
+
+/* ===== ICON ===== */
+.artikel-icon {
+  width: 36px;
+  height: 36px;
+  background: #ffffff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.artikel-icon i {
+  color: #1665f3;
+  font-size: 18px;
+}
+
+/* ===== BODY ===== */
+.artikel-body {
+  flex: 1;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== KATEGORI ===== */
+.artikel-kategori {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1665f3;
+  margin-bottom: 6px;
+}
+
+/* ===== JUDUL (LIST) ===== */
+.artikel-card .artikel-judul {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  line-height: 1.3;
+  min-height: 42px;
+  color: #111827;
+}
+
+/* ===== DESKRIPSI (LIST) ===== */
+.artikel-card .artikel-deskripsi {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 16px;
+  line-height: 1.5;
+  min-height: 48px;
+}
+
+/* ===== META ===== */
+.artikel-meta,
+.artikel-tanggal {
+  margin-top: auto;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+
+/* =====================================================
+   =============== ARTIKEL DETAIL PAGE =================
+   ===================================================== */
+
+.artikel-detail-page {
+  padding: 60px 0;
+}
+
+/* ===== HEADER ===== */
+.artikel-detail-header {
+  max-width: 900px;
+  margin: 0 auto 36px;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 36px 40px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* ===== BUTTON KEMBALI ===== */
+.artikel-back-btn {
+  margin-bottom: 18px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+/* ===== JUDUL (DETAIL) ===== */
+.artikel-detail-header .artikel-judul {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 14px;
+  color: #111827;
+}
+
+/* ===== DESKRIPSI (DETAIL) ===== */
+.artikel-detail-header .artikel-deskripsi {
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.7;
+  max-width: 820px;
+  margin-bottom: 10px;
+}
+
+/* ===== TANGGAL ===== */
+.artikel-detail-header .artikel-tanggal {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ===== PDF VIEWER ===== */
+.artikel-pdf-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ===== KUIS ===== */
+.kuis-container {
+  max-width: 1300px;   /* ⬅️ sama seperti artikel/video */
+}
+
+.kuis-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ICON */
+.kuis-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff8a00, #ff5f00);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+
+/* TITLE */
+.kuis-title {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+/* DESKRIPSI */
+.kuis-deskripsi {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+/* BADGE */
+.badge-soal {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 20px;
+}
+
+/* BUTTON */
+.kuis-btn {
+  margin-top: auto;
+  display: block;
+  text-align: center;
+  padding: 12px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #14b8a6, #2563eb);
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* ================= KUIS DETAIL PAGE ================= */
+
+.kuis-detail-page {
+  padding: 60px 0;
+}
+
+/* ===== HEADER ===== */
+.kuis-detail-header {
+  max-width: 900px;
+  margin: 0 auto 40px;
+  background: linear-gradient(
+    180deg,
+    rgba(37, 99, 235, 0.08),
+    #ffffff
+  );
+  border-radius: 22px;
+  padding: 36px 40px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+.kuis-badge-header {
+  display: inline-block;
+  background: rgba(37, 99, 235, 0.15);
+  color: #2563eb;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.kuis-judul {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 14px;
+  color: #111827;
+}
+
+.kuis-deskripsi-header {
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.7;
+  max-width: 820px;
+}
+
+/* ===== SOAL WRAPPER ===== */
+.kuis-soal-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ===== SOAL CARD ===== */
+.kuis-question-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 22px 26px;
+  margin-bottom: 22px;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+}
+
+.kuis-question-title {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 16px;
+  color: #1f2937;
+}
+
+/* ===== OPSI ===== */
+.kuis-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.kuis-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f9fafb;
+  padding: 14px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.kuis-option:hover {
+  background: #eef6ff;
+}
+
+.kuis-option input {
+  accent-color: #2563eb;
+}
+
+/* ===== SUBMIT ===== */
+.kuis-submit {
+  width: 100%;
+  padding: 15px;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 16px;
+  margin-top: 28px;
+}

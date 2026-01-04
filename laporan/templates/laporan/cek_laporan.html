@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cek Status Laporan{% endblock %}
+
+{% block content %}
+<section class="cek-laporan-hero cek-laporan-page">
+  <div class="container text-center">
+
+    <h1 class="cek-laporan-title">Cek Status Laporan</h1>
+    <p class="cek-laporan-subtitle">
+      Selalu menjaga kerahasiaan agar merasa aman dan terlindungi
+    </p>
+
+    <!-- INPUT CARD -->
+    <div class="cek-laporan-card mx-auto mt-5">
+      <img src="{% static 'img/shield.png' %}" class="cek-laporan-icon">
+
+      <h3 class="cek-laporan-card-title">Masukkan Kode Laporan</h3>
+
+      <form method="post">
+        {% csrf_token %}
+        <input
+          type="text"
+          name="kode"
+          class="cek-laporan-input form-control text-center mb-4"
+          placeholder="Masukkan kode laporan"
+          required
+        >
+
+        <button type="submit" class="cek-laporan-btn-primary w-100">
+          Cek Status
+        </button>
+      </form>
+    </div>
+
+    {% if laporan %}
+    <div class="cek-laporan-detail-card mx-auto mt-5 p-4">
+
+      <div class="text-center">
+        <img src="{% static 'img/ribbon.png' %}" class="cek-laporan-icon mb-3">
+        <h3 class="cek-laporan-detail-title">Detail Laporan</h3>
+      </div>
+
+      <div class="mt-4 text-start">
+        <p class="mb-1"><strong>Pelapor :</strong> {{ laporan.nama_pelapor }} ({{ laporan.kelas_pelapor }})</p>
+        <p class="mb-1"><strong>Terlapor :</strong> {{ laporan.terlapor }}</p>
+
+        <p class="mb-1"><strong>Jenis Bullying :</strong>
+          {{ laporan.get_jenis_bullying_display }}
+        </p>
+
+        <p class="mb-1"><strong>Isi Laporan :</strong></p>
+        <p class="mb-0">{{ laporan.isi_laporan }}</p>
+      </div>
+
+      <hr>
+
+      <div class="text-center">
+        <h3 class="cek-laporan-detail-title mb-1">Status</h3>
+        <p class="cek-laporan-status mb-3">{{ laporan.status }}</p>
+      </div>
+
+      {% if laporan.catatan_bk and laporan.status != "Menunggu Ditindaklanjuti" %}
+      <div class="card bg-light border-0 p-3 mb-3">
+        <h5 class="mb-2">Catatan BK</h5>
+        <p class="mb-0">{{ laporan.catatan_bk|linebreaksbr }}</p>
+      </div>
+      {% endif %}
+
+      <div class="d-grid gap-2">
+        {% if laporan.bukti_tindak_lanjut %}
+        <a href="{{ laporan.bukti_tindak_lanjut.url }}" class="cek-laporan-btn-success w-100">
+          Lihat Bukti Tindak Lanjut
+        </a>
+        {% endif %}
+
+        <a href="{% url 'laporan_home' %}" class="btn btn-outline-secondary w-100">← Kembali</a>
+      </div>
+
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

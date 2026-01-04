@@ -1,0 +1,73 @@
+{% extends "base_public.html" %}
+{% load static %}
+
+{% block title %}Login | SMP N 1 Madang Suku III{% endblock %}
+
+{% block content %}
+
+<!-- ================= HERO LOGIN ================= -->
+<section class="auth-hero d-flex justify-content-center align-items-center">
+  <div class="login-card text-center">
+
+    <!-- LOGO -->
+    <img src="{% static 'img/logo.png' %}" class="login-logo mb-3" alt="Logo">
+
+    <h2 class="login-title">Masuk</h2>
+
+    <!-- ================= FORM LOGIN ================= -->
+    <form method="POST" class="text-start mt-4">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label class="form-label">Masukan Username</label>
+        <input
+          type="text"
+          name="username"
+          class="form-control custom-input"
+          placeholder="Username"
+          required
+        >
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Masukan Password</label>
+        <input
+          type="password"
+          name="password"
+          class="form-control custom-input"
+          placeholder="Password"
+          required
+        >
+      </div>
+
+      <!-- ===== PESAN ERROR LOGIN ===== -->
+      {% if messages %}
+        <div class="text-center mb-2">
+          {% for message in messages %}
+            <p class="text-danger small mb-1">{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <button type="submit" class="btn btn-login w-100 mt-2">
+        Masuk
+      </button>
+    </form>
+
+    <!-- ================= LINK TAMBAHAN ================= -->
+    <div class="d-flex justify-content-between mt-4 small">
+      <div>
+        Belum punya akun?
+        <a href="{% url 'register' %}" class="link-primary">Daftar</a>
+      </div>
+
+      <!-- LINK LUPA PASSWORD (AKTIF) -->
+      <a href="{% url 'lupa_password' %}" class="link-primary">
+        Lupa password?
+      </a>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}
