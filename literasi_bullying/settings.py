@@ -1,6 +1,6 @@
 """
 Django settings for literasi_bullying project
-FINAL – Local + Railway Compatible
+FINAL – Railway Production Ready
 """
 
 from pathlib import Path
@@ -21,8 +21,7 @@ SECRET_KEY = os.environ.get(
     "django-insecure-local-only"
 )
 
-DEBUG = os.environ.get("DEBUG", "True") == "True"
-
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
     "literasi-bullying-production.up.railway.app",
@@ -30,7 +29,6 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
 ]
-
 
 CSRF_TRUSTED_ORIGINS = [
     "https://literasi-bullying-production.up.railway.app",
@@ -105,13 +103,9 @@ WSGI_APPLICATION = "literasi_bullying.wsgi.application"
 
 
 # =====================================================
-# DATABASE (POSTGRESQL - RAILWAY / SQLITE LOCAL)
+# DATABASE
 # =====================================================
-
-
-
 if os.environ.get("RAILWAY_ENVIRONMENT"):
-    # Railway / Production
     DATABASES = {
         "default": dj_database_url.config(
             conn_max_age=600,
@@ -119,7 +113,6 @@ if os.environ.get("RAILWAY_ENVIRONMENT"):
         )
     }
 else:
-    # Local Development (SQLite)
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -149,7 +142,7 @@ USE_TZ = True
 
 
 # =====================================================
-# STATIC FILES
+# STATIC FILES (FINAL & FIXED)
 # =====================================================
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -158,11 +151,8 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-STATICFILES_STORAGE = (
-    "whitenoise.storage.CompressedManifestStaticFilesStorage"
-    if not DEBUG
-    else "django.contrib.staticfiles.storage.StaticFilesStorage"
-)
+# 🔥 WAJIB PAKAI INI (JANGAN CONDITIONAL)
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 # =====================================================
@@ -173,7 +163,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 
 # =====================================================
-# UPLOAD LIMIT (10 MB)
+# UPLOAD LIMIT
 # =====================================================
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
