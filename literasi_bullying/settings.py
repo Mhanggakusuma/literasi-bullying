@@ -108,10 +108,9 @@ WSGI_APPLICATION = "literasi_bullying.wsgi.application"
 # DATABASE (POSTGRESQL - RAILWAY / SQLITE LOCAL)
 # =====================================================
 
-import os
-import dj_database_url
 
-if os.environ.get("DATABASE_URL"):
+
+if os.environ.get("RAILWAY_ENVIRONMENT"):
     # Railway / Production
     DATABASES = {
         "default": dj_database_url.config(
@@ -120,13 +119,14 @@ if os.environ.get("DATABASE_URL"):
         )
     }
 else:
-    # LOCAL (SQLite)
+    # Local Development (SQLite)
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+
 
 # =====================================================
 # PASSWORD VALIDATION
