@@ -99,12 +99,12 @@ WSGI_APPLICATION = "literasi_bullying.wsgi.application"
 
 
 # =====================================================
-# DATABASE (POSTGRESQL - RAILWAY ONLY)
+# DATABASE (POSTGRESQL - RAILWAY / SQLITE LOCAL)
 # =====================================================
-import dj_database_url
 
 DATABASES = {
     "default": dj_database_url.config(
+        default="sqlite:///db.sqlite3",  # ⬅️ PENTING
         conn_max_age=600,
         ssl_require=True
     )
