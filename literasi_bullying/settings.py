@@ -30,10 +30,12 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = [
+    "literasi-bullying-production.up.railway.app",
+    ".railway.app",
     "localhost",
     "127.0.0.1",
-    ".railway.app",
 ]
+
 
 # =====================================================
 # APPLICATIONS
