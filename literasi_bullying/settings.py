@@ -110,21 +110,22 @@ WSGI_APPLICATION = "literasi_bullying.wsgi.application"
 import os
 import dj_database_url
 
-if DEBUG:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
-else:
+if os.environ.get("DATABASE_URL"):
+    # Railway / Production
     DATABASES = {
         "default": dj_database_url.config(
             conn_max_age=600,
             ssl_require=True
         )
     }
-
+else:
+    # LOCAL (SQLite)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 # =====================================================
 # PASSWORD VALIDATION
