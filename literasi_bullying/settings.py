@@ -26,10 +26,11 @@ DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = [
     "literasi-bullying-production.up.railway.app",
-    ".railway.app",
+    ".up.railway.app",
     "localhost",
     "127.0.0.1",
 ]
+
 
 CSRF_TRUSTED_ORIGINS = [
     "https://literasi-bullying-production.up.railway.app",
