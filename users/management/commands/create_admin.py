@@ -5,7 +5,7 @@ import os
 User = get_user_model()
 
 class Command(BaseCommand):
-    help = "Create default admin if not exists"
+    help = "Create or reset admin user"
 
     def handle(self, *args, **options):
         username = os.environ.get("DJANGO_SUPERUSER_USERNAME")
@@ -16,14 +16,17 @@ class Command(BaseCommand):
             self.stdout.write("Admin env not set, skipping.")
             return
 
-        if User.objects.filter(username=username).exists():
-            self.stdout.write("Admin already exists.")
-            return
-
-        User.objects.create_superuser(
+        user, created = User.objects.get_or_create(
             username=username,
-            password=password,
-            email=email
+            defaults={"email": email}
         )
 
-        self.stdout.write("Admin user created.")
+        user.is_staff = True
+        user.is_superuser = True
+        user.set_password(password)
+        user.save()
+
+        if created:
+            self.stdout.write("Admin user created.")
+        else:
+            self.stdout.write("Admin password reset.")
