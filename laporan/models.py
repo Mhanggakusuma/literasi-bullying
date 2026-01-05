@@ -26,6 +26,12 @@ class Laporan(models.Model):
         ("IX D", "IX D"), ("IX E", "IX E"),
     ]
 
+    STATUS_CHOICES = [
+        ("baru", "Laporan Baru"),
+        ("diproses", "Sedang Diproses"),
+        ("selesai", "Selesai Ditangani"),
+    ]
+
     nama_pelapor = models.CharField(max_length=100)
     nis_pelapor = models.CharField(max_length=20)
 
@@ -51,8 +57,9 @@ class Laporan(models.Model):
     )
 
     status = models.CharField(
-        max_length=50,
-        default="Menunggu Ditindaklanjuti"
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="baru"
     )
 
     catatan_bk = models.TextField(blank=True, null=True)

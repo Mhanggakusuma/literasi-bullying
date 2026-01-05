@@ -54,30 +54,50 @@ def cek_laporan(request):
     )
 
 
+# =======================
+# DASHBOARD GURU BK (FINAL)
+# =======================
 @login_required
 def bk_dashboard(request):
-    laporan_qs = Laporan.objects.all().order_by("-tanggal")
+    status_filter = request.GET.get("status", "all")
+    query = request.GET.get("q", "")
 
-    statistik_kelas = (
-        laporan_qs
-        .values("kelas_pelapor")
-        .annotate(total=Count("id"))
-        .order_by("-total")
-    )
+    laporan_qs = Laporan.objects.all()
 
-    tren_qs = (
-        laporan_qs
-        .annotate(bulan=TruncMonth("tanggal"))
-        .values("bulan")
-        .annotate(total=Count("id"))
-        .order_by("bulan")
-    )
+    if status_filter == "baru":
+        laporan_qs = laporan_qs.filter(status="baru")
+    elif status_filter == "diproses":
+        laporan_qs = laporan_qs.filter(status="diproses")
+    elif status_filter == "selesai":
+        laporan_qs = laporan_qs.filter(status="selesai")
+
+    if query:
+        laporan_qs = laporan_qs.filter(kode_laporan__icontains=query)
+
+    laporan_qs = laporan_qs.order_by("-tanggal")
 
     context = {
         "laporan": laporan_qs,
-        "statistik_kelas": statistik_kelas,
-        "chart_labels": [t["bulan"].strftime("%b %Y") for t in tren_qs],
-        "chart_data": [t["total"] for t in tren_qs],
+
+        # Ringkasan
+        "total_laporan": Laporan.objects.count(),
+        "laporan_baru": Laporan.objects.filter(status="baru").count(),
+        "sedang_diproses": Laporan.objects.filter(status="diproses").count(),
+        "selesai": Laporan.objects.filter(status="selesai").count(),
+
+        # Filter state
+        "status_filter": status_filter,
+        "query": query,
+
+        # Statistik kelas
+        "statistik_kelas": (
+            Laporan.objects.values("kelas_pelapor")
+            .annotate(total=Count("id"))
+            .order_by("-total")
+        ),
+
+        # Aktivitas terkini
+        "aktivitas_terkini": Laporan.objects.order_by("-tanggal")[:5],
     }
 
     return render(request, "laporan/bk_dashboard.html", context)
@@ -88,14 +108,10 @@ def bk_tindak_lanjut(request, pk):
     laporan = get_object_or_404(Laporan, pk=pk)
 
     if request.method == "POST":
-        form = TindakLanjutForm(
-            request.POST,
-            request.FILES,
-            instance=laporan
-        )
+        form = TindakLanjutForm(request.POST, request.FILES, instance=laporan)
         if form.is_valid():
             laporan = form.save(commit=False)
-            laporan.status = "Sudah Ditindaklanjuti"
+            laporan.status = "selesai"
             laporan.save()
             return redirect("bk_dashboard")
     else:
@@ -125,7 +141,7 @@ def bk_download_laporan(request):
             lap.nis_pelapor,
             lap.kelas_pelapor,
             lap.get_jenis_bullying_display(),
-            lap.status,
+            lap.get_status_display(),
             lap.tanggal.strftime("%d-%m-%Y"),
         ])
 
