@@ -105,20 +105,17 @@ WSGI_APPLICATION = "literasi_bullying.wsgi.application"
 # =====================================================
 # DATABASE
 # =====================================================
-if os.environ.get("RAILWAY_ENVIRONMENT"):
-    DATABASES = {
-        "default": dj_database_url.config(
-            conn_max_age=600,
-            ssl_require=True
-        )
-    }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
+# =====================================================
+# DATABASE (FINAL – JANGAN PAKAI IF ELSE)
+# =====================================================
+DATABASES = {
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
+
 
 
 # =====================================================
