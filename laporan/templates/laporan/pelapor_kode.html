@@ -3,33 +3,37 @@
 {% block title %}Laporan Berhasil Dikirim{% endblock %}
 
 {% block content %}
-<section class="hero-section">
-  <div class="container text-center">
+<div class="buat-laporan-page">
 
-    <h1 class="hero-title">Laporan Berhasil Dikirim</h1>
-    <p class="hero-subtitle">
-      Selalu menjaga kerahasiaan agar merasa aman dan terlindungi
-    </p>
+  <section class="buat-laporan-hero">
+    <div class="container text-center">
 
-    <!-- SUCCESS CARD -->
-    <div class="success-card mx-auto mt-5">
-
-      <img src="{% static 'img/check.png' %}" class="success-icon" alt="Berhasil">
-
-      <p class="success-text">
-        Gunakan dan simpan Kode Berikut Untuk mengecek Status Laporan Anda
+      <h1 class="hero-title">Laporan Berhasil Dikirim</h1>
+      <p class="hero-subtitle">
+        Selalu menjaga kerahasiaan agar merasa aman dan terlindungi
       </p>
 
-      <div class="code-box">
-        {{ kode }}
+      <!-- SUCCESS CARD -->
+      <div class="success-card mx-auto mt-5">
+
+        <img src="{% static 'img/check.png' %}" class="success-icon" alt="Berhasil">
+
+        <p class="success-text">
+          Gunakan dan simpan kode berikut untuk mengecek status laporan Anda
+        </p>
+
+        <div class="code-box">
+          {{ kode }}
+        </div>
+
+        <a href="{% url 'laporan_home' %}" class="btn btn-kembali w-100 mt-3">
+          ← Kembali
+        </a>
+
       </div>
 
-      <a href="{% url 'laporan_home' %}" class="btn btn-outline-primary w-100 mt-3">
-        Kembali
-      </a>
-
     </div>
+  </section>
 
-  </div>
-</section>
+</div>
 {% endblock %}
