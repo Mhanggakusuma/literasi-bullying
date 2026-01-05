@@ -6,13 +6,14 @@ MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10 MB
 
 
 class LaporanForm(forms.ModelForm):
+
     nis_pelapor = forms.CharField(
         label="NIS Pelapor",
         max_length=20,
-        help_text="Harus sesuai dengan NIS saat registrasi",
+        help_text="Harus sesuai dengan NIS akun yang terdaftar",
         widget=forms.TextInput(attrs={
             "class": "form-control",
-            "placeholder": "NIS sesuai akun terdaftar"
+            "placeholder": "Masukkan NIS sesuai akun"
         })
     )
 
@@ -33,13 +34,15 @@ class LaporanForm(forms.ModelForm):
                 "class": "form-control",
                 "placeholder": "Nama lengkap pelapor"
             }),
-            "kelas_pelapor": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "Contoh: VII A"
+            "kelas_pelapor": forms.Select(attrs={
+                "class": "form-select"
             }),
             "terlapor": forms.TextInput(attrs={
                 "class": "form-control",
                 "placeholder": "Nama siswa yang dilaporkan"
+            }),
+            "jenis_bullying": forms.Select(attrs={
+                "class": "form-select"
             }),
             "isi_laporan": forms.Textarea(attrs={
                 "class": "form-control",
@@ -53,10 +56,9 @@ class LaporanForm(forms.ModelForm):
 
     def clean_nis_pelapor(self):
         nis = self.cleaned_data.get("nis_pelapor")
-
         if not Profile.objects.filter(nis=nis).exists():
             raise forms.ValidationError(
-                "NIS tidak terdaftar. Gunakan NIS yang sesuai akun."
+                "NIS tidak terdaftar. Gunakan NIS sesuai akun siswa."
             )
         return nis
 
@@ -69,22 +71,14 @@ class LaporanForm(forms.ModelForm):
         return file
 
 
-# =============================
-# FORM TINDAK LANJUT BK
-# =============================
 class TindakLanjutForm(forms.ModelForm):
     class Meta:
         model = Laporan
-        fields = [
-            "catatan_bk",
-            "bukti_tindak_lanjut"
-        ]
-
+        fields = ["catatan_bk", "bukti_tindak_lanjut"]
         widgets = {
             "catatan_bk": forms.Textarea(attrs={
                 "class": "form-control",
                 "rows": 4,
-                "placeholder": "Tuliskan hasil penanganan / tindak lanjut..."
             }),
             "bukti_tindak_lanjut": forms.ClearableFileInput(attrs={
                 "class": "form-control"

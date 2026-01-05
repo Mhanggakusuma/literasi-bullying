@@ -2,9 +2,6 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 
-# =========================
-# VALIDATOR UKURAN FILE
-# =========================
 def validate_file_size(value):
     max_size = 10 * 1024 * 1024  # 10 MB
     if value.size > max_size:
@@ -14,15 +11,29 @@ def validate_file_size(value):
 class Laporan(models.Model):
 
     JENIS_BULLYING_CHOICES = [
-        ("Fisik", "Bullying Fisik (memukul, mendorong, dll)"),
-        ("Verbal", "Bullying Verbal (mengejek, menghina, dll)"),
-        ("Sosial", "Bullying Sosial (mengucilkan, menyebarkan gosip)"),
-        ("Cyber", "Cyberbullying (media sosial / online)"),
+        ("Fisik", "Bullying Fisik"),
+        ("Verbal", "Bullying Verbal"),
+        ("Sosial", "Bullying Sosial"),
+        ("Cyber", "Cyberbullying"),
+    ]
+
+    KELAS_CHOICES = [
+        ("VII A", "VII A"), ("VII B", "VII B"), ("VII C", "VII C"),
+        ("VII D", "VII D"), ("VII E", "VII E"),
+        ("VIII A", "VIII A"), ("VIII B", "VIII B"), ("VIII C", "VIII C"),
+        ("VIII D", "VIII D"), ("VIII E", "VIII E"),
+        ("IX A", "IX A"), ("IX B", "IX B"), ("IX C", "IX C"),
+        ("IX D", "IX D"), ("IX E", "IX E"),
     ]
 
     nama_pelapor = models.CharField(max_length=100)
     nis_pelapor = models.CharField(max_length=20)
-    kelas_pelapor = models.CharField(max_length=20)
+
+    kelas_pelapor = models.CharField(
+        max_length=10,
+        choices=KELAS_CHOICES
+    )
+
     terlapor = models.CharField(max_length=100)
 
     jenis_bullying = models.CharField(
@@ -30,12 +41,8 @@ class Laporan(models.Model):
         choices=JENIS_BULLYING_CHOICES
     )
 
-    # KRONOLOGI / CERITA KEJADIAN
     isi_laporan = models.TextField()
 
-    # =========================
-    # BUKTI LAPORAN (FILE BEBAS)
-    # =========================
     bukti = models.FileField(
         upload_to="laporan_bukti/",
         blank=True,
@@ -50,9 +57,6 @@ class Laporan(models.Model):
 
     catatan_bk = models.TextField(blank=True, null=True)
 
-    # =========================
-    # BUKTI TINDAK LANJUT BK
-    # =========================
     bukti_tindak_lanjut = models.FileField(
         upload_to="laporan_tindak_lanjut/",
         blank=True,

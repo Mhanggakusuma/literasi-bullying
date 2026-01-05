@@ -1,32 +1,27 @@
 import random
 import string
 import csv
+
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
-from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 from .models import Laporan
 from .forms import LaporanForm, TindakLanjutForm
 
 
-# =============================
-# Generate kode laporan unik
-# =============================
 def generate_kode():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
 
 
-# =============================
-# Home laporan
-# =============================
+@login_required
 def laporan_home(request):
     return render(request, "laporan/laporan_home.html")
 
 
-# =============================
-# Buat laporan siswa
-# =============================
+@login_required
 def buat_laporan(request):
     if request.method == "POST":
         form = LaporanForm(request.POST, request.FILES)
@@ -42,16 +37,10 @@ def buat_laporan(request):
     else:
         form = LaporanForm()
 
-    return render(
-        request,
-        "laporan/buat_laporan.html",
-        {"form": form}
-    )
+    return render(request, "laporan/buat_laporan.html", {"form": form})
 
 
-# =============================
-# Cek laporan berdasarkan kode
-# =============================
+@login_required
 def cek_laporan(request):
     laporan = None
     if request.method == "POST":
@@ -65,28 +54,9 @@ def cek_laporan(request):
     )
 
 
-# =============================
-# Dashboard Guru BK
-# =============================
+@login_required
 def bk_dashboard(request):
-    query = request.GET.get("q")
-    status_filter = request.GET.get("status", "all")
-
-    laporan_qs = Laporan.objects.all()
-
-    if status_filter == "baru":
-        laporan_qs = laporan_qs.filter(status="Menunggu Ditindaklanjuti")
-    elif status_filter == "selesai":
-        laporan_qs = laporan_qs.filter(status="Sudah Ditindaklanjuti")
-
-    if query:
-        laporan_qs = laporan_qs.filter(kode_laporan__icontains=query)
-
-    laporan_qs = laporan_qs.order_by("-tanggal")
-
-    total_laporan = Laporan.objects.count()
-    laporan_baru = Laporan.objects.filter(status="Menunggu Ditindaklanjuti").count()
-    selesai = Laporan.objects.filter(status="Sudah Ditindaklanjuti").count()
+    laporan_qs = Laporan.objects.all().order_by("-tanggal")
 
     statistik_kelas = (
         laporan_qs
@@ -105,9 +75,6 @@ def bk_dashboard(request):
 
     context = {
         "laporan": laporan_qs,
-        "total_laporan": total_laporan,
-        "laporan_baru": laporan_baru,
-        "selesai": selesai,
         "statistik_kelas": statistik_kelas,
         "chart_labels": [t["bulan"].strftime("%b %Y") for t in tren_qs],
         "chart_data": [t["total"] for t in tren_qs],
@@ -116,9 +83,7 @@ def bk_dashboard(request):
     return render(request, "laporan/bk_dashboard.html", context)
 
 
-# =============================
-# Tindak lanjut Guru BK
-# =============================
+@login_required
 def bk_tindak_lanjut(request, pk):
     laporan = get_object_or_404(Laporan, pk=pk)
 
@@ -139,30 +104,18 @@ def bk_tindak_lanjut(request, pk):
     return render(
         request,
         "laporan/bk_tindak_lanjut.html",
-        {
-            "laporan": laporan,
-            "form": form
-        }
+        {"laporan": laporan, "form": form}
     )
 
 
-# =============================
-# Download CSV laporan
-# =============================
+@login_required
 def bk_download_laporan(request):
     response = HttpResponse(content_type="text/csv")
     response["Content-Disposition"] = 'attachment; filename="laporan_bullying.csv"'
 
     writer = csv.writer(response)
     writer.writerow([
-        "Kode Laporan",
-        "Nama Pelapor",
-        "NIS",
-        "Kelas",
-        "Jenis Bullying",
-        "Terlapor",
-        "Status",
-        "Tanggal"
+        "Kode", "Nama", "NIS", "Kelas", "Jenis", "Status", "Tanggal"
     ])
 
     for lap in Laporan.objects.all().order_by("-tanggal"):
@@ -172,9 +125,8 @@ def bk_download_laporan(request):
             lap.nis_pelapor,
             lap.kelas_pelapor,
             lap.get_jenis_bullying_display(),
-            lap.terlapor,
             lap.status,
-            lap.tanggal.strftime("%d-%m-%Y %H:%M")
+            lap.tanggal.strftime("%d-%m-%Y"),
         ])
 
     return response
