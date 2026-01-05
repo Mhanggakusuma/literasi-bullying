@@ -755,6 +755,51 @@ body {
   background: #1C6BEF;
   color: #ffffff;
 }
+/* =====================================================
+   SUCCESS PAGE – PELAPOR KODE
+===================================================== */
+
+.success-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 40px 32px;
+  max-width: 520px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+
+.success-icon {
+  width: 72px;
+  margin-bottom: 20px;
+}
+
+.success-text {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 18px;
+}
+
+.code-box {
+  background: #f3f6fb;
+  border: 2px dashed #0d6ac6;
+  border-radius: 14px;
+  padding: 18px;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #0d6ac6;
+  margin-bottom: 22px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 576px) {
+  .success-card {
+    padding: 28px 20px;
+  }
+
+  .code-box {
+    font-size: 22px;
+  }
+}
 
 /* ===================================================== */
 /* ============ CEK LAPORAN (FINAL FIXED) ============== */
