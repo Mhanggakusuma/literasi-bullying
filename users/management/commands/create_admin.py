@@ -26,4 +26,4 @@ class Command(BaseCommand):
             email=email
         )
 
-        self.stdout.write("Admin user created successfully.")
+        self.stdout.write("Admin user created.")
