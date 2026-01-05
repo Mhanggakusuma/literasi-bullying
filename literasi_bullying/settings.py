@@ -116,6 +116,15 @@ DATABASES = {
     )
 }
 
+if os.environ.get("RAILWAY_ENVIRONMENT"):
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    if not User.objects.filter(username="adminsmp1md3").exists():
+        User.objects.create_superuser(
+            username="adminsmp1md3",
+            email="adminsmp1md3@gmail.com",
+            password="AdminSMP123!"
+        )
 
 
 # =====================================================
