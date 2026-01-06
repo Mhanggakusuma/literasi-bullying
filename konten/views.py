@@ -1,7 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-import requests
+
+from cloudinary.utils import private_download_url
 
 from .models import Artikel, Video, Kuis, Opsi
 
@@ -27,7 +28,9 @@ def artikel_detail(request, id):
     return render(request, "konten/artikel_detail.html", {"artikel": artikel})
 
 
-# 🔥 VIEW BARU: DOWNLOAD PDF VIA DJANGO (PROXY)
+# =====================================================
+# 🔥 DOWNLOAD PDF VIA SIGNED CLOUDINARY URL (FINAL)
+# =====================================================
 @login_required
 def download_artikel_pdf(request, id):
     artikel = get_object_or_404(Artikel, id=id)
@@ -35,21 +38,19 @@ def download_artikel_pdf(request, id):
     if not artikel.file_pdf:
         return HttpResponse("File PDF tidak tersedia", status=404)
 
-    pdf_url = artikel.file_pdf.url
+    # Ambil public_id dari CloudinaryField
+    public_id = artikel.file_pdf.public_id
 
-    # Ambil file dari Cloudinary (server-to-server)
-    response = requests.get(pdf_url, stream=True)
-
-    if response.status_code != 200:
-        return HttpResponse("Gagal mengambil file PDF", status=500)
-
-    # Kirim ke browser sebagai file download
-    resp = HttpResponse(
-        response.content,
-        content_type="application/pdf"
+    # Buat signed download URL (RESMI Cloudinary)
+    download_url = private_download_url(
+        public_id,
+        format="pdf",
+        resource_type="image",
+        expires_at=3600  # URL berlaku 1 jam
     )
-    resp["Content-Disposition"] = f'attachment; filename="{artikel.judul}.pdf"'
-    return resp
+
+    # Redirect user ke signed URL
+    return redirect(download_url)
 
 
 @login_required

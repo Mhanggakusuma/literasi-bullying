@@ -8,7 +8,7 @@ urlpatterns = [
     # Artikel
     path("artikel/<int:id>/", views.artikel_detail, name="artikel_detail"),
 
-    # 🔥 DOWNLOAD PDF (LEWAT DJANGO)
+    # 🔥 DOWNLOAD PDF (SIGNED CLOUDINARY)
     path(
         "artikel/<int:id>/download/",
         views.download_artikel_pdf,

@@ -5,7 +5,6 @@
 {% block content %}
 <div class="container artikel-detail-page">
 
-  <!-- ================= HEADER ================= -->
   <div class="artikel-detail-header mb-4">
 
     <a href="{% url 'konten_index' %}?tab=artikel"
@@ -28,7 +27,7 @@
     </span>
 
     {% if artikel.file_pdf %}
-      <!-- 🔥 DOWNLOAD VIA DJANGO (AMAN, TANPA 401) -->
+      <!-- 🔥 DOWNLOAD VIA SIGNED CLOUDINARY URL -->
       <a href="{% url 'download_artikel_pdf' artikel.id %}"
          class="btn btn-primary btn-lg">
         ⬇️ Download Artikel (PDF)
