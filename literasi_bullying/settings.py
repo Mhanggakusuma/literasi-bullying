@@ -187,4 +187,4 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 # =====================================================
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-print("DEFAULT STORAGE:", STORAGES["default"]["BACKEND"])
+
