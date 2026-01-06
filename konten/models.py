@@ -4,7 +4,7 @@ from cloudinary.models import CloudinaryField
 
 # =====================================================
 # ⬇️ WAJIB ADA (UNTUK MIGRATION LAMA)
-# JANGAN DIHAPUS walaupun sudah tidak dipakai
+# JANGAN DIHAPUS
 # =====================================================
 def artikel_upload_path(instance, filename):
     return f"artikel_pdf/{filename}"
@@ -17,10 +17,10 @@ class Artikel(models.Model):
     judul = models.CharField(max_length=200)
     deskripsi = models.TextField(blank=True)
 
-    # 🔥 PDF DISIMPAN DI CLOUDINARY
-    # resource_type="raw" → PDF, DOCX, dll
+    # 🔥 PDF DISIMPAN SEBAGAI IMAGE (AGAR TIDAK 401)
+    # Cloudinary akan memperlakukan PDF sebagai image multi-page
     file_pdf = CloudinaryField(
-        resource_type="raw",
+        resource_type="image",
         blank=True,
         null=True
     )
