@@ -6,31 +6,36 @@
 <div class="container artikel-detail-page">
 
   <!-- ================= HEADER ================= -->
-  <div class="artikel-detail-header">
+  <div class="artikel-detail-header mb-4">
 
+    <!-- TOMBOL KEMBALI -->
     <a href="{% url 'konten_index' %}?tab=artikel"
        class="btn btn-outline-secondary mb-3">
       ← Kembali ke Daftar Artikel
     </a>
 
+    <!-- JUDUL -->
     <h1 class="artikel-judul">
       {{ artikel.judul }}
     </h1>
 
+    <!-- DESKRIPSI -->
     {% if artikel.deskripsi %}
       <p class="artikel-deskripsi">
         {{ artikel.deskripsi }}
       </p>
     {% endif %}
 
-    <span class="artikel-tanggal d-block mb-3">
+    <!-- TANGGAL -->
+    <span class="artikel-tanggal d-block mb-3 text-muted">
       Upload: {{ artikel.tanggal_upload|date:"d M Y" }}
     </span>
 
+    <!-- DOWNLOAD PDF -->
     {% if artikel.file_pdf %}
-      <a href="{{ artikel.file_pdf.url }}"
+      <a href="{{ artikel.file_pdf.url }}?fl_attachment=true"
          target="_blank"
-         class="btn btn-primary btn-sm mb-4">
+         class="btn btn-primary mb-4">
         ⬇️ Download Artikel (PDF)
       </a>
     {% endif %}
@@ -39,16 +44,16 @@
 
   <!-- ================= PDF PREVIEW ================= -->
   {% if artikel.file_pdf %}
-    <div class="artikel-pdf-wrapper mt-4">
+    <div class="artikel-pdf-wrapper mb-5">
       <iframe
-        src="{{ artikel.file_pdf.url }}"
+        src="https://docs.google.com/gview?url={{ artikel.file_pdf.url }}&embedded=true"
         width="100%"
         height="720px"
         style="border:1px solid #ddd; border-radius:14px;">
       </iframe>
     </div>
   {% else %}
-    <div class="alert alert-warning mt-4">
+    <div class="alert alert-warning">
       Artikel ini belum memiliki file PDF.
     </div>
   {% endif %}
