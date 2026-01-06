@@ -1,23 +1,39 @@
 from django.db import models
+from cloudinary.models import CloudinaryField
 
 
-# ⬇️ WAJIB ADA UNTUK MIGRATION LAMA
+# =====================================================
+# ⬇️ WAJIB ADA (UNTUK MIGRATION LAMA)
+# JANGAN DIHAPUS walaupun sudah tidak dipakai
+# =====================================================
 def artikel_upload_path(instance, filename):
     return f"artikel_pdf/{filename}"
 
 
+# =========================
+# MODEL ARTIKEL (PDF)
+# =========================
 class Artikel(models.Model):
     judul = models.CharField(max_length=200)
     deskripsi = models.TextField(blank=True)
-    file_pdf = models.FileField(
-        upload_to=artikel_upload_path
+
+    # 🔥 PDF DISIMPAN DI CLOUDINARY
+    # resource_type="raw" → PDF, DOCX, dll
+    file_pdf = CloudinaryField(
+        resource_type="raw",
+        blank=True,
+        null=True
     )
+
     tanggal_upload = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.judul
 
 
+# =========================
+# MODEL VIDEO (YOUTUBE)
+# =========================
 class Video(models.Model):
     judul = models.CharField(max_length=200)
     youtube_id = models.CharField(max_length=50)
@@ -27,6 +43,9 @@ class Video(models.Model):
         return self.judul
 
 
+# =========================
+# MODEL KUIS
+# =========================
 class Kuis(models.Model):
     judul = models.CharField(max_length=200)
     deskripsi = models.TextField(blank=True)
@@ -35,6 +54,9 @@ class Kuis(models.Model):
         return self.judul
 
 
+# =========================
+# MODEL PERTANYAAN
+# =========================
 class Pertanyaan(models.Model):
     kuis = models.ForeignKey(
         Kuis,
@@ -47,6 +69,9 @@ class Pertanyaan(models.Model):
         return self.teks
 
 
+# =========================
+# MODEL OPSI JAWABAN
+# =========================
 class Opsi(models.Model):
     pertanyaan = models.ForeignKey(
         Pertanyaan,
