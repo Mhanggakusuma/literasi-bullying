@@ -28,8 +28,8 @@
     </span>
 
     {% if artikel.file_pdf %}
-      <a href="{{ artikel.file_pdf.url }}?fl_attachment=true"
-         target="_blank"
+      <!-- 🔥 DOWNLOAD VIA DJANGO (AMAN, TANPA 401) -->
+      <a href="{% url 'download_artikel_pdf' artikel.id %}"
          class="btn btn-primary btn-lg">
         ⬇️ Download Artikel (PDF)
       </a>
