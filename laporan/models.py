@@ -1,10 +1,8 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from cloudinary.models import CloudinaryField
 
 
-# =========================
-# VALIDATOR UKURAN FILE
-# =========================
 def validate_file_size(value):
     max_size = 10 * 1024 * 1024  # 10 MB
     if value.size > max_size:
@@ -13,9 +11,6 @@ def validate_file_size(value):
 
 class Laporan(models.Model):
 
-    # =========================
-    # CHOICES
-    # =========================
     JENIS_BULLYING_CHOICES = [
         ("Fisik", "Bullying Fisik"),
         ("Verbal", "Bullying Verbal"),
@@ -38,59 +33,36 @@ class Laporan(models.Model):
         ("selesai", "Selesai Ditangani"),
     ]
 
-    # =========================
-    # DATA PELAPOR
-    # =========================
     nama_pelapor = models.CharField(max_length=100)
     nis_pelapor = models.CharField(max_length=20)
-
-    kelas_pelapor = models.CharField(
-        max_length=10,
-        choices=KELAS_CHOICES
-    )
-
+    kelas_pelapor = models.CharField(max_length=10, choices=KELAS_CHOICES)
     terlapor = models.CharField(max_length=100)
 
-    # =========================
-    # ISI LAPORAN
-    # =========================
-    jenis_bullying = models.CharField(
-        max_length=20,
-        choices=JENIS_BULLYING_CHOICES
-    )
-
+    jenis_bullying = models.CharField(max_length=20, choices=JENIS_BULLYING_CHOICES)
     isi_laporan = models.TextField()
 
-    bukti = models.FileField(
-        upload_to="laporan_bukti/",
+    # 🔥 CLOUDINARY FIELD
+    bukti = CloudinaryField(
+        resource_type="auto",
         blank=True,
-        null=True,
-        validators=[validate_file_size]
+        null=True
     )
 
-    # 🔥 PERBAIKAN UTAMA DI SINI
-    # max_length DIPERBESAR agar kompatibel dengan data lama
     status = models.CharField(
-        max_length=50,   # ⬅️ WAJIB 50 (bukan 20)
+        max_length=50,
         choices=STATUS_CHOICES,
         default="baru"
     )
 
-    # =========================
-    # TINDAK LANJUT BK
-    # =========================
     catatan_bk = models.TextField(blank=True, null=True)
 
-    bukti_tindak_lanjut = models.FileField(
-        upload_to="laporan_tindak_lanjut/",
+    # 🔥 CLOUDINARY FIELD
+    bukti_tindak_lanjut = CloudinaryField(
+        resource_type="auto",
         blank=True,
-        null=True,
-        validators=[validate_file_size]
+        null=True
     )
 
-    # =========================
-    # META
-    # =========================
     kode_laporan = models.CharField(max_length=12, unique=True)
     tanggal = models.DateTimeField(auto_now_add=True)
 
