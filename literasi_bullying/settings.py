@@ -1,6 +1,6 @@
 """
 Django settings for literasi_bullying project
-FINAL – Railway + Cloudinary Ready
+FINAL – Railway + Cloudinary (PRODUCTION READY)
 """
 
 from pathlib import Path
@@ -16,11 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # =====================================================
 # SECURITY
 # =====================================================
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY",
-    "django-insecure-local-only"
-)
-
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-local-only")
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
@@ -73,7 +69,6 @@ LOGOUT_REDIRECT_URL = "/users/login/"
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -108,13 +103,13 @@ WSGI_APPLICATION = "literasi_bullying.wsgi.application"
 
 
 # =====================================================
-# DATABASE (FINAL – TANPA IF ELSE)
+# DATABASE
 # =====================================================
 DATABASES = {
     "default": dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=True,
     )
 }
 
@@ -145,9 +140,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
@@ -157,13 +150,8 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # =====================================================
 MEDIA_URL = "/media/"
 
+# 🔥 INI KUNCI UTAMA
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-
-CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
-    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
-    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
-}
 
 
 # =====================================================
