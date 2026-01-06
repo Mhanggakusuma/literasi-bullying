@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-
 from cloudinary.utils import private_download_url
+import time
 
 from .models import Artikel, Video, Kuis, Opsi
 
@@ -29,7 +29,7 @@ def artikel_detail(request, id):
 
 
 # =====================================================
-# 🔥 DOWNLOAD PDF VIA SIGNED CLOUDINARY URL (FINAL)
+# 🔥 DOWNLOAD PDF VIA SIGNED CLOUDINARY URL (FIXED)
 # =====================================================
 @login_required
 def download_artikel_pdf(request, id):
@@ -38,18 +38,18 @@ def download_artikel_pdf(request, id):
     if not artikel.file_pdf:
         return HttpResponse("File PDF tidak tersedia", status=404)
 
-    # Ambil public_id dari CloudinaryField
     public_id = artikel.file_pdf.public_id
 
-    # Buat signed download URL (RESMI Cloudinary)
+    # ⬅️ FIX UTAMA: expires_at HARUS UNIX TIMESTAMP
+    expires_at = int(time.time()) + 3600  # berlaku 1 jam
+
     download_url = private_download_url(
         public_id,
         format="pdf",
         resource_type="image",
-        expires_at=3600  # URL berlaku 1 jam
+        expires_at=expires_at
     )
 
-    # Redirect user ke signed URL
     return redirect(download_url)
 
 
