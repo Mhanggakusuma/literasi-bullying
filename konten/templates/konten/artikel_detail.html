@@ -8,30 +8,26 @@
   <!-- ================= HEADER ================= -->
   <div class="artikel-detail-header mb-4">
 
-    <!-- TOMBOL KEMBALI -->
     <a href="{% url 'konten_index' %}?tab=artikel"
        class="btn btn-outline-secondary mb-3">
       ← Kembali ke Daftar Artikel
     </a>
 
-    <!-- JUDUL -->
     <h1 class="artikel-judul">
       {{ artikel.judul }}
     </h1>
 
-    <!-- DESKRIPSI -->
     {% if artikel.deskripsi %}
       <p class="artikel-deskripsi">
         {{ artikel.deskripsi }}
       </p>
     {% endif %}
 
-    <!-- TANGGAL -->
     <span class="artikel-tanggal d-block mb-3 text-muted">
       Upload: {{ artikel.tanggal_upload|date:"d M Y" }}
     </span>
 
-    <!-- DOWNLOAD PDF -->
+    <!-- ✅ DOWNLOAD (PAKAI fl_attachment) -->
     {% if artikel.file_pdf %}
       <a href="{{ artikel.file_pdf.url }}?fl_attachment=true"
          target="_blank"
