@@ -1,6 +1,6 @@
 """
 Django settings for literasi_bullying project
-FINAL – Railway Production Ready
+FINAL – Railway + Cloudinary Ready
 """
 
 from pathlib import Path
@@ -46,6 +46,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # Third-party
+    "cloudinary",
+    "cloudinary_storage",
 
     # Local apps
     "users.apps.UsersConfig",
@@ -104,10 +108,7 @@ WSGI_APPLICATION = "literasi_bullying.wsgi.application"
 
 
 # =====================================================
-# DATABASE
-# =====================================================
-# =====================================================
-# DATABASE (FINAL – JANGAN PAKAI IF ELSE)
+# DATABASE (FINAL – TANPA IF ELSE)
 # =====================================================
 DATABASES = {
     "default": dj_database_url.config(
@@ -116,8 +117,6 @@ DATABASES = {
         ssl_require=True
     )
 }
-
-
 
 
 # =====================================================
@@ -141,7 +140,7 @@ USE_TZ = True
 
 
 # =====================================================
-# STATIC FILES (FINAL & FIXED)
+# STATIC FILES (WHITENOISE)
 # =====================================================
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -150,15 +149,21 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-# 🔥 WAJIB PAKAI INI (JANGAN CONDITIONAL)
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 # =====================================================
-# MEDIA FILES
+# MEDIA FILES (CLOUDINARY)
 # =====================================================
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+}
 
 
 # =====================================================
