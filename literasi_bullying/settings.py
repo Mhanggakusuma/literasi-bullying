@@ -1,6 +1,6 @@
 """
 Django settings for literasi_bullying project
-FINAL – Railway + Cloudinary (PRODUCTION READY)
+FINAL – Railway + Cloudinary (DJANGO 5 READY)
 """
 
 from pathlib import Path
@@ -17,6 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 # =====================================================
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-local-only")
+
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
@@ -69,6 +70,7 @@ LOGOUT_REDIRECT_URL = "/users/login/"
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -139,19 +141,32 @@ USE_TZ = True
 # =====================================================
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 
 # =====================================================
-# MEDIA FILES (CLOUDINARY)
+# STORAGE (DJANGO 5 – FINAL)
 # =====================================================
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
 MEDIA_URL = "/media/"
 
-# 🔥 INI KUNCI UTAMA
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+# =====================================================
+# CLOUDINARY CONFIG
+# =====================================================
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+}
 
 
 # =====================================================
