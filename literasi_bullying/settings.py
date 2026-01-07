@@ -1,6 +1,6 @@
 """
 Django settings for literasi_bullying project
-FINAL – Railway + Cloudinary (DJANGO 5 READY)
+FINAL – Railway + Cloudinary + Jazzmin (DJANGO 5 READY)
 """
 
 from pathlib import Path
@@ -37,6 +37,8 @@ CSRF_TRUSTED_ORIGINS = [
 # APPLICATIONS
 # =====================================================
 INSTALLED_APPS = [
+    "jazzmin",  # ⬅️ HARUS PALING ATAS
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -130,14 +132,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # =====================================================
 # INTERNATIONALIZATION
 # =====================================================
-LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+LANGUAGE_CODE = "id"
+TIME_ZONE = "Asia/Jakarta"
 USE_I18N = True
 USE_TZ = True
 
 
 # =====================================================
-# STATIC FILES (WHITENOISE)
+# STATIC FILES
 # =====================================================
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -145,7 +147,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 
 # =====================================================
-# STORAGE (DJANGO 5 – FINAL)
+# STORAGE
 # =====================================================
 STORAGES = {
     "default": {
@@ -160,7 +162,7 @@ MEDIA_URL = "/media/"
 
 
 # =====================================================
-# CLOUDINARY CONFIG
+# CLOUDINARY
 # =====================================================
 CLOUDINARY_STORAGE = {
     "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
@@ -188,3 +190,38 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
+# =====================================================
+# JAZZMIN ADMIN CONFIG (🔥 TAMPILAN MODERN)
+# =====================================================
+JAZZMIN_SETTINGS = {
+    "site_title": "Admin Literasi Bullying",
+    "site_header": "Sistem Literasi & Anti-Bullying",
+    "site_brand": "SMP Negeri",
+    "welcome_sign": "Selamat Datang Admin",
+    "copyright": "© 2026 Literasi Bullying",
+
+    "search_model": ["auth.User", "laporan.Laporan"],
+
+    "topmenu_links": [
+        {"name": "Dashboard", "url": "/dashboard/home/", "permissions": ["auth.view_user"]},
+        {"model": "auth.User"},
+        {"app": "laporan"},
+    ],
+
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.group": "fas fa-users",
+
+        "konten.artikel": "fas fa-newspaper",
+        "konten.video": "fas fa-video",
+        "konten.kuis": "fas fa-question-circle",
+        "konten.pertanyaan": "fas fa-list",
+        "konten.opsi": "fas fa-check-circle",
+
+        "laporan.laporan": "fas fa-file-alt",
+        "users.profile": "fas fa-id-badge",
+    },
+
+    "theme": "darkly",  # 🔥 DARK MODE
+}
