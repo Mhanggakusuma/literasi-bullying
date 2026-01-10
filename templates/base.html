@@ -46,7 +46,7 @@
     <div class="collapse navbar-collapse" id="navbarDashboard">
       <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
 
-        <!-- USER INFO MOBILE -->
+        <!-- ================= USER INFO (MOBILE ONLY) ================= -->
         <li class="nav-item d-lg-none mb-3">
           <div class="d-flex align-items-center gap-3 px-2">
             <div class="profile-avatar">
@@ -62,11 +62,18 @@
           <hr class="dropdown-divider">
         </li>
 
-        <!-- MENU -->
+        <!-- ================= BERANDA ================= -->
         <li class="nav-item">
-          <a class="nav-link" href="#">Beranda</a>
+          {% if user.profile.role == "siswa" %}
+            <a class="nav-link" href="{% url 'dashboard_siswa' %}">Beranda</a>
+          {% elif user.profile.role == "gurubk" %}
+            <a class="nav-link" href="{% url 'dashboard_guru' %}">Beranda</a>
+          {% elif user.profile.role == "admin" %}
+            <a class="nav-link" href="{% url 'dashboard_admin' %}">Beranda</a>
+          {% endif %}
         </li>
 
+        <!-- ================= MENU LAIN ================= -->
         <li class="nav-item">
           <a class="nav-link" href="{% url 'tentang_bullying_login' %}">
             Tentang Bullying
@@ -79,11 +86,26 @@
           </a>
         </li>
 
+        {% if user.profile.role == "siswa" %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'laporan_home' %}">Laporan</a>
+          </li>
+        {% elif user.profile.role == "gurubk" %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'bk_dashboard' %}">Laporan</a>
+          </li>
+        {% elif user.profile.role == "admin" %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin:index' %}">Admin Panel</a>
+          </li>
+        {% endif %}
+
+        <!-- ================= DIVIDER ================= -->
         <li class="nav-item d-lg-none mt-2">
           <hr class="dropdown-divider">
         </li>
 
-        <!-- LOGOUT MOBILE -->
+        <!-- ================= LOGOUT (MOBILE) ================= -->
         <li class="nav-item d-lg-none">
           <a class="nav-link text-danger fw-semibold"
              href="{% url 'logout' %}">
@@ -91,9 +113,10 @@
           </a>
         </li>
 
-        <!-- PROFILE DESKTOP -->
+        <!-- ================= PROFILE DESKTOP ================= -->
         <li class="nav-item dropdown d-none d-lg-block">
-          <a class="nav-link p-0" href="#" role="button" data-bs-toggle="dropdown">
+          <a class="nav-link p-0" href="#" role="button"
+             data-bs-toggle="dropdown">
             <div class="profile-avatar">
               <i class="bi bi-person-fill"></i>
             </div>
@@ -143,7 +166,7 @@
   }
 </script>
 
-<!-- ✅ CLOCK -->
+<!-- ✅ JAM WIB -->
 <script src="{% static 'js/clock.js' %}"></script>
 
 </body>
