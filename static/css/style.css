@@ -28,6 +28,79 @@ body {
   min-width: 180px;
   border-radius: 14px;
 }
+/* =====================================================
+   MOBILE NAVBAR – DRAWER STYLE (LIKE UMS)
+===================================================== */
+@media (max-width: 991px) {
+
+  /* Navbar tetap di atas */
+  .navbar {
+    z-index: 1050;
+  }
+
+  /* Collapse jadi sidebar */
+  .navbar-collapse {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 260px;
+    height: 100vh;
+    background: #ffffff;
+    padding: 80px 20px 24px;
+    transition: left 0.3s ease;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+  }
+
+  /* Saat dibuka */
+  .navbar-collapse.show {
+    left: 0;
+  }
+
+  /* Item menu */
+  .navbar-nav {
+    align-items: flex-start !important;
+    gap: 10px;
+  }
+
+  .navbar-nav .nav-link {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+
+  .navbar-nav .nav-link:hover {
+    background: #f1f5f9;
+  }
+
+  /* Tombol Daftar */
+  .navbar-nav .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Avatar profile */
+  .profile-avatar {
+    margin-top: 12px;
+  }
+
+  /* Overlay gelap */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s;
+    z-index: 1040;
+  }
+
+  body.nav-open::after {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
 
 /* =====================================================
    DASHBOARD HOME – FINAL (FULL + MOBILE FIX)

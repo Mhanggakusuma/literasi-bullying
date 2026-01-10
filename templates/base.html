@@ -7,93 +7,71 @@
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"rel="stylesheet">
 
   <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;700&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Global Style -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
-  <!-- Footer Info Style -->
   <link rel="stylesheet" href="{% static 'css/footer_info.css' %}">
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 
-<!-- ================= NAVBAR ================= -->
+<!-- ================= NAVBAR DASHBOARD ================= -->
 <nav class="navbar navbar-expand-lg navbar-light shadow-sm fixed-top navbar-dashboard">
-  <div class="container-fluid px-5">
+  <div class="container-fluid px-4">
 
-    {% if user.is_authenticated %}
-      {% if user.profile.role == "siswa" %}
-        <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard_siswa' %}">
-      {% elif user.profile.role == "gurubk" %}
-        <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard_guru' %}">
-      {% elif user.profile.role == "admin" %}
-        <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard_admin' %}">
-      {% else %}
-        <a class="navbar-brand d-flex align-items-center" href="/">
-      {% endif %}
+    {% if user.profile.role == "siswa" %}
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard_siswa' %}">
+    {% elif user.profile.role == "gurubk" %}
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard_guru' %}">
+    {% elif user.profile.role == "admin" %}
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard_admin' %}">
     {% else %}
       <a class="navbar-brand d-flex align-items-center" href="/">
     {% endif %}
-      <img src="{% static 'img/logo.png' %}" width="45" class="me-2">
-      <span class="fw-medium">SMP N 1 Madang Suku III</span>
-    </a>
+        <img src="{% static 'img/logo.png' %}" width="45" class="me-2">
+        <span class="fw-medium">SMP N 1 Madang Suku III</span>
+      </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDashboard">
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarDashboard">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarDashboard">
-      <ul class="navbar-nav ms-auto align-items-center gap-3">
-
-        {% if user.is_authenticated %}
-          {% if user.profile.role == "siswa" %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'dashboard_siswa' %}">Beranda</a>
-            </li>
-          {% elif user.profile.role == "gurubk" %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'dashboard_guru' %}">Beranda</a>
-            </li>
-          {% elif user.profile.role == "admin" %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'dashboard_admin' %}">Beranda</a>
-            </li>
-          {% endif %}
-        {% endif %}
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
 
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'tentang_bullying_login' %}">Tentang Bullying</a>
+          <a class="nav-link" href="#">Beranda</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'konten_index' %}">Literasi</a>
+          <a class="nav-link" href="{% url 'tentang_bullying_login' %}">
+            Tentang Bullying
+          </a>
         </li>
 
-        {% if user.profile.role == "siswa" %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'laporan_home' %}">Laporan</a>
-          </li>
-        {% elif user.profile.role == "gurubk" %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'bk_dashboard' %}">Laporan</a>
-          </li>
-        {% elif user.profile.role == "admin" %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'admin:index' %}">Admin Panel</a>
-          </li>
-        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'konten_index' %}">
+            Literasi
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'laporan_home' %}">
+            Laporan
+          </a>
+        </li>
 
         <!-- PROFILE -->
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown mt-2 mt-lg-0">
           <a class="nav-link p-0" href="#" role="button"
-             data-bs-toggle="dropdown" aria-expanded="false">
+             data-bs-toggle="dropdown">
             <div class="profile-avatar">
               <i class="bi bi-person-fill"></i>
             </div>
@@ -105,7 +83,8 @@
             </li>
             <li><hr class="dropdown-divider"></li>
             <li>
-              <a class="dropdown-item text-danger text-center" href="{% url 'logout' %}">
+              <a class="dropdown-item text-danger text-center"
+                 href="{% url 'logout' %}">
                 <i class="bi bi-box-arrow-right me-1"></i> Logout
               </a>
             </li>
@@ -133,7 +112,15 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<script src="{% static 'js/clock.js' %}"></script>
+<!-- Drawer Overlay Script -->
+<script>
+  const togglerDash = document.querySelector('.navbar-toggler');
+  if (togglerDash) {
+    togglerDash.addEventListener('click', () => {
+      document.body.classList.toggle('nav-open');
+    });
+  }
+</script>
 
 </body>
 </html>
