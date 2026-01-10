@@ -434,189 +434,116 @@ body {
 /* ===================================================== */
 
 .auth-hero {
-  min-height: calc(100vh - 120px);
+  min-height: 100vh;
+  padding: 80px 16px 40px;
   background: linear-gradient(
     180deg,
     rgba(13,106,198,0.85),
     rgba(7,51,96,0.9)
   );
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-/* ================= CARD ================= */
-
+/* CARD */
 .login-card,
 .register-card,
 .forgot-card {
-  background: #8fbfe0;
+  background: #88B8D8;
   border-radius: 16px;
-  box-shadow: 0 18px 40px rgba(0,0,0,0.28);
-  padding: 32px 36px;
-}
-
-.login-card,
-.register-card {
+  box-shadow: 8px 12px 24px rgba(0,0,0,0.32);
+  padding: 36px 40px;
   width: 560px;
+  max-width: 100%;
 }
 
-.forgot-card {
-  width: 480px;
-}
-
-/* ================= LOGO & TITLE ================= */
-
+/* LOGO */
 .login-logo {
-  width: 64px;
+  width: 80px;
+}
+
+/* TITLE */
+.login-title {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   margin-bottom: 10px;
 }
 
-.login-title {
-  font-size: 30px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  margin-bottom: 6px;
-}
-
-/* ================= FORM ================= */
-
+/* FORM */
 .form-label {
-  font-size: 13px;
-  color: #0f172a;
-  font-weight: 600;
-  margin-bottom: 6px;
+  font-size: 14px;
+  color: #000;
 }
 
 .custom-input {
-  border-radius: 10px;
-  border: 1px solid #3b82f6;
-  height: 42px;
+  border-radius: 12px;
+  border: 1px solid #4285F4;
+  height: 44px;
   font-size: 14px;
-  padding: 0 12px;
 }
 
-/* ================= BUTTON ================= */
-
+/* BUTTON */
 .btn-login {
-  background: #2563eb !important;
+  background: #1C6BEF !important;
   color: #ffffff !important;
-  font-size: 16px;
-  font-weight: 700;
-  border-radius: 12px;
-  height: 46px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 14px;
+  height: 50px;
   border: none;
 }
 
 /* ===================================================== */
-/* ================= RESPONSIVE TABLET ================= */
-/* ===================================================== */
-
-@media (max-width: 992px) {
-  .login-card,
-  .register-card,
-  .forgot-card {
-    width: 92%;
-    padding: 30px;
-  }
-}
-
-/* ===================================================== */
-/* ========== RESPONSIVE MOBILE – RAPI & SEIMBANG ======= */
+/* ================= MOBILE RESPONSIVE ================= */
 /* ===================================================== */
 
 @media (max-width: 576px) {
 
-  /* HERO */
   .auth-hero {
-    min-height: 100vh !important;
-    padding: 64px 16px 32px !important;
-    align-items: flex-start !important;
+    padding: 70px 14px 30px;
   }
 
-  /* CARD – VERTIKAL RAPI */
   .login-card,
   .register-card,
   .forgot-card {
-    width: 100% !important;
-    max-width: 340px !important;     /* PAS, TIDAK TERLALU KECIL */
-    margin: 0 auto !important;
-    padding: 28px 22px 26px !important;
-    border-radius: 18px !important;
+    width: 100%;
+    padding: 28px 22px;
+    border-radius: 18px;
   }
 
-  /* LOGO */
   .login-logo {
-    width: 56px !important;
-    margin-bottom: 12px !important;
+    width: 64px;
   }
 
-  /* TITLE */
   .login-title {
-    font-size: 20px !important;
-    letter-spacing: 0.04em !important;
-    margin-bottom: 10px !important;
+    font-size: 24px;
+    letter-spacing: 0.04em;
   }
 
-  /* FORM SPACING */
-  .login-card form {
-    margin-top: 14px !important;
-  }
-
-  .login-card .mb-3 {
-    margin-bottom: 16px !important;
-  }
-
-  /* LABEL */
-  .form-label {
-    font-size: 13px !important;
-  }
-
-  /* INPUT */
   .custom-input {
-    height: 44px !important;
-    font-size: 14px !important;
-    border-radius: 10px !important;
+    height: 46px;
+    font-size: 14px;
   }
 
-  /* BUTTON */
   .btn-login {
-    height: 46px !important;
-    font-size: 15px !important;
-    border-radius: 12px !important;
-    margin-top: 12px !important;
+    height: 52px;
+    font-size: 17px;
   }
 
-  /* LINK BAWAH */
-  .login-card .small {
-    margin-top: 16px !important;
-    font-size: 12px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 6px !important;
-    text-align: center !important;
+  /* LINK BAWAH JADI VERTIKAL */
+  .login-card .d-flex {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
   }
 }
 
-/* =====================================================
-   FINAL FIX – LOGIN POSITION WITH FIXED NAVBAR
-===================================================== */
-@media (max-width: 576px) {
+/* ===================================================== */
+/* ================= FOOTER ============================= */
+/* ===================================================== */
 
-  /* Override efek body margin-top dari navbar */
-  .auth-hero {
-    min-height: calc(100vh - 76px) !important; /* tinggi navbar */
-    padding-top: 40px !important;
-    padding-bottom: 32px !important;
-    align-items: flex-start !important;
-  }
-
-  /* Card tetap vertikal & rapi */
-  .login-card,
-  .register-card,
-  .forgot-card {
-    margin-top: 0 !important;
-  }
+.footer {
+  background: #0D6AC6;
+  font-size: 18px;
 }
 
 
