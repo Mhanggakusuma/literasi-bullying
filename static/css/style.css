@@ -440,7 +440,12 @@ body {
     rgba(13,106,198,0.81),
     rgba(7,51,96,0.81)
   );
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+/* ================= CARD ================= */
 
 .login-card,
 .register-card,
@@ -460,6 +465,8 @@ body {
   width: 480px;
 }
 
+/* ================= LOGO & TITLE ================= */
+
 .login-logo {
   width: 70px;
 }
@@ -468,9 +475,11 @@ body {
   font-size: 32px;
   font-weight: 600;
   letter-spacing: 0.08em;
+  margin-bottom: 6px;
 }
 
-/* FORM */
+/* ================= FORM ================= */
+
 .form-label {
   font-size: 13px;
   color: #000;
@@ -483,7 +492,8 @@ body {
   font-size: 13px;
 }
 
-/* BUTTON AUTH (INI YANG TADI HILANG) */
+/* ================= BUTTON ================= */
+
 .btn-login {
   background: #1C6BEF !important;
   color: #ffffff !important;
@@ -495,7 +505,7 @@ body {
 }
 
 /* ===================================================== */
-/* ================= DASHBOARD ========================= */
+/* ================= DASHBOARD (LAINNYA) ================ */
 /* ===================================================== */
 
 .hero-welcome {
@@ -510,19 +520,6 @@ body {
 .hero-welcome-icon {
   max-width: 260px;
   width: 100%;
-}
-
-/* ================= FOOTER: locked link for anonymous users (click -> login) ================= */
-.footer-info-links .footer-link-locked {
-  color: #6b7280;
-  cursor: pointer;
-  pointer-events: auto;
-  text-decoration: none;
-  opacity: 0.9;
-}
-.footer-info-links .footer-link-locked:hover {
-  text-decoration: underline;
-  opacity: 1;
 }
 
 .hero-welcome-title {
@@ -543,8 +540,34 @@ body {
   max-width: 720px;
 }
 
-/* ================= RESPONSIVE ================= */
+/* ================= FOOTER ================= */
+
+.footer {
+  background: #0D6AC6;
+  font-size: 18px;
+}
+
+/* ================= FOOTER: locked link ================= */
+
+.footer-info-links .footer-link-locked {
+  color: #6b7280;
+  cursor: pointer;
+  pointer-events: auto;
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.footer-info-links .footer-link-locked:hover {
+  text-decoration: underline;
+  opacity: 1;
+}
+
+/* ===================================================== */
+/* ================= RESPONSIVE TABLET ================= */
+/* ===================================================== */
+
 @media (max-width: 992px) {
+
   .hero-welcome-title,
   .hero-welcome-desc {
     text-align: center;
@@ -564,11 +587,69 @@ body {
   }
 }
 
-/* ================= FOOTER ================= */
-.footer {
-  background: #0D6AC6;
-  font-size: 18px;
+/* ===================================================== */
+/* ================= RESPONSIVE MOBILE (FIX UTAMA) ===== */
+/* ===================================================== */
+
+@media (max-width: 576px) {
+
+  /* HERO */
+  .auth-hero {
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* CARD */
+  .login-card,
+  .register-card,
+  .forgot-card {
+    width: 100%;
+    padding: 28px 24px;
+    border-radius: 16px;
+  }
+
+  /* LOGO */
+  .login-logo {
+    width: 90px;
+    margin-bottom: 12px;
+  }
+
+  /* TITLE */
+  .login-title {
+    font-size: 26px;
+    letter-spacing: 0.05em;
+  }
+
+  /* LABEL */
+  .form-label {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  /* INPUT */
+  .custom-input {
+    height: 48px;
+    font-size: 15px;
+    border-radius: 14px;
+  }
+
+  /* BUTTON */
+  .btn-login {
+    height: 52px;
+    font-size: 18px;
+    border-radius: 14px;
+  }
+
+  /* LINK BAWAH */
+  .login-card .small {
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
 }
+
 
 /* ===================================================== */
 /* ============ LAPORAN HOME (SCOPED) ================== */
