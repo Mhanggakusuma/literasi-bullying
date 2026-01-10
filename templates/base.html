@@ -46,32 +46,58 @@
     <div class="collapse navbar-collapse" id="navbarDashboard">
       <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
 
-        <li class="nav-item">
-          <a class="nav-link" href="#">Beranda</a>
+        <!-- ===== LOGOUT (PALING ATAS - MOBILE ONLY) ===== -->
+        <li class="nav-item d-lg-none">
+          <a class="nav-link text-danger fw-semibold"
+             href="{% url 'logout' %}">
+            <i class="bi bi-box-arrow-right me-2"></i> Logout
+          </a>
         </li>
 
+        <!-- ===== BERANDA ===== -->
+        <li class="nav-item">
+          {% if user.profile.role == "siswa" %}
+            <a class="nav-link" href="{% url 'dashboard_siswa' %}">Beranda</a>
+          {% elif user.profile.role == "gurubk" %}
+            <a class="nav-link" href="{% url 'dashboard_guru' %}">Beranda</a>
+          {% elif user.profile.role == "admin" %}
+            <a class="nav-link" href="{% url 'dashboard_admin' %}">Beranda</a>
+          {% endif %}
+        </li>
+
+        <!-- ===== TENTANG BULLYING ===== -->
         <li class="nav-item">
           <a class="nav-link" href="{% url 'tentang_bullying_login' %}">
             Tentang Bullying
           </a>
         </li>
 
+        <!-- ===== LITERASI ===== -->
         <li class="nav-item">
           <a class="nav-link" href="{% url 'konten_index' %}">
             Literasi
           </a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'laporan_home' %}">
-            Laporan
-          </a>
-        </li>
+        <!-- ===== LAPORAN (ROLE) ===== -->
+        {% if user.profile.role == "siswa" %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'laporan_home' %}">Laporan</a>
+          </li>
+        {% elif user.profile.role == "gurubk" %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'bk_dashboard' %}">Laporan</a>
+          </li>
+        {% elif user.profile.role == "admin" %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin:index' %}">Admin Panel</a>
+          </li>
+        {% endif %}
 
-        <!-- PROFILE -->
-        <li class="nav-item dropdown mt-2 mt-lg-0">
+        <!-- ===== PROFILE (DESKTOP ONLY) ===== -->
+        <li class="nav-item dropdown d-none d-lg-block">
           <a class="nav-link p-0" href="#" role="button"
-             data-bs-toggle="dropdown">
+             data-bs-toggle="dropdown" aria-expanded="false">
             <div class="profile-avatar">
               <i class="bi bi-person-fill"></i>
             </div>
