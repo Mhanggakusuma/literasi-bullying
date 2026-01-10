@@ -428,6 +428,73 @@ body {
   }
 }
 
+/* ================= HERO WELCOME ================= */
+
+.hero-welcome {
+  background: linear-gradient(
+    180deg,
+    rgba(13,106,198,0.9),
+    rgba(7,51,96,0.95)
+  );
+  padding: 120px 0 80px;
+  color: #ffffff;
+}
+
+.hero-welcome-icon {
+  max-width: 260px;
+  width: 100%;
+  filter: drop-shadow(0 12px 24px rgba(0,0,0,0.35));
+}
+
+.hero-welcome-title {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.hero-welcome-title span {
+  color: #facc15;
+}
+
+.hero-welcome-desc {
+  font-size: 18px;
+  line-height: 1.7;
+  max-width: 720px;
+  color: #e5e7eb;
+}
+
+/* ================= HERO WELCOME – RESPONSIVE ================= */
+
+@media (max-width: 992px) {
+  .hero-welcome {
+    padding: 100px 0 70px;
+    text-align: center;
+  }
+
+  .hero-welcome-icon {
+    max-width: 220px;
+    margin-bottom: 24px;
+  }
+
+  .hero-welcome-desc {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-welcome {
+    padding: 80px 0 60px;
+  }
+
+  .hero-welcome-title {
+    font-size: 26px;
+  }
+
+  .hero-welcome-desc {
+    font-size: 15px;
+  }
+}
 
 /* ===================================================== */
 /* ================= AUTH (LOGIN / REGISTER / FORGOT) == */
