@@ -1,7 +1,7 @@
 {% extends "base_public.html" %}
 {% load static %}
 
-{% block title %}Beranda - SMP N 1 Madang Suku III{% endblock %}
+{% block title %}Beranda - SMP Negeri 1 Madang Suku III{% endblock %}
 
 {% block content %}
 <div class="dashboard-home">
@@ -54,7 +54,7 @@
 
         <div class="col-12 col-sm-6 col-lg-3">
           <div class="dh-card">
-            <img src="{% static 'img/icon-shield.png' %}" alt="">
+            <img src="{% static 'img/icon-shield.png' %}" alt="Ikon Keamanan">
             <h5>Sekolah Aman & Nyaman</h5>
             <p>
               Mewujudkan lingkungan belajar yang bebas dari bullying
@@ -65,7 +65,7 @@
 
         <div class="col-12 col-sm-6 col-lg-3">
           <div class="dh-card">
-            <img src="{% static 'img/icon-lock.png' %}" alt="">
+            <img src="{% static 'img/icon-lock.png' %}" alt="Ikon Privasi">
             <h5>Pelaporan Rahasia & Aman</h5>
             <p>
               Memberi ruang bagi siswa untuk berani melapor
@@ -76,7 +76,7 @@
 
         <div class="col-12 col-sm-6 col-lg-3">
           <div class="dh-card">
-            <img src="{% static 'img/icon-book.png' %}" alt="">
+            <img src="{% static 'img/icon-book.png' %}" alt="Ikon Edukasi">
             <h5>Literasi Digital Cerdas</h5>
             <p>
               Edukasi penggunaan media digital secara bijak,
@@ -87,7 +87,7 @@
 
         <div class="col-12 col-sm-6 col-lg-3">
           <div class="dh-card">
-            <img src="{% static 'img/icon-team.png' %}" alt="">
+            <img src="{% static 'img/icon-team.png' %}" alt="Ikon Kepedulian">
             <h5>Peduli & Tindak Lanjut</h5>
             <p>
               Setiap laporan dan permasalahan ditangani dengan
@@ -97,6 +97,83 @@
         </div>
 
       </div>
+    </div>
+  </section>
+
+  <!-- ================= PESAN KEPALA SEKOLAH ================= -->
+  <section class="principal-section">
+    <div class="container">
+
+      <div class="principal-header">
+        <span class="principal-badge">Pesan Kepala Sekolah</span>
+        <h2>Pesan SMP Negeri 1 Madang Suku III</h2>
+      </div>
+
+      <div class="principal-grid">
+
+        <div class="principal-photo-wrapper">
+          <div class="principal-photo-bg"></div>
+
+          <img
+            src="{% static 'img/kepala-sekolah.png' %}"
+            alt="Kepala Sekolah SMP Negeri 1 Madang Suku III"
+            class="principal-photo"
+          >
+
+          <div class="principal-exp">
+            <div class="exp-icon">❝</div>
+            <div>
+              <strong>10+ Tahun</strong>
+              <span>Pengalaman</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="principal-text">
+          <h3>Sambutan Kepala Sekolah</h3>
+
+          <div class="principal-quote">
+            <span class="quote-icon">❝</span>
+            <p>
+              Kami percaya bahwa setiap siswa berhak merasa aman,
+              dihargai, dan didengar. Melalui sistem ini, kami mengajak
+              seluruh warga sekolah untuk bersama-sama mencegah bullying
+              dan membangun budaya digital yang sehat.
+            </p>
+          </div>
+
+          <div class="principal-author">
+            <span class="line"></span>
+            <div>
+              <strong>Kepala Sekolah</strong><br>
+              <small>SMP Negeri 1 Madang Suku III</small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CTA ================= -->
+  <section class="dh-cta text-center">
+    <div class="container">
+
+      <span class="cta-badge">Jadilah Bagian dari Perubahan</span>
+
+      <h2>Siap Membuat Perubahan?</h2>
+
+      <p>
+        Jangan diam terhadap bullying. Laporkan, pelajari,
+        dan jadilah bagian dari perubahan untuk menciptakan
+        lingkungan sekolah yang lebih baik.
+      </p>
+
+      <a href="{% url 'login' %}"
+         class="btn btn-light btn-lg rounded-pill px-5 shadow">
+        Masuk Sekarang
+      </a>
+
     </div>
   </section>
 
