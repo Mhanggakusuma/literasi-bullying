@@ -526,11 +526,43 @@ body {
   width: 100%;
 }
 
+.hero-welcome-title {
+  font-weight: 700;
+  font-size: 36px;
+  color: #ffffff;
+  margin-bottom: 14px;
+}
+
+.hero-welcome-title span {
+  color: #facc15;
+}
+
+.hero-welcome-desc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #e5e7eb;
+  max-width: 720px;
+}
+
 /* ================= FOOTER ================= */
 
 .footer {
   background: #0D6AC6;
   font-size: 18px;
+}
+
+/* ================= FOOTER LOCKED LINK ================= */
+
+.footer-info-links .footer-link-locked {
+  color: #6b7280;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.footer-info-links .footer-link-locked:hover {
+  text-decoration: underline;
+  opacity: 1;
 }
 
 /* ===================================================== */
@@ -545,76 +577,87 @@ body {
     width: 92%;
     padding: 28px;
   }
+
+  .hero-welcome-title,
+  .hero-welcome-desc {
+    text-align: center;
+    margin: auto;
+  }
+
+  .hero-welcome-icon {
+    max-width: 220px;
+    margin: auto;
+  }
 }
 
 /* ===================================================== */
-/* ================= RESPONSIVE MOBILE (FINAL TARGET) == */
+/* ========== RESPONSIVE MOBILE – FORCE FIX FINAL ====== */
 /* ===================================================== */
 
 @media (max-width: 576px) {
 
-  /* HERO */
+  /* ===== HERO ===== */
   .auth-hero {
-    min-height: 100vh;
-    padding: 64px 16px 24px;
-    align-items: flex-start;
+    min-height: 100vh !important;
+    padding: 60px 16px 24px !important;
+    align-items: flex-start !important;
   }
 
-  /* CARD – INI KUNCI UTAMA */
+  /* ===== CARD ===== */
   .login-card,
   .register-card,
   .forgot-card {
-    width: 100%;
-    max-width: 360px;          /* 🔥 seperti gambar ke-2 */
-    margin: 0 auto;
-    padding: 22px 20px 20px;   /* 🔥 tidak memanjang */
-    border-radius: 16px;
-    box-shadow: 0 18px 36px rgba(0,0,0,0.28);
+    width: 100% !important;
+    max-width: 360px !important; /* TARGET SEPERTI GAMBAR KE-2 */
+    margin: 0 auto !important;
+    padding: 22px 20px 20px !important;
+    border-radius: 16px !important;
+    box-shadow: 0 18px 36px rgba(0,0,0,0.28) !important;
   }
 
-  /* LOGO */
+  /* ===== LOGO ===== */
   .login-logo {
-    width: 56px;
-    margin-bottom: 6px;
+    width: 56px !important;
+    margin-bottom: 6px !important;
   }
 
-  /* TITLE */
+  /* ===== TITLE ===== */
   .login-title {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    margin-bottom: 4px;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em !important;
+    margin-bottom: 6px !important;
   }
 
-  /* LABEL */
+  /* ===== LABEL ===== */
   .form-label {
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 13px !important;
+    font-weight: 600 !important;
   }
 
-  /* INPUT */
+  /* ===== INPUT ===== */
   .custom-input {
-    height: 44px;
-    font-size: 14px;
-    border-radius: 10px;
+    height: 44px !important;
+    font-size: 14px !important;
+    border-radius: 10px !important;
   }
 
-  /* BUTTON */
+  /* ===== BUTTON ===== */
   .btn-login {
-    height: 46px;
-    font-size: 15px;
-    border-radius: 12px;
-    margin-top: 6px;
+    height: 46px !important;
+    font-size: 15px !important;
+    border-radius: 12px !important;
+    margin-top: 6px !important;
   }
 
-  /* LINK BAWAH */
+  /* ===== LINK BAWAH ===== */
   .login-card .small {
-    font-size: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    text-align: center;
-    margin-top: 12px;
+    font-size: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    text-align: center !important;
+    margin-top: 12px !important;
   }
 }
 
