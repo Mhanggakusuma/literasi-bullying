@@ -46,15 +46,24 @@
     <div class="collapse navbar-collapse" id="navbarDashboard">
       <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
 
-        <!-- ===== LOGOUT (PALING ATAS - MOBILE ONLY) ===== -->
-        <li class="nav-item d-lg-none">
-          <a class="nav-link text-danger fw-semibold"
-             href="{% url 'logout' %}">
-            <i class="bi bi-box-arrow-right me-2"></i> Logout
-          </a>
+        <!-- ================= USER INFO (MOBILE ONLY) ================= -->
+        <li class="nav-item d-lg-none mb-3">
+          <div class="d-flex align-items-center gap-3 px-2">
+            <div class="profile-avatar">
+              <i class="bi bi-person-fill"></i>
+            </div>
+            <div>
+              <strong class="d-block">{{ user.first_name|upper }}</strong>
+              <small class="text-muted">Akun Pengguna</small>
+            </div>
+          </div>
         </li>
 
-        <!-- ===== BERANDA ===== -->
+        <li class="nav-item d-lg-none">
+          <hr class="dropdown-divider">
+        </li>
+
+        <!-- ================= BERANDA ================= -->
         <li class="nav-item">
           {% if user.profile.role == "siswa" %}
             <a class="nav-link" href="{% url 'dashboard_siswa' %}">Beranda</a>
@@ -65,21 +74,19 @@
           {% endif %}
         </li>
 
-        <!-- ===== TENTANG BULLYING ===== -->
+        <!-- ================= MENU LAIN ================= -->
         <li class="nav-item">
           <a class="nav-link" href="{% url 'tentang_bullying_login' %}">
             Tentang Bullying
           </a>
         </li>
 
-        <!-- ===== LITERASI ===== -->
         <li class="nav-item">
           <a class="nav-link" href="{% url 'konten_index' %}">
             Literasi
           </a>
         </li>
 
-        <!-- ===== LAPORAN (ROLE) ===== -->
         {% if user.profile.role == "siswa" %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'laporan_home' %}">Laporan</a>
@@ -94,10 +101,23 @@
           </li>
         {% endif %}
 
-        <!-- ===== PROFILE (DESKTOP ONLY) ===== -->
+        <!-- ================= DIVIDER ================= -->
+        <li class="nav-item d-lg-none mt-2">
+          <hr class="dropdown-divider">
+        </li>
+
+        <!-- ================= LOGOUT (PALING BAWAH) ================= -->
+        <li class="nav-item d-lg-none">
+          <a class="nav-link text-danger fw-semibold"
+             href="{% url 'logout' %}">
+            <i class="bi bi-box-arrow-right me-2"></i> Logout
+          </a>
+        </li>
+
+        <!-- ================= PROFILE DESKTOP ONLY ================= -->
         <li class="nav-item dropdown d-none d-lg-block">
           <a class="nav-link p-0" href="#" role="button"
-             data-bs-toggle="dropdown" aria-expanded="false">
+             data-bs-toggle="dropdown">
             <div class="profile-avatar">
               <i class="bi bi-person-fill"></i>
             </div>
@@ -138,11 +158,10 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Drawer Overlay Script -->
 <script>
-  const togglerDash = document.querySelector('.navbar-toggler');
-  if (togglerDash) {
-    togglerDash.addEventListener('click', () => {
+  const toggler = document.querySelector('.navbar-toggler');
+  if (toggler) {
+    toggler.addEventListener('click', () => {
       document.body.classList.toggle('nav-open');
     });
   }
