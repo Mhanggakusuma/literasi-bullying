@@ -598,6 +598,27 @@ body {
   }
 }
 
+/* =====================================================
+   FINAL FIX – LOGIN POSITION WITH FIXED NAVBAR
+===================================================== */
+@media (max-width: 576px) {
+
+  /* Override efek body margin-top dari navbar */
+  .auth-hero {
+    min-height: calc(100vh - 76px) !important; /* tinggi navbar */
+    padding-top: 40px !important;
+    padding-bottom: 32px !important;
+    align-items: flex-start !important;
+  }
+
+  /* Card tetap vertikal & rapi */
+  .login-card,
+  .register-card,
+  .forgot-card {
+    margin-top: 0 !important;
+  }
+}
+
 
 /* ===================================================== */
 /* ============ LAPORAN HOME (SCOPED) ================== */
