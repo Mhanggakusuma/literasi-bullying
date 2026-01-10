@@ -452,8 +452,8 @@ body {
 .forgot-card {
   background: #88B8D8;
   border-radius: 14px;
-  box-shadow: 0 18px 36px rgba(0,0,0,0.3);
-  padding: 36px 40px;
+  box-shadow: 0 16px 32px rgba(0,0,0,0.3);
+  padding: 32px 36px;
 }
 
 .login-card,
@@ -469,6 +469,7 @@ body {
 
 .login-logo {
   width: 72px;
+  margin-bottom: 6px;
 }
 
 .login-title {
@@ -484,6 +485,7 @@ body {
   font-size: 13px;
   color: #000;
   font-weight: 500;
+  margin-bottom: 4px;
 }
 
 .custom-input {
@@ -524,43 +526,11 @@ body {
   width: 100%;
 }
 
-.hero-welcome-title {
-  font-weight: 700;
-  font-size: 36px;
-  color: #ffffff;
-  margin-bottom: 14px;
-}
-
-.hero-welcome-title span {
-  color: #facc15;
-}
-
-.hero-welcome-desc {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #e5e7eb;
-  max-width: 720px;
-}
-
 /* ================= FOOTER ================= */
 
 .footer {
   background: #0D6AC6;
   font-size: 18px;
-}
-
-/* ================= FOOTER LOCKED LINK ================= */
-
-.footer-info-links .footer-link-locked {
-  color: #6b7280;
-  cursor: pointer;
-  text-decoration: none;
-  opacity: 0.9;
-}
-
-.footer-info-links .footer-link-locked:hover {
-  text-decoration: underline;
-  opacity: 1;
 }
 
 /* ===================================================== */
@@ -573,23 +543,12 @@ body {
   .register-card,
   .forgot-card {
     width: 92%;
-    padding: 30px;
-  }
-
-  .hero-welcome-title,
-  .hero-welcome-desc {
-    text-align: center;
-    margin: auto;
-  }
-
-  .hero-welcome-icon {
-    max-width: 220px;
-    margin: auto;
+    padding: 28px;
   }
 }
 
 /* ===================================================== */
-/* ================= RESPONSIVE MOBILE – FINAL PRO ===== */
+/* ================= RESPONSIVE MOBILE (FINAL TARGET) == */
 /* ===================================================== */
 
 @media (max-width: 576px) {
@@ -597,65 +556,65 @@ body {
   /* HERO */
   .auth-hero {
     min-height: 100vh;
-    padding: 72px 16px 24px;
+    padding: 64px 16px 24px;
     align-items: flex-start;
   }
 
-  /* CARD */
+  /* CARD – INI KUNCI UTAMA */
   .login-card,
   .register-card,
   .forgot-card {
     width: 100%;
-    max-width: 420px;
+    max-width: 360px;          /* 🔥 seperti gambar ke-2 */
     margin: 0 auto;
-    padding: 26px 22px 22px;
-    border-radius: 18px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.28);
+    padding: 22px 20px 20px;   /* 🔥 tidak memanjang */
+    border-radius: 16px;
+    box-shadow: 0 18px 36px rgba(0,0,0,0.28);
   }
 
   /* LOGO */
   .login-logo {
-    width: 64px;
-    margin-bottom: 8px;
+    width: 56px;
+    margin-bottom: 6px;
   }
 
   /* TITLE */
   .login-title {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
     letter-spacing: 0.04em;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
 
   /* LABEL */
   .form-label {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
   }
 
   /* INPUT */
   .custom-input {
-    height: 46px;
+    height: 44px;
     font-size: 14px;
-    border-radius: 12px;
+    border-radius: 10px;
   }
 
   /* BUTTON */
   .btn-login {
-    height: 48px;
-    font-size: 16px;
-    border-radius: 14px;
-    margin-top: 8px;
+    height: 46px;
+    font-size: 15px;
+    border-radius: 12px;
+    margin-top: 6px;
   }
 
   /* LINK BAWAH */
   .login-card .small {
-    font-size: 13px;
+    font-size: 12px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
     text-align: center;
-    margin-top: 14px;
+    margin-top: 12px;
   }
 }
 
