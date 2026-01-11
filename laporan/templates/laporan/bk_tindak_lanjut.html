@@ -9,7 +9,7 @@
 
       <h1 class="bk-tl-title">Tindak Lanjut Kasus Bullying</h1>
       <p class="bk-tl-subtitle">
-        Selalu menjaga kerahasiaan demi keamanan dan kenyamanan semua pihak
+        Jaga kerahasiaan data demi keamanan dan kenyamanan semua pihak
       </p>
 
       <div class="bk-tl-card mx-auto mt-5">
@@ -21,12 +21,13 @@
           <p><strong>Kode Laporan :</strong> {{ laporan.kode_laporan }}</p>
 
           <p>
-            <strong>Pelapor :</strong>
-            {% if laporan.is_anonymous %}
-              Anonim 🔒
-            {% else %}
-              Anonim 🔒
-            {% endif %}
+            <strong>Status Saat Ini :</strong>
+            <span class="badge
+              {% if laporan.status == 'selesai' %}bg-success
+              {% elif laporan.status == 'diproses' %}bg-warning
+              {% else %}bg-secondary{% endif %}">
+              {{ laporan.get_status_display }}
+            </span>
           </p>
 
           <p>
@@ -40,12 +41,14 @@
           <p>
             <strong>Waktu Kejadian :</strong>
             {{ laporan.tanggal_kejadian|date:"d M Y" }}
-            ({{ laporan.get_perkiraan_waktu_display }})
+            {% if laporan.perkiraan_waktu %}
+              ({{ laporan.get_perkiraan_waktu_display }})
+            {% endif %}
           </p>
 
           <p>
             <strong>Lokasi Kejadian :</strong>
-            {{ laporan.lokasi_kejadian }}
+            {{ laporan.lokasi_kejadian|default:"-" }}
           </p>
 
           <hr>
@@ -149,10 +152,7 @@
           <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <label class="bk-tl-label">Status Penanganan</label>
-            {{ form.status }}
-
-            <label class="bk-tl-label mt-3">Catatan Guru BK</label>
+            <label class="bk-tl-label">Catatan Guru BK</label>
             {{ form.catatan_bk }}
 
             <label class="bk-tl-label mt-3">
@@ -161,13 +161,23 @@
             {{ form.bukti_tindak_lanjut }}
 
             <small class="text-muted">
-              File bebas ( gambar, audio, video). Maksimal 10 MB.
+              File bebas (PDF, gambar, audio, video). Maksimal 10 MB.
             </small>
 
+            <!-- ====== ACTION BUTTONS ====== -->
             <button type="submit"
                     class="bk-tl-btn-primary w-100 mt-4">
-              Simpan Tindak Lanjut
+              💾 Simpan Tindak Lanjut
             </button>
+
+            {% if laporan.status != "selesai" %}
+            <button type="submit"
+                    name="selesai"
+                    value="1"
+                    class="btn btn-success w-100 mt-2">
+              ✅ Tandai Kasus Selesai
+            </button>
+            {% endif %}
           </form>
 
           <a href="{% url 'bk_dashboard' %}"
