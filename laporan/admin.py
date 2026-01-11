@@ -5,8 +5,9 @@ from .models import Laporan
 @admin.register(Laporan)
 class LaporanAdmin(admin.ModelAdmin):
     """
-    Konfigurasi admin untuk laporan bullying.
-    Identitas pelapor tetap dapat diakses oleh Admin.
+    Konfigurasi Admin Panel untuk laporan bullying.
+    Identitas pelapor tetap dapat diakses oleh Admin,
+    meskipun laporan bersifat anonim di tampilan publik.
     """
 
     # =========================
@@ -29,6 +30,7 @@ class LaporanAdmin(admin.ModelAdmin):
     list_filter = (
         "status",
         "jenis_bullying",
+        "perkiraan_waktu",
         "is_anonymous",
         "tanggal",
     )
@@ -40,19 +42,27 @@ class LaporanAdmin(admin.ModelAdmin):
         "pelapor__last_name",
         "nama_korban",
         "nama_terlapor",
+        "lokasi_kejadian",
     )
 
     # =========================
     # FIELD GROUPING
     # =========================
     fieldsets = (
-        ("Identitas Pelapor (Internal)", {
+        ("🔒 Identitas Pelapor (Internal)", {
             "fields": (
                 "pelapor",
                 "is_anonymous",
             )
         }),
-        ("Korban & Terlapor", {
+        ("🕒 Waktu & Tempat Kejadian", {
+            "fields": (
+                "tanggal_kejadian",
+                "perkiraan_waktu",
+                "lokasi_kejadian",
+            )
+        }),
+        ("👤 Korban & Terlapor", {
             "fields": (
                 "nama_korban",
                 "kelas_korban",
@@ -60,21 +70,33 @@ class LaporanAdmin(admin.ModelAdmin):
                 "kelas_terlapor",
             )
         }),
-        ("Detail Perundungan", {
+        ("🚨 Detail Perundungan", {
             "fields": (
                 "jenis_bullying",
                 "isi_laporan",
                 "bukti",
             )
         }),
-        ("Tindak Lanjut Guru BK", {
+        ("💔 Dampak & Harapan", {
+            "fields": (
+                "dampak_korban",
+                "dampak_lainnya",
+                "harapan_pelapor",
+            )
+        }),
+        ("🧾 Tindak Lanjut Guru BK", {
             "fields": (
                 "status",
                 "catatan_bk",
                 "bukti_tindak_lanjut",
             )
         }),
-        ("Meta Data", {
+        ("✅ Pernyataan", {
+            "fields": (
+                "pernyataan_setuju",
+            )
+        }),
+        ("🔑 Meta Data", {
             "fields": (
                 "kode_laporan",
                 "tanggal",
@@ -82,6 +104,9 @@ class LaporanAdmin(admin.ModelAdmin):
         }),
     )
 
+    # =========================
+    # READ ONLY
+    # =========================
     readonly_fields = (
         "kode_laporan",
         "tanggal",
@@ -93,8 +118,8 @@ class LaporanAdmin(admin.ModelAdmin):
     @admin.display(description="Pelapor")
     def get_pelapor_admin(self, obj):
         """
-        Di admin panel:
-        Tetap tampilkan identitas asli,
-        meskipun laporan anonim.
+        Di Admin Panel:
+        Identitas asli tetap ditampilkan,
+        meskipun laporan bersifat anonim di tampilan publik.
         """
         return obj.pelapor.get_full_name() or obj.pelapor.username

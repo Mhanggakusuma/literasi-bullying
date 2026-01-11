@@ -24,8 +24,8 @@
         <form method="post" enctype="multipart/form-data" class="text-start">
           {% csrf_token %}
 
-          <!-- ================= 1. IDENTITAS PELAPOR (READ ONLY) ================= -->
-          <h5 class="mb-3">🔒 Identitas Pelapor</h5>
+          <!-- ================= 1. IDENTITAS PELAPOR ================= -->
+          <h5 class="mb-3">🔒 1️⃣ Identitas Pelapor</h5>
 
           <div class="mb-3">
             <label class="form-label">Nama Pelapor</label>
@@ -51,7 +51,7 @@
                    readonly>
           </div>
 
-          <!-- ANONIM -->
+          <!-- OPSI ANONIM -->
           <div class="form-check mb-4">
             {{ form.is_anonymous }}
             <label class="form-check-label ms-2">
@@ -65,32 +65,22 @@
           <hr class="my-4">
 
           <!-- ================= 2. IDENTITAS KORBAN ================= -->
-          <h5 class="mb-3">👤 Identitas Korban</h5>
+          <h5 class="mb-3">👤 2️⃣ Identitas Korban</h5>
 
           <div class="mb-3">
             <label class="form-label">Nama Korban</label>
             {{ form.nama_korban }}
-            {% if form.nama_korban.errors %}
-              <div class="text-danger small">
-                {{ form.nama_korban.errors.0 }}
-              </div>
-            {% endif %}
           </div>
 
           <div class="mb-4">
             <label class="form-label">Kelas Korban</label>
             {{ form.kelas_korban }}
-            {% if form.kelas_korban.errors %}
-              <div class="text-danger small">
-                {{ form.kelas_korban.errors.0 }}
-              </div>
-            {% endif %}
           </div>
 
           <hr class="my-4">
 
           <!-- ================= 3. IDENTITAS TERLAPOR ================= -->
-          <h5 class="mb-3">⚠️ Identitas Terlapor (Opsional)</h5>
+          <h5 class="mb-3">⚠️ 3️⃣ Identitas Terlapor (Opsional)</h5>
 
           <div class="mb-3">
             <label class="form-label">Nama Terlapor</label>
@@ -105,30 +95,91 @@
           <hr class="my-4">
 
           <!-- ================= 4. JENIS PERUNDUNGAN ================= -->
-          <h5 class="mb-3">🚨 Jenis Perundungan</h5>
+          <h5 class="mb-3">🚨 4️⃣ Jenis Perundungan</h5>
 
           <div class="mb-4">
             {{ form.jenis_bullying }}
           </div>
 
-          <!-- ================= 5. KRONOLOGI ================= -->
-          <h5 class="mb-3">🧾 Kronologi Kejadian</h5>
+          <hr class="my-4">
 
-          <div class="mb-4">
-            {{ form.isi_laporan }}
-            <small class="text-muted">
-              Gunakan bahasa sopan, hindari kata kasar, dan fokus pada kejadian
-            </small>
+          <!-- ================= 5. WAKTU & TEMPAT ================= -->
+          <h5 class="mb-3">🕒 5️⃣ Waktu & Tempat Kejadian</h5>
+
+          <div class="mb-3">
+            <label class="form-label">Tanggal Kejadian</label>
+            {{ form.tanggal_kejadian }}
           </div>
 
-          <!-- ================= 6. BUKTI ================= -->
-          <h5 class="mb-3">📎 Bukti Pendukung (Opsional)</h5>
+          <div class="mb-3">
+            <label class="form-label">Perkiraan Waktu</label>
+            {{ form.perkiraan_waktu }}
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Lokasi Kejadian</label>
+            {{ form.lokasi_kejadian }}
+          </div>
+
+          <hr class="my-4">
+
+          <!-- ================= 6. KRONOLOGI ================= -->
+          <h5 class="mb-3">🧾 6️⃣ Kronologi Kejadian <span class="text-danger">(WAJIB)</span></h5>
+
+          <div class="mb-2">
+            {{ form.isi_laporan }}
+          </div>
+
+          <small class="text-muted d-block mb-4">
+            • Gunakan bahasa sopan<br>
+            • Hindari kata kasar<br>
+            • Fokus pada kejadian
+          </small>
+
+          <hr class="my-4">
+
+          <!-- ================= 7. DAMPAK KORBAN ================= -->
+          <h5 class="mb-3">💔 7️⃣ Dampak yang Dirasakan Korban</h5>
+
+          <div class="mb-3">
+            {{ form.dampak_korban }}
+          </div>
+
+          <div class="mb-4">
+            {{ form.dampak_lainnya }}
+          </div>
+
+          <hr class="my-4">
+
+          <!-- ================= 8. BUKTI ================= -->
+          <h5 class="mb-3">📎 8️⃣ Bukti Pendukung (Opsional)</h5>
 
           <div class="mb-4">
             {{ form.bukti }}
             <small class="text-muted">
-              JPG / PNG / PDF / Video • Maksimal 10 MB
+              JPG / PNG / Video • Maksimal 10 MB
             </small>
+          </div>
+
+          <hr class="my-4">
+
+          <!-- ================= 9. HARAPAN ================= -->
+          <h5 class="mb-3">🤝 9️⃣ Harapan Pelapor (Opsional)</h5>
+
+          <div class="mb-4">
+            {{ form.harapan_pelapor }}
+          </div>
+
+          <hr class="my-4">
+
+          <!-- ================= 10. PERNYATAAN ================= -->
+          <h5 class="mb-3">✅ 1️⃣0️⃣ Pernyataan</h5>
+
+          <div class="form-check mb-4">
+            {{ form.pernyataan_setuju }}
+            <label class="form-check-label ms-2">
+              Saya menyatakan laporan ini dibuat dengan jujur dan bertanggung jawab
+            </label>
           </div>
 
           <!-- ================= SUBMIT ================= -->

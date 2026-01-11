@@ -39,6 +39,26 @@ class Laporan(models.Model):
     ]
 
     # =========================
+    # PERKIRAAN WAKTU KEJADIAN
+    # =========================
+    WAKTU_CHOICES = [
+        ("pagi", "Pagi"),
+        ("siang", "Siang"),
+        ("sore", "Sore"),
+    ]
+
+    # =========================
+    # DAMPAK KORBAN (MULTI PILIH)
+    # =========================
+    DAMPAK_CHOICES = [
+        ("takut", "Takut datang ke sekolah"),
+        ("menangis", "Menangis / tertekan"),
+        ("prestasi", "Prestasi menurun"),
+        ("menarik_diri", "Menarik diri"),
+        ("lainnya", "Lainnya"),
+    ]
+
+    # =========================
     # 🔒 IDENTITAS PELAPOR
     # =========================
     pelapor = models.ForeignKey(
@@ -49,21 +69,36 @@ class Laporan(models.Model):
 
     is_anonymous = models.BooleanField(
         default=False,
-        help_text="Jika dicentang, identitas pelapor disembunyikan di tampilan"
+        help_text="Jika dicentang, identitas pelapor disembunyikan"
+    )
+
+    # =========================
+    # 🕒 WAKTU & TEMPAT KEJADIAN
+    # =========================
+    tanggal_kejadian = models.DateField(
+        help_text="Tanggal terjadinya perundungan"
+    )
+
+    perkiraan_waktu = models.CharField(
+        max_length=10,
+        choices=WAKTU_CHOICES
+    )
+
+    lokasi_kejadian = models.CharField(
+        max_length=255,
+        help_text="Lokasi kejadian bullying"
     )
 
     # =========================
     # 👤 IDENTITAS KORBAN
     # =========================
     nama_korban = models.CharField(
-        max_length=100,
-        help_text="Nama korban perundungan"
+        max_length=100
     )
 
     kelas_korban = models.CharField(
         max_length=10,
-        choices=KELAS_CHOICES,
-        help_text="Kelas korban"
+        choices=KELAS_CHOICES
     )
 
     # =========================
@@ -94,7 +129,30 @@ class Laporan(models.Model):
     )
 
     # =========================
-    # 📎 BUKTI (CLOUDINARY)
+    # 💔 DAMPAK YANG DIRASAKAN
+    # =========================
+    dampak_korban = models.JSONField(
+        blank=True,
+        null=True,
+        help_text="Daftar dampak yang dirasakan korban"
+    )
+
+    dampak_lainnya = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
+
+    # =========================
+    # 🤝 HARAPAN PELAPOR
+    # =========================
+    harapan_pelapor = models.TextField(
+        blank=True,
+        null=True
+    )
+
+    # =========================
+    # 📎 BUKTI PENDUKUNG
     # =========================
     bukti = CloudinaryField(
         resource_type="auto",
@@ -113,14 +171,21 @@ class Laporan(models.Model):
 
     catatan_bk = models.TextField(
         blank=True,
-        null=True,
-        help_text="Catatan internal Guru BK"
+        null=True
     )
 
     bukti_tindak_lanjut = CloudinaryField(
         resource_type="auto",
         blank=True,
         null=True
+    )
+
+    # =========================
+    # ✅ PERNYATAAN
+    # =========================
+    pernyataan_setuju = models.BooleanField(
+        default=False,
+        help_text="Pernyataan bahwa laporan dibuat dengan jujur"
     )
 
     # =========================
@@ -133,6 +198,9 @@ class Laporan(models.Model):
 
     tanggal = models.DateTimeField(auto_now_add=True)
 
+    # =========================
+    # HELPER
+    # =========================
     def __str__(self):
         return f"Laporan {self.kode_laporan}"
 

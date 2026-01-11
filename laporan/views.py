@@ -17,10 +17,11 @@ from users.models import Profile
 # =========================
 def generate_kode():
     while True:
-        kode = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+        kode = ''.join(
+            random.choices(string.ascii_uppercase + string.digits, k=8)
+        )
         if not Laporan.objects.filter(kode_laporan=kode).exists():
             return kode
-
 
 
 # =========================
@@ -41,14 +42,14 @@ def buat_laporan(request):
         if form.is_valid():
             laporan = form.save(commit=False)
 
-            # 🔑 WAJIB: set pelapor dari akun login
+            # 🔑 Set pelapor dari akun login
             laporan.pelapor = request.user
 
-            # 🔢 KODE LAPORAN
+            # 🔢 Kode unik laporan
             laporan.kode_laporan = generate_kode()
 
-            # ❌ JANGAN set laporan.bukti = None
-            # CloudinaryField aman jika kosong
+            # 💔 Simpan dampak korban (list -> JSON)
+            laporan.dampak_korban = form.cleaned_data.get("dampak_korban")
 
             laporan.save()
 
@@ -60,7 +61,7 @@ def buat_laporan(request):
     else:
         form = LaporanForm()
 
-    # Data profil untuk tampilan read-only di form
+    # Data profil siswa (read-only di form)
     profile, _ = Profile.objects.get_or_create(user=request.user)
 
     return render(
@@ -74,7 +75,7 @@ def buat_laporan(request):
 
 
 # =========================
-# CEK STATUS LAPORAN
+# CEK STATUS LAPORAN (SISWA)
 # =========================
 @login_required
 def cek_laporan(request):
@@ -101,15 +102,20 @@ def bk_dashboard(request):
 
     laporan_qs = Laporan.objects.all()
 
+    # Filter status
     if status_filter in ["baru", "diproses", "selesai"]:
         laporan_qs = laporan_qs.filter(status=status_filter)
 
+    # Search kode laporan
     if query:
-        laporan_qs = laporan_qs.filter(kode_laporan__icontains=query)
+        laporan_qs = laporan_qs.filter(
+            kode_laporan__icontains=query
+        )
 
     laporan_qs = laporan_qs.order_by("-tanggal")
 
     context = {
+        # Data utama
         "laporan": laporan_qs,
 
         # Ringkasan
@@ -118,22 +124,30 @@ def bk_dashboard(request):
         "sedang_diproses": Laporan.objects.filter(status="diproses").count(),
         "selesai": Laporan.objects.filter(status="selesai").count(),
 
-        # Filter
+        # Filter UI
         "status_filter": status_filter,
         "query": query,
 
         # Statistik kelas korban
         "statistik_kelas": (
-            Laporan.objects.values("kelas_korban")
+            Laporan.objects
+            .values("kelas_korban")
             .annotate(total=Count("id"))
             .order_by("-total")
         ),
 
         # Aktivitas terbaru
-        "aktivitas_terkini": Laporan.objects.order_by("-tanggal")[:5],
+        "aktivitas_terkini": (
+            Laporan.objects
+            .order_by("-tanggal")[:5]
+        ),
     }
 
-    return render(request, "laporan/bk_dashboard.html", context)
+    return render(
+        request,
+        "laporan/bk_dashboard.html",
+        context
+    )
 
 
 # =========================
@@ -144,10 +158,13 @@ def bk_tindak_lanjut(request, pk):
     laporan = get_object_or_404(Laporan, pk=pk)
 
     if request.method == "POST":
-        form = TindakLanjutForm(request.POST, request.FILES, instance=laporan)
+        form = TindakLanjutForm(
+            request.POST,
+            request.FILES,
+            instance=laporan
+        )
         if form.is_valid():
-            obj = form.save(commit=False)
-            obj.save()
+            form.save()
             return redirect("bk_dashboard")
     else:
         form = TindakLanjutForm(instance=laporan)
@@ -168,23 +185,31 @@ def bk_tindak_lanjut(request, pk):
 @login_required
 def bk_download_laporan(request):
     response = HttpResponse(content_type="text/csv")
-    response["Content-Disposition"] = 'attachment; filename="laporan_bullying.csv"'
+    response["Content-Disposition"] = (
+        'attachment; filename="laporan_bullying.csv"'
+    )
 
     writer = csv.writer(response)
     writer.writerow([
-        "Kode",
+        "Kode Laporan",
         "Pelapor",
+        "Tanggal Kejadian",
+        "Waktu",
+        "Lokasi",
         "Korban",
         "Kelas Korban",
-        "Jenis",
+        "Jenis Bullying",
         "Status",
-        "Tanggal",
+        "Tanggal Lapor",
     ])
 
     for lap in Laporan.objects.all().order_by("-tanggal"):
         writer.writerow([
             lap.kode_laporan,
             lap.tampilkan_pelapor(),
+            lap.tanggal_kejadian.strftime("%d-%m-%Y"),
+            lap.get_perkiraan_waktu_display(),
+            lap.lokasi_kejadian,
             lap.nama_korban,
             lap.kelas_korban,
             lap.get_jenis_bullying_display(),

@@ -104,24 +104,35 @@
           {% for lap in laporan %}
           <div class="laporan-item">
 
-            <div class="laporan-top d-flex justify-content-between">
+            <div class="laporan-top d-flex justify-content-between align-items-center">
               <strong>{{ lap.kode_laporan }}</strong>
 
-              <span class="status {% if lap.status == 'selesai' %}selesai{% else %}proses{% endif %}">
+              <span class="status
+                {% if lap.status == 'selesai' %}
+                  selesai
+                {% elif lap.status == 'diproses' %}
+                  proses
+                {% else %}
+                  baru
+                {% endif %}
+              ">
                 {{ lap.get_status_display }}
               </span>
             </div>
 
-            <!-- 🔒 DEFAULT VIEW = ANONIM -->
+            <!-- ANONIM DI LIST -->
             <p class="laporan-meta">
-              <strong>Pelapor:</strong>
-              {% if lap.is_anonymous %}
-                Anonim
-              {% else %}
-                Anonim
-              {% endif %}
+              <strong>Pelapor:</strong> Anonim 🔒
               • {{ lap.get_jenis_bullying_display }}
               • {{ lap.tanggal|date:"d M Y" }}
+            </p>
+
+            <!-- INFO TAMBAHAN -->
+            <p class="laporan-meta">
+              <strong>Kejadian:</strong>
+              {{ lap.tanggal_kejadian|date:"d M Y" }}
+              ({{ lap.get_perkiraan_waktu_display }})
+              • <strong>Lokasi:</strong> {{ lap.lokasi_kejadian }}
             </p>
 
             <a href="{% url 'bk_tindak_lanjut' lap.id %}" class="btn-detail">
@@ -139,6 +150,7 @@
       <!-- ================= RIGHT ================= -->
       <aside class="dashboard-right">
 
+        <!-- STATISTIK KELAS -->
         <div class="side-card">
           <h4><i class="bi bi-bar-chart"></i> Statistik Kelas Korban</h4>
           {% for k in statistik_kelas %}
@@ -146,9 +158,12 @@
             <span>{{ k.kelas_korban }}</span>
             <span>{{ k.total }}</span>
           </div>
+          {% empty %}
+          <p class="text-muted small">Belum ada data</p>
           {% endfor %}
         </div>
 
+        <!-- AKTIVITAS -->
         <div class="side-card">
           <h4><i class="bi bi-clock-history"></i> Aktivitas Terkini</h4>
           <ul class="activity-list">
@@ -157,6 +172,8 @@
               <strong>{{ a.kode_laporan }}</strong><br>
               <small>{{ a.tanggal|timesince }} lalu</small>
             </li>
+            {% empty %}
+            <li class="text-muted">Belum ada aktivitas</li>
             {% endfor %}
           </ul>
         </div>
