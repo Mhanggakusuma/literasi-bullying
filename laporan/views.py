@@ -36,11 +36,15 @@ def buat_laporan(request):
         form = LaporanForm(request.POST, request.FILES)
         if form.is_valid():
             laporan = form.save(commit=False)
+
+            # 🔑 WAJIB: set pelapor dari akun login
             laporan.pelapor = request.user
+
+            # 🔢 KODE LAPORAN
             laporan.kode_laporan = generate_kode()
 
-            # 🔥 BYPASS CLOUDINARY (BUKTI)
-            laporan.bukti = None
+            # ❌ JANGAN set laporan.bukti = None
+            # CloudinaryField aman jika kosong
 
             laporan.save()
 
@@ -52,12 +56,16 @@ def buat_laporan(request):
     else:
         form = LaporanForm()
 
+    # Data profil untuk tampilan read-only di form
     profile, _ = Profile.objects.get_or_create(user=request.user)
 
     return render(
         request,
         "laporan/buat_laporan.html",
-        {"form": form, "profile": profile}
+        {
+            "form": form,
+            "profile": profile
+        }
     )
 
 
@@ -89,12 +97,8 @@ def bk_dashboard(request):
 
     laporan_qs = Laporan.objects.all()
 
-    if status_filter == "baru":
-        laporan_qs = laporan_qs.filter(status="baru")
-    elif status_filter == "diproses":
-        laporan_qs = laporan_qs.filter(status="diproses")
-    elif status_filter == "selesai":
-        laporan_qs = laporan_qs.filter(status="selesai")
+    if status_filter in ["baru", "diproses", "selesai"]:
+        laporan_qs = laporan_qs.filter(status=status_filter)
 
     if query:
         laporan_qs = laporan_qs.filter(kode_laporan__icontains=query)
@@ -138,9 +142,8 @@ def bk_tindak_lanjut(request, pk):
     if request.method == "POST":
         form = TindakLanjutForm(request.POST, request.FILES, instance=laporan)
         if form.is_valid():
-            laporan = form.save(commit=False)
-            laporan.status = "selesai"
-            laporan.save()
+            obj = form.save(commit=False)
+            obj.save()
             return redirect("bk_dashboard")
     else:
         form = TindakLanjutForm(instance=laporan)
