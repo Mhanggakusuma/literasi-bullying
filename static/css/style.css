@@ -102,65 +102,77 @@ body {
   }
 }
 
-/* ===============================
-   LENGKAPI PROFIL (ISI KELAS)
-   =============================== */
+/* =====================================
+   AUTH-LIKE STYLE (LENGKAPI PROFIL)
+   Mirip halaman LOGIN
+   ===================================== */
 
-.lengkapi-profil-wrapper {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f4f7fb, #eef2f7);
+.auth-like-hero {
+  min-height: calc(100vh - 70px); /* tinggi navbar */
+  background: linear-gradient(180deg, #2f80ed, #1c5db6);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 24px;
 }
 
-.lengkapi-profil-card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 30px 28px;
+.auth-like-card {
+  background: #9ec5e5;
+  border-radius: 20px;
+  padding: 36px 32px;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  text-align: center;
 }
 
-.lengkapi-profil-card h4 {
-  font-weight: 600;
-  text-align: center;
+.auth-like-logo {
+  width: 70px;
+}
+
+.auth-like-card h4 {
+  font-weight: 700;
   margin-bottom: 6px;
+  color: #000;
 }
 
-.lengkapi-profil-card p {
+.auth-like-desc {
   font-size: 0.85rem;
-  color: #6c757d;
-  text-align: center;
-  margin-bottom: 20px;
+  color: #1e1e1e;
+  margin-bottom: 22px;
+  line-height: 1.5;
 }
 
-.lengkapi-profil-card label {
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.lengkapi-profil-card .form-select {
+.auth-like-input {
   border-radius: 10px;
   padding: 10px 12px;
   font-size: 0.95rem;
 }
 
-.lengkapi-profil-card button {
-  margin-top: 15px;
-  padding: 10px;
-  border-radius: 10px;
-  font-weight: 500;
+.auth-like-btn {
+  background: #1e6bf1;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.auth-like-btn:hover {
+  background: #1558c0;
 }
 
 /* ===============================
    RESPONSIVE
    =============================== */
 @media (max-width: 576px) {
-  .lengkapi-profil-card {
-    padding: 24px 20px;
+  .auth-like-card {
+    padding: 28px 22px;
+  }
+
+  .auth-like-logo {
+    width: 60px;
   }
 }
 

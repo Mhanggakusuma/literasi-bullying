@@ -1,16 +1,20 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block title %}
 Lengkapi Profil | SMP N 1 Madang Suku III
 {% endblock %}
 
 {% block content %}
-<div class="lengkapi-profil-wrapper">
-  <div class="lengkapi-profil-card">
+<div class="auth-like-hero">
+  <div class="auth-like-card">
+
+    <!-- LOGO -->
+    <img src="{% static 'img/logo.png' %}"
+         alt="Logo SMP"
+         class="auth-like-logo mb-3">
 
     <h4>Lengkapi Data Diri</h4>
-    <p>
+    <p class="auth-like-desc">
       Silakan pilih kelas Anda.  
       Data ini hanya diisi satu kali.  
       Jika ada kesalahan, hubungi Admin / Guru BK.
@@ -19,9 +23,9 @@ Lengkapi Profil | SMP N 1 Madang Suku III
     <form method="post">
       {% csrf_token %}
 
-      <div class="mb-3">
+      <div class="mb-3 text-start">
         <label class="form-label">Kelas</label>
-        <select name="kelas" class="form-select" required>
+        <select name="kelas" class="form-select auth-like-input" required>
           <option value="">-- Pilih Kelas --</option>
           {% for value, label in kelas_choices %}
             <option value="{{ value }}">{{ label }}</option>
@@ -29,7 +33,7 @@ Lengkapi Profil | SMP N 1 Madang Suku III
         </select>
       </div>
 
-      <button type="submit" class="btn btn-primary w-100">
+      <button type="submit" class="btn auth-like-btn w-100">
         Simpan
       </button>
     </form>
