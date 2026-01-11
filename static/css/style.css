@@ -102,6 +102,68 @@ body {
   }
 }
 
+/* ===============================
+   LENGKAPI PROFIL (ISI KELAS)
+   =============================== */
+
+.lengkapi-profil-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f4f7fb, #eef2f7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.lengkapi-profil-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 30px 28px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+}
+
+.lengkapi-profil-card h4 {
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.lengkapi-profil-card p {
+  font-size: 0.85rem;
+  color: #6c757d;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.lengkapi-profil-card label {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.lengkapi-profil-card .form-select {
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+}
+
+.lengkapi-profil-card button {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+@media (max-width: 576px) {
+  .lengkapi-profil-card {
+    padding: 24px 20px;
+  }
+}
+
 /* =====================================================
    DASHBOARD HOME – FINAL (FULL + MOBILE FIX)
 ===================================================== */

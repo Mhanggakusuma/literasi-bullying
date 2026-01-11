@@ -7,6 +7,8 @@ urlpatterns = [
     path("register/", views.register_view, name="register"),
     path("logout/", views.LogoutAllowGet.as_view(), name="logout"),
 
+    path("lengkapi-profil/", views.lengkapi_profil, name="lengkapi_profil"),
+
     path("lupa-password/", views.lupa_password_view, name="lupa_password"),
 
     path(

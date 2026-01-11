@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Lengkapi Profil | SMP N 1 Madang Suku III
+{% endblock %}
+
+{% block content %}
+<div class="lengkapi-profil-wrapper">
+  <div class="lengkapi-profil-card">
+
+    <h4>Lengkapi Data Diri</h4>
+    <p>
+      Silakan pilih kelas Anda.  
+      Data ini hanya diisi satu kali.  
+      Jika ada kesalahan, hubungi Admin / Guru BK.
+    </p>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label class="form-label">Kelas</label>
+        <select name="kelas" class="form-select" required>
+          <option value="">-- Pilih Kelas --</option>
+          {% for value, label in kelas_choices %}
+            <option value="{{ value }}">{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">
+        Simpan
+      </button>
+    </form>
+
+  </div>
+</div>
+{% endblock %}

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.views import View
+from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm
 from .models import Profile
 
@@ -17,12 +18,10 @@ def login_view(request):
         if user:
             profile = user.profile
 
-            # 🔐 CEK MASA AKTIF AKUN
             if not profile.is_masih_aktif():
                 messages.error(
                     request,
-                    "Akun Anda sudah tidak aktif karena telah melewati masa studi. "
-                    "Silakan hubungi pihak sekolah."
+                    "Akun Anda sudah tidak aktif. Hubungi pihak sekolah."
                 )
                 return redirect("login")
 
@@ -32,17 +31,19 @@ def login_view(request):
                 messages.warning(request, "Silakan ganti password terlebih dahulu")
                 return redirect("password_change")
 
-            role = profile.role
+            # 🔴 WAJIB ISI KELAS JIKA SISWA
+            if profile.role == "siswa" and not profile.kelas:
+                return redirect("lengkapi_profil")
+
             return redirect(
-                "dashboard_siswa" if role == "siswa" else
-                "dashboard_guru" if role == "gurubk" else
+                "dashboard_siswa" if profile.role == "siswa" else
+                "dashboard_guru" if profile.role == "gurubk" else
                 "dashboard_admin"
             )
 
         messages.error(request, "Username atau password salah")
 
     return render(request, "users/login.html")
-
 
 
 # ================= REGISTER =================
@@ -53,6 +54,25 @@ def register_view(request):
         messages.success(request, "Pendaftaran berhasil")
         return redirect("login")
     return render(request, "users/register.html", {"form": form})
+
+
+# ================= LENGKAPI PROFIL (ISI KELAS) =================
+@login_required
+def lengkapi_profil(request):
+    profile = request.user.profile
+
+    if profile.kelas_locked:
+        return redirect("dashboard_siswa")
+
+    if request.method == "POST":
+        profile.kelas = request.POST.get("kelas")
+        profile.kelas_locked = True
+        profile.save()
+        return redirect("dashboard_siswa")
+
+    return render(request, "users/lengkapi_profil.html", {
+        "kelas_choices": Profile.KELAS_CHOICES
+    })
 
 
 # ================= LOGOUT =================
@@ -69,7 +89,7 @@ def lupa_password_view(request):
         if Profile.objects.filter(nis=nis).exists():
             messages.info(
                 request,
-                "Akun ditemukan. Silakan hubungi Admin / Guru BK untuk reset password."
+                "Akun ditemukan. Hubungi Admin / Guru BK untuk reset password."
             )
         else:
             messages.error(request, "NIS tidak terdaftar")
