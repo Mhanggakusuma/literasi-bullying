@@ -10,6 +10,8 @@ from django.db.models import Count
 from .models import Laporan
 from .forms import LaporanForm, TindakLanjutForm
 from users.models import Profile
+from users.decorators import role_required
+
 
 
 # ==================================================
@@ -28,6 +30,7 @@ def generate_kode():
 # HOME LAPORAN (SISWA)
 # ==================================================
 @login_required
+@role_required(['siswa'])
 def laporan_home(request):
     return render(request, "laporan/laporan_home.html")
 
@@ -36,6 +39,7 @@ def laporan_home(request):
 # BUAT LAPORAN (SISWA)
 # ==================================================
 @login_required
+@role_required(['siswa'])
 def buat_laporan(request):
     if request.method == "POST":
         form = LaporanForm(request.POST, request.FILES)
@@ -78,6 +82,7 @@ def buat_laporan(request):
 # CEK STATUS LAPORAN (SISWA)
 # ==================================================
 @login_required
+@role_required(['siswa'])
 def cek_laporan(request):
     laporan = None
 
@@ -98,6 +103,7 @@ def cek_laporan(request):
 # DASHBOARD GURU BK
 # ==================================================
 @login_required
+@role_required(['gurubk', 'admin'])
 def bk_dashboard(request):
     status_filter = request.GET.get("status", "all")
     query = request.GET.get("q", "")
@@ -156,6 +162,7 @@ def bk_dashboard(request):
 # TINDAK LANJUT GURU BK (STATUS OTOMATIS)
 # ==================================================
 @login_required
+@role_required(['gurubk', 'admin'])
 def bk_tindak_lanjut(request, pk):
     laporan = get_object_or_404(Laporan, pk=pk)
 
@@ -195,6 +202,7 @@ def bk_tindak_lanjut(request, pk):
 # DOWNLOAD CSV (GURU BK)
 # ==================================================
 @login_required
+@role_required(['gurubk', 'admin'])
 def bk_download_laporan(request):
     response = HttpResponse(content_type="text/csv")
     response["Content-Disposition"] = (
