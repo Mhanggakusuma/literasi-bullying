@@ -4,24 +4,25 @@ from .models import Laporan
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10 MB
 
 
+# ==================================================
+# FORM LAPORAN SISWA
+# ==================================================
 class LaporanForm(forms.ModelForm):
     """
     Form laporan bullying untuk SISWA.
-    Identitas pelapor diambil dari akun login (request.user),
-    bukan dari input form.
+    Identitas pelapor diambil dari akun login.
     """
 
     # =========================
-    # 🔒 OPSI ANONIM
+    # OPSI ANONIM
     # =========================
     is_anonymous = forms.BooleanField(
         required=False,
-        label="Laporkan sebagai anonim",
-        help_text="Identitas hanya dapat dilihat oleh Guru BK & Admin"
+        label="Laporkan sebagai anonim"
     )
 
     # =========================
-    # 💔 DAMPAK KORBAN (MULTI PILIH)
+    # DAMPAK KORBAN (MULTI PILIH)
     # =========================
     dampak_korban = forms.MultipleChoiceField(
         choices=Laporan.DAMPAK_CHOICES,
@@ -31,7 +32,7 @@ class LaporanForm(forms.ModelForm):
     )
 
     # =========================
-    # ✅ PERNYATAAN KEJUJURAN
+    # PERNYATAAN KEJUJURAN
     # =========================
     pernyataan_setuju = forms.BooleanField(
         required=True,
@@ -44,41 +45,38 @@ class LaporanForm(forms.ModelForm):
             # Anonimitas
             "is_anonymous",
 
-            # 🕒 Waktu & Tempat
+            # Waktu & Tempat
             "tanggal_kejadian",
             "perkiraan_waktu",
             "lokasi_kejadian",
 
-            # 👤 Korban
+            # Korban
             "nama_korban",
             "kelas_korban",
 
-            # ⚠️ Terlapor
+            # Terlapor
             "nama_terlapor",
             "kelas_terlapor",
 
-            # 🚨 Detail
+            # Detail
             "jenis_bullying",
             "isi_laporan",
 
-            # 💔 Dampak
+            # Dampak
             "dampak_korban",
             "dampak_lainnya",
 
-            # 📎 Bukti
+            # Bukti
             "bukti",
 
-            # 🤝 Harapan
+            # Harapan
             "harapan_pelapor",
 
-            # ✅ Pernyataan
+            # Pernyataan
             "pernyataan_setuju",
         ]
 
         widgets = {
-            # =========================
-            # WAKTU & TEMPAT
-            # =========================
             "tanggal_kejadian": forms.DateInput(attrs={
                 "type": "date",
                 "class": "form-control"
@@ -90,33 +88,20 @@ class LaporanForm(forms.ModelForm):
                 "class": "form-control",
                 "placeholder": "Contoh: Ruang kelas / Lapangan sekolah"
             }),
-
-            # =========================
-            # KORBAN
-            # =========================
             "nama_korban": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "Nama korban perundungan"
+                "class": "form-control"
             }),
             "kelas_korban": forms.Select(attrs={
                 "class": "form-select"
             }),
-
-            # =========================
-            # TERLAPOR
-            # =========================
             "nama_terlapor": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "Nama terlapor (opsional)"
+                "placeholder": "Opsional"
             }),
             "kelas_terlapor": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "Kelas terlapor (opsional)"
+                "placeholder": "Opsional"
             }),
-
-            # =========================
-            # DETAIL
-            # =========================
             "jenis_bullying": forms.Select(attrs={
                 "class": "form-select"
             }),
@@ -128,25 +113,13 @@ class LaporanForm(forms.ModelForm):
                     "Gunakan bahasa sopan dan fokus pada kejadian."
                 )
             }),
-
-            # =========================
-            # DAMPAK LAINNYA
-            # =========================
             "dampak_lainnya": forms.TextInput(attrs={
                 "class": "form-control",
                 "placeholder": "Jika lainnya, jelaskan..."
             }),
-
-            # =========================
-            # BUKTI
-            # =========================
             "bukti": forms.ClearableFileInput(attrs={
                 "class": "form-control"
             }),
-
-            # =========================
-            # HARAPAN
-            # =========================
             "harapan_pelapor": forms.Textarea(attrs={
                 "class": "form-control",
                 "rows": 3,
@@ -155,37 +128,40 @@ class LaporanForm(forms.ModelForm):
         }
 
     # =========================
-    # VALIDASI FILE BUKTI
+    # VALIDASI BUKTI (AMAN CLOUDINARY)
     # =========================
     def clean_bukti(self):
         file = self.cleaned_data.get("bukti")
+
+        # Jika file lama dari Cloudinary (bukan upload baru)
+        if file and not hasattr(file, "size"):
+            return file
+
         if file and file.size > MAX_UPLOAD_SIZE:
             raise forms.ValidationError(
                 "Ukuran file terlalu besar. Maksimal 10 MB."
             )
+
         return file
 
 
 # ==================================================
-# FORM TINDAK LANJUT (KHUSUS GURU BK)
+# FORM TINDAK LANJUT GURU BK
 # ==================================================
 class TindakLanjutForm(forms.ModelForm):
     """
-    Form khusus Guru BK untuk mencatat tindak lanjut kasus bullying.
+    Guru BK hanya mengisi catatan & bukti.
+    Status laporan diatur OTOMATIS oleh sistem.
     """
 
     class Meta:
         model = Laporan
         fields = [
-            "status",
             "catatan_bk",
             "bukti_tindak_lanjut",
         ]
 
         widgets = {
-            "status": forms.Select(attrs={
-                "class": "form-select"
-            }),
             "catatan_bk": forms.Textarea(attrs={
                 "class": "form-control",
                 "rows": 4,
@@ -196,10 +172,19 @@ class TindakLanjutForm(forms.ModelForm):
             }),
         }
 
+    # =========================
+    # VALIDASI BUKTI BK (AMAN CLOUDINARY)
+    # =========================
     def clean_bukti_tindak_lanjut(self):
         file = self.cleaned_data.get("bukti_tindak_lanjut")
+
+        # Jika file lama Cloudinary
+        if file and not hasattr(file, "size"):
+            return file
+
         if file and file.size > MAX_UPLOAD_SIZE:
             raise forms.ValidationError(
                 "Ukuran file terlalu besar. Maksimal 10 MB."
             )
+
         return file

@@ -12,9 +12,9 @@ from .forms import LaporanForm, TindakLanjutForm
 from users.models import Profile
 
 
-# =========================
-# GENERATE KODE LAPORAN
-# =========================
+# ==================================================
+# GENERATE KODE LAPORAN UNIK
+# ==================================================
 def generate_kode():
     while True:
         kode = ''.join(
@@ -24,17 +24,17 @@ def generate_kode():
             return kode
 
 
-# =========================
-# HOME LAPORAN
-# =========================
+# ==================================================
+# HOME LAPORAN (SISWA)
+# ==================================================
 @login_required
 def laporan_home(request):
     return render(request, "laporan/laporan_home.html")
 
 
-# =========================
+# ==================================================
 # BUAT LAPORAN (SISWA)
-# =========================
+# ==================================================
 @login_required
 def buat_laporan(request):
     if request.method == "POST":
@@ -42,13 +42,13 @@ def buat_laporan(request):
         if form.is_valid():
             laporan = form.save(commit=False)
 
-            # 🔑 Set pelapor dari akun login
+            # Set pelapor dari akun login
             laporan.pelapor = request.user
 
-            # 🔢 Kode unik laporan
+            # Generate kode laporan
             laporan.kode_laporan = generate_kode()
 
-            # 💔 Simpan dampak korban (list -> JSON)
+            # Simpan dampak korban (list -> JSON)
             laporan.dampak_korban = form.cleaned_data.get("dampak_korban")
 
             laporan.save()
@@ -61,7 +61,7 @@ def buat_laporan(request):
     else:
         form = LaporanForm()
 
-    # Data profil siswa (read-only di form)
+    # Data profil siswa (read-only)
     profile, _ = Profile.objects.get_or_create(user=request.user)
 
     return render(
@@ -74,16 +74,18 @@ def buat_laporan(request):
     )
 
 
-# =========================
+# ==================================================
 # CEK STATUS LAPORAN (SISWA)
-# =========================
+# ==================================================
 @login_required
 def cek_laporan(request):
     laporan = None
 
     if request.method == "POST":
         kode = request.POST.get("kode")
-        laporan = Laporan.objects.filter(kode_laporan=kode).first()
+        laporan = Laporan.objects.filter(
+            kode_laporan=kode
+        ).first()
 
     return render(
         request,
@@ -92,9 +94,9 @@ def cek_laporan(request):
     )
 
 
-# =========================
+# ==================================================
 # DASHBOARD GURU BK
-# =========================
+# ==================================================
 @login_required
 def bk_dashboard(request):
     status_filter = request.GET.get("status", "all")
@@ -150,9 +152,9 @@ def bk_dashboard(request):
     )
 
 
-# =========================
-# TINDAK LANJUT GURU BK
-# =========================
+# ==================================================
+# TINDAK LANJUT GURU BK (STATUS OTOMATIS)
+# ==================================================
 @login_required
 def bk_tindak_lanjut(request, pk):
     laporan = get_object_or_404(Laporan, pk=pk)
@@ -164,7 +166,17 @@ def bk_tindak_lanjut(request, pk):
             instance=laporan
         )
         if form.is_valid():
-            form.save()
+            laporan = form.save(commit=False)
+
+            # =========================
+            # STATUS OTOMATIS
+            # =========================
+            if "selesai" in request.POST:
+                laporan.status = "selesai"
+            elif laporan.status == "baru":
+                laporan.status = "diproses"
+
+            laporan.save()
             return redirect("bk_dashboard")
     else:
         form = TindakLanjutForm(instance=laporan)
@@ -179,9 +191,9 @@ def bk_tindak_lanjut(request, pk):
     )
 
 
-# =========================
+# ==================================================
 # DOWNLOAD CSV (GURU BK)
-# =========================
+# ==================================================
 @login_required
 def bk_download_laporan(request):
     response = HttpResponse(content_type="text/csv")
@@ -207,9 +219,11 @@ def bk_download_laporan(request):
         writer.writerow([
             lap.kode_laporan,
             lap.tampilkan_pelapor(),
-            lap.tanggal_kejadian.strftime("%d-%m-%Y"),
-            lap.get_perkiraan_waktu_display(),
-            lap.lokasi_kejadian,
+            lap.tanggal_kejadian.strftime("%d-%m-%Y")
+            if lap.tanggal_kejadian else "-",
+            lap.get_perkiraan_waktu_display()
+            if lap.perkiraan_waktu else "-",
+            lap.lokasi_kejadian or "-",
             lap.nama_korban,
             lap.kelas_korban,
             lap.get_jenis_bullying_display(),
