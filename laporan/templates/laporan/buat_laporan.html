@@ -29,21 +29,24 @@
 
           <div class="mb-3">
             <label class="form-label">Nama Pelapor</label>
-            <input type="text" class="form-control"
+            <input type="text"
+                   class="form-control"
                    value="{{ profile.user.get_full_name|default:profile.user.username }}"
                    readonly>
           </div>
 
           <div class="mb-3">
             <label class="form-label">NIS</label>
-            <input type="text" class="form-control"
+            <input type="text"
+                   class="form-control"
                    value="{{ profile.nis }}"
                    readonly>
           </div>
 
           <div class="mb-4">
             <label class="form-label">Kelas</label>
-            <input type="text" class="form-control"
+            <input type="text"
+                   class="form-control"
                    value="{{ profile.kelas }}"
                    readonly>
           </div>
@@ -51,7 +54,7 @@
           <!-- ANONIM -->
           <div class="form-check mb-4">
             {{ form.is_anonymous }}
-            <label class="form-check-label">
+            <label class="form-check-label ms-2">
               Laporkan sebagai anonim
             </label>
             <small class="d-block text-muted">
@@ -68,13 +71,20 @@
             <label class="form-label">Nama Korban</label>
             {{ form.nama_korban }}
             {% if form.nama_korban.errors %}
-              <div class="text-danger small">{{ form.nama_korban.errors.0 }}</div>
+              <div class="text-danger small">
+                {{ form.nama_korban.errors.0 }}
+              </div>
             {% endif %}
           </div>
 
           <div class="mb-4">
             <label class="form-label">Kelas Korban</label>
             {{ form.kelas_korban }}
+            {% if form.kelas_korban.errors %}
+              <div class="text-danger small">
+                {{ form.kelas_korban.errors.0 }}
+              </div>
+            {% endif %}
           </div>
 
           <hr class="my-4">
@@ -94,7 +104,7 @@
 
           <hr class="my-4">
 
-          <!-- ================= 4. JENIS BULLYING ================= -->
+          <!-- ================= 4. JENIS PERUNDUNGAN ================= -->
           <h5 class="mb-3">🚨 Jenis Perundungan</h5>
 
           <div class="mb-4">
@@ -117,7 +127,7 @@
           <div class="mb-4">
             {{ form.bukti }}
             <small class="text-muted">
-              JPG / PNG / PDF • Maksimal 10 MB
+              JPG / PNG / PDF / Video • Maksimal 10 MB
             </small>
           </div>
 
@@ -126,7 +136,8 @@
             Kirim Laporan
           </button>
 
-          <a href="{% url 'laporan_home' %}" class="btn btn-kembali w-100 mt-3">
+          <a href="{% url 'laporan_home' %}"
+             class="btn btn-kembali w-100 mt-3">
             ← Kembali
           </a>
 

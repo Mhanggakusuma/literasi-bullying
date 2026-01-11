@@ -47,21 +47,26 @@ class LaporanForm(forms.ModelForm):
                 "class": "form-control",
                 "placeholder": "Nama korban perundungan"
             }),
-            "kelas_korban": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "Contoh: VIII B"
+
+            # ✅ DROPDOWN (SELARAS DENGAN MODEL)
+            "kelas_korban": forms.Select(attrs={
+                "class": "form-select"
             }),
+
             "nama_terlapor": forms.TextInput(attrs={
                 "class": "form-control",
                 "placeholder": "Nama terlapor (boleh dikosongkan)"
             }),
+
             "kelas_terlapor": forms.TextInput(attrs={
                 "class": "form-control",
                 "placeholder": "Kelas terlapor (opsional)"
             }),
+
             "jenis_bullying": forms.Select(attrs={
                 "class": "form-select"
             }),
+
             "isi_laporan": forms.Textarea(attrs={
                 "class": "form-control",
                 "rows": 5,
@@ -70,6 +75,7 @@ class LaporanForm(forms.ModelForm):
                     "Gunakan bahasa sopan dan fokus pada kejadian."
                 )
             }),
+
             "bukti": forms.ClearableFileInput(attrs={
                 "class": "form-control"
             }),
@@ -80,11 +86,10 @@ class LaporanForm(forms.ModelForm):
     # =========================
     def clean_bukti(self):
         file = self.cleaned_data.get("bukti")
-        if file:
-            if file.size > MAX_UPLOAD_SIZE:
-                raise forms.ValidationError(
-                    "Ukuran file terlalu besar. Maksimal 10 MB."
-                )
+        if file and file.size > MAX_UPLOAD_SIZE:
+            raise forms.ValidationError(
+                "Ukuran file terlalu besar. Maksimal 10 MB."
+            )
         return file
 
 
@@ -120,9 +125,8 @@ class TindakLanjutForm(forms.ModelForm):
 
     def clean_bukti_tindak_lanjut(self):
         file = self.cleaned_data.get("bukti_tindak_lanjut")
-        if file:
-            if file.size > MAX_UPLOAD_SIZE:
-                raise forms.ValidationError(
-                    "Ukuran file terlalu besar. Maksimal 10 MB."
-                )
+        if file and file.size > MAX_UPLOAD_SIZE:
+            raise forms.ValidationError(
+                "Ukuran file terlalu besar. Maksimal 10 MB."
+            )
         return file
