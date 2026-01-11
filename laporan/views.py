@@ -3,7 +3,7 @@ import string
 import csv
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 
@@ -12,22 +12,10 @@ from .forms import LaporanForm, TindakLanjutForm
 
 
 # =========================
-# UTIL
+# GENERATE KODE LAPORAN
 # =========================
 def generate_kode():
-    """
-    Generate kode laporan unik (8 karakter)
-    """
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-
-
-def is_guru_bk_or_admin(user):
-    """
-    Helper permission Guru BK & Admin
-    """
-    if not hasattr(user, "profile"):
-        return False
-    return user.profile.role in ["gurubk", "admin"]
 
 
 # =========================
@@ -43,21 +31,15 @@ def laporan_home(request):
 # =========================
 @login_required
 def buat_laporan(request):
-    """
-    Siswa membuat laporan.
-    Identitas pelapor diambil dari akun (READ-ONLY).
-    """
-    profile = request.user.profile
-
     if request.method == "POST":
         form = LaporanForm(request.POST, request.FILES)
         if form.is_valid():
             laporan = form.save(commit=False)
 
-            # 🔒 IDENTITAS ASLI
+            # 🔑 WAJIB: set pelapor dari user login
             laporan.pelapor = request.user
 
-            # 🔑 KODE LAPORAN
+            # 🔑 generate kode laporan
             laporan.kode_laporan = generate_kode()
 
             laporan.save()
@@ -75,22 +57,17 @@ def buat_laporan(request):
         "laporan/buat_laporan.html",
         {
             "form": form,
-            "profile": profile,  # untuk tampil READ-ONLY
+            "profile": request.user.profile,  # untuk readonly identitas pelapor
         }
     )
 
 
 # =========================
-# CEK LAPORAN (SISWA)
+# CEK STATUS LAPORAN (SISWA)
 # =========================
 @login_required
 def cek_laporan(request):
-    """
-    Siswa mengecek status laporan via kode.
-    Identitas pelapor tidak pernah ditampilkan.
-    """
     laporan = None
-
     if request.method == "POST":
         kode = request.POST.get("kode")
         laporan = Laporan.objects.filter(kode_laporan=kode).first()
@@ -102,24 +79,19 @@ def cek_laporan(request):
     )
 
 
-# ==================================================
+# =========================
 # DASHBOARD GURU BK
-# ==================================================
+# =========================
 @login_required
 def bk_dashboard(request):
-    if not is_guru_bk_or_admin(request.user):
-        return HttpResponseForbidden("Akses ditolak")
-
     status_filter = request.GET.get("status", "all")
     query = request.GET.get("q", "")
 
     laporan_qs = Laporan.objects.all()
 
-    # Filter status
     if status_filter != "all":
         laporan_qs = laporan_qs.filter(status=status_filter)
 
-    # Pencarian
     if query:
         laporan_qs = laporan_qs.filter(kode_laporan__icontains=query)
 
@@ -138,7 +110,7 @@ def bk_dashboard(request):
         "status_filter": status_filter,
         "query": query,
 
-        # Statistik kelas korban (lebih relevan secara akademik)
+        # Statistik kelas korban
         "statistik_kelas": (
             Laporan.objects.values("kelas_korban")
             .annotate(total=Count("id"))
@@ -152,22 +124,15 @@ def bk_dashboard(request):
     return render(request, "laporan/bk_dashboard.html", context)
 
 
-# ==================================================
+# =========================
 # DETAIL & TINDAK LANJUT (GURU BK)
-# ==================================================
+# =========================
 @login_required
 def bk_tindak_lanjut(request, pk):
-    if not is_guru_bk_or_admin(request.user):
-        return HttpResponseForbidden("Akses ditolak")
-
     laporan = get_object_or_404(Laporan, pk=pk)
 
     if request.method == "POST":
-        form = TindakLanjutForm(
-            request.POST,
-            request.FILES,
-            instance=laporan
-        )
+        form = TindakLanjutForm(request.POST, request.FILES, instance=laporan)
         if form.is_valid():
             form.save()
             return redirect("bk_dashboard")
@@ -184,18 +149,13 @@ def bk_tindak_lanjut(request, pk):
     )
 
 
-# ==================================================
-# DOWNLOAD CSV (ADMIN / GURU BK)
-# ==================================================
+# =========================
+# DOWNLOAD CSV (ADMIN / BK)
+# =========================
 @login_required
 def bk_download_laporan(request):
-    if not is_guru_bk_or_admin(request.user):
-        return HttpResponseForbidden("Akses ditolak")
-
     response = HttpResponse(content_type="text/csv")
-    response["Content-Disposition"] = (
-        'attachment; filename="laporan_bullying.csv"'
-    )
+    response["Content-Disposition"] = 'attachment; filename="laporan_bullying.csv"'
 
     writer = csv.writer(response)
     writer.writerow([
@@ -212,7 +172,7 @@ def bk_download_laporan(request):
     for lap in Laporan.objects.all().order_by("-tanggal"):
         writer.writerow([
             lap.kode_laporan,
-            lap.pelapor.get_full_name() or lap.pelapor.username,
+            lap.pelapor.username,
             "Ya" if lap.is_anonymous else "Tidak",
             lap.nama_korban,
             lap.kelas_korban,
