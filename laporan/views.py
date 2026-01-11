@@ -34,13 +34,13 @@ def laporan_home(request):
 def buat_laporan(request):
     if request.method == "POST":
         form = LaporanForm(request.POST, request.FILES)
-
         if form.is_valid():
             laporan = form.save(commit=False)
-
-            # 🔴 WAJIB DISET (INI PENYEBAB ERROR 500 SEBELUMNYA)
             laporan.pelapor = request.user
             laporan.kode_laporan = generate_kode()
+
+            # 🔥 BYPASS CLOUDINARY (BUKTI)
+            laporan.bukti = None
 
             laporan.save()
 
@@ -52,16 +52,12 @@ def buat_laporan(request):
     else:
         form = LaporanForm()
 
-    # Ambil profil siswa (untuk identitas read-only)
     profile, _ = Profile.objects.get_or_create(user=request.user)
 
     return render(
         request,
         "laporan/buat_laporan.html",
-        {
-            "form": form,
-            "profile": profile,
-        }
+        {"form": form, "profile": profile}
     )
 
 
