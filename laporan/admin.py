@@ -5,9 +5,9 @@ from .models import Laporan
 @admin.register(Laporan)
 class LaporanAdmin(admin.ModelAdmin):
     """
-    Konfigurasi Admin Panel untuk laporan bullying.
-    Identitas pelapor tetap dapat diakses oleh Admin,
-    meskipun laporan bersifat anonim di tampilan publik.
+    Konfigurasi Admin untuk Laporan Bullying.
+    - Guru BK: status diubah otomatis via sistem
+    - Admin: tetap bisa memantau & mengoreksi jika diperlukan
     """
 
     # =========================
@@ -16,7 +16,6 @@ class LaporanAdmin(admin.ModelAdmin):
     list_display = (
         "kode_laporan",
         "get_pelapor_admin",
-        "is_anonymous",
         "nama_korban",
         "kelas_korban",
         "jenis_bullying",
@@ -30,8 +29,7 @@ class LaporanAdmin(admin.ModelAdmin):
     list_filter = (
         "status",
         "jenis_bullying",
-        "perkiraan_waktu",
-        "is_anonymous",
+        "kelas_korban",
         "tanggal",
     )
 
@@ -46,7 +44,7 @@ class LaporanAdmin(admin.ModelAdmin):
     )
 
     # =========================
-    # FIELD GROUPING
+    # GROUPING FIELD
     # =========================
     fieldsets = (
         ("🔒 Identitas Pelapor (Internal)", {
@@ -91,11 +89,6 @@ class LaporanAdmin(admin.ModelAdmin):
                 "bukti_tindak_lanjut",
             )
         }),
-        ("✅ Pernyataan", {
-            "fields": (
-                "pernyataan_setuju",
-            )
-        }),
         ("🔑 Meta Data", {
             "fields": (
                 "kode_laporan",
@@ -105,7 +98,7 @@ class LaporanAdmin(admin.ModelAdmin):
     )
 
     # =========================
-    # READ ONLY
+    # READ ONLY FIELD
     # =========================
     readonly_fields = (
         "kode_laporan",
@@ -113,13 +106,13 @@ class LaporanAdmin(admin.ModelAdmin):
     )
 
     # =========================
-    # HELPER ADMIN
+    # HELPER DISPLAY
     # =========================
     @admin.display(description="Pelapor")
     def get_pelapor_admin(self, obj):
         """
-        Di Admin Panel:
-        Identitas asli tetap ditampilkan,
-        meskipun laporan bersifat anonim di tampilan publik.
+        Di Admin:
+        - Identitas pelapor selalu terlihat
+        - Anonimitas hanya berlaku di UI siswa/BK
         """
         return obj.pelapor.get_full_name() or obj.pelapor.username
