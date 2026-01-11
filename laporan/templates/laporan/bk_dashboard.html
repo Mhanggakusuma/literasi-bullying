@@ -18,7 +18,6 @@
       <a href="{% url 'bk_download_laporan' %}" class="btn-download">
         <i class="bi bi-download"></i> Download Laporan
       </a>
-
     </header>
 
     <!-- ================= SUMMARY ================= -->
@@ -61,42 +60,74 @@
     <!-- ================= MAIN ================= -->
     <main class="dashboard-content">
 
-      <!-- LEFT -->
+      <!-- ================= LEFT ================= -->
       <section class="dashboard-left">
 
+        <!-- SEARCH -->
         <form method="get" class="search-box">
           <input type="hidden" name="status" value="{{ status_filter }}">
-          <input type="text" name="q" placeholder="Cari laporan..." value="{{ query|default:'' }}">
-          <button type="submit"><i class="bi bi-search"></i></button>
+          <input
+            type="text"
+            name="q"
+            placeholder="Cari kode laporan..."
+            value="{{ query|default:'' }}"
+          >
+          <button type="submit">
+            <i class="bi bi-search"></i>
+          </button>
         </form>
 
+        <!-- FILTER -->
         <div class="filter-bar">
-          <a href="?status=all" class="filter-btn {% if status_filter == 'all' %}active{% endif %}">Semua</a>
-          <a href="?status=baru" class="filter-btn {% if status_filter == 'baru' %}active{% endif %}">Baru</a>
-          <a href="?status=selesai" class="filter-btn {% if status_filter == 'selesai' %}active{% endif %}">Selesai</a>
+          <a href="?status=all"
+             class="filter-btn {% if status_filter == 'all' %}active{% endif %}">
+            Semua
+          </a>
+          <a href="?status=baru"
+             class="filter-btn {% if status_filter == 'baru' %}active{% endif %}">
+            Baru
+          </a>
+          <a href="?status=diproses"
+             class="filter-btn {% if status_filter == 'diproses' %}active{% endif %}">
+            Diproses
+          </a>
+          <a href="?status=selesai"
+             class="filter-btn {% if status_filter == 'selesai' %}active{% endif %}">
+            Selesai
+          </a>
         </div>
 
+        <!-- ================= LIST LAPORAN ================= -->
         <div class="laporan-card">
           <h3>Daftar Laporan</h3>
 
           {% for lap in laporan %}
           <div class="laporan-item">
-            <div class="laporan-top">
+
+            <div class="laporan-top d-flex justify-content-between">
               <strong>{{ lap.kode_laporan }}</strong>
-              <span class="status {% if lap.status == 'Sudah Ditindaklanjuti' %}selesai{% else %}proses{% endif %}">
-                {{ lap.status }}
+
+              <span class="status {% if lap.status == 'selesai' %}selesai{% else %}proses{% endif %}">
+                {{ lap.get_status_display }}
               </span>
             </div>
 
+            <!-- 🔒 DEFAULT VIEW = ANONIM -->
             <p class="laporan-meta">
-              {{ lap.get_jenis_bullying_display }} •
-              {{ lap.kelas_pelapor }} •
-              {{ lap.tanggal|date:"d M Y" }}
+              <strong>Pelapor:</strong>
+              {% if lap.is_anonymous %}
+                Anonim
+              {% else %}
+                Anonim
+              {% endif %}
+              • {{ lap.get_jenis_bullying_display }}
+              • {{ lap.tanggal|date:"d M Y" }}
             </p>
 
             <a href="{% url 'bk_tindak_lanjut' lap.id %}" class="btn-detail">
               <i class="bi bi-eye"></i> Lihat Detail
             </a>
+
           </div>
           {% empty %}
           <p class="empty">Tidak ada laporan</p>
@@ -105,19 +136,14 @@
 
       </section>
 
-      <!-- RIGHT -->
+      <!-- ================= RIGHT ================= -->
       <aside class="dashboard-right">
 
         <div class="side-card">
-          <h4><i class="bi bi-graph-up"></i> Tren Laporan</h4>
-          <canvas id="trenChart" height="200"></canvas>
-        </div>
-
-        <div class="side-card">
-          <h4><i class="bi bi-bar-chart"></i> Statistik Kelas</h4>
+          <h4><i class="bi bi-bar-chart"></i> Statistik Kelas Korban</h4>
           {% for k in statistik_kelas %}
           <div class="stat-row">
-            <span>{{ k.kelas_pelapor }}</span>
+            <span>{{ k.kelas_korban }}</span>
             <span>{{ k.total }}</span>
           </div>
           {% endfor %}

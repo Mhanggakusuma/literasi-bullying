@@ -1,70 +1,158 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from cloudinary.models import CloudinaryField
 
 
+# =========================
+# VALIDASI UKURAN FILE
+# =========================
 def validate_file_size(value):
     max_size = 10 * 1024 * 1024  # 10 MB
     if value.size > max_size:
         raise ValidationError("Ukuran file maksimal 10 MB.")
 
 
+# =========================
+# MODEL LAPORAN BULLYING
+# =========================
 class Laporan(models.Model):
 
+    # =========================
+    # PILIHAN JENIS BULLYING
+    # (MULTI DIMENSI – AKADEMIK)
+    # =========================
     JENIS_BULLYING_CHOICES = [
-        ("Fisik", "Bullying Fisik"),
-        ("Verbal", "Bullying Verbal"),
-        ("Sosial", "Bullying Sosial"),
-        ("Cyber", "Cyberbullying"),
+        ("verbal", "Verbal"),
+        ("fisik", "Fisik"),
+        ("sosial", "Sosial"),
+        ("siber", "Siber"),
+        ("psikologis", "Psikologis"),
+        ("lainnya", "Lainnya"),
     ]
 
-    KELAS_CHOICES = [
-        ("VII A", "VII A"), ("VII B", "VII B"), ("VII C", "VII C"),
-        ("VII D", "VII D"), ("VII E", "VII E"),
-        ("VIII A", "VIII A"), ("VIII B", "VIII B"), ("VIII C", "VIII C"),
-        ("VIII D", "VIII D"), ("VIII E", "VIII E"),
-        ("IX A", "IX A"), ("IX B", "IX B"), ("IX C", "IX C"),
-        ("IX D", "IX D"), ("IX E", "IX E"),
-    ]
-
+    # =========================
+    # STATUS PENANGANAN
+    # =========================
     STATUS_CHOICES = [
         ("baru", "Laporan Baru"),
         ("diproses", "Sedang Diproses"),
         ("selesai", "Selesai Ditangani"),
     ]
 
-    nama_pelapor = models.CharField(max_length=100)
-    nis_pelapor = models.CharField(max_length=20)
-    kelas_pelapor = models.CharField(max_length=10, choices=KELAS_CHOICES)
-    terlapor = models.CharField(max_length=100)
+    # ==================================================
+    # 🔒 IDENTITAS ASLI PELAPOR (TIDAK PERNAH HILANG)
+    # ==================================================
+    pelapor = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="laporan_bullying"
+    )
 
-    jenis_bullying = models.CharField(max_length=20, choices=JENIS_BULLYING_CHOICES)
-    isi_laporan = models.TextField()
+    # Checkbox "Laporkan sebagai anonim"
+    is_anonymous = models.BooleanField(
+        default=False,
+        help_text="Jika dicentang, identitas pelapor disembunyikan di tampilan"
+    )
 
-    # 🔥 CLOUDINARY FIELD
-    bukti = CloudinaryField(
-        resource_type="auto",
+    # =========================
+    # 👤 IDENTITAS KORBAN
+    # =========================
+    nama_korban = models.CharField(
+        max_length=100,
+        help_text="Nama korban perundungan"
+    )
+
+    kelas_korban = models.CharField(
+        max_length=10,
+        help_text="Kelas korban"
+    )
+
+    # =========================
+    # ⚠️ IDENTITAS TERLAPOR
+    # (BOLEH KOSONG JIKA BUKAN SISWA)
+    # =========================
+    nama_terlapor = models.CharField(
+        max_length=100,
         blank=True,
         null=True
     )
 
+    kelas_terlapor = models.CharField(
+        max_length=10,
+        blank=True,
+        null=True
+    )
+
+    # =========================
+    # 🚨 DETAIL PERUNDUNGAN
+    # =========================
+    jenis_bullying = models.CharField(
+        max_length=20,
+        choices=JENIS_BULLYING_CHOICES
+    )
+
+    isi_laporan = models.TextField(
+        help_text="Kronologi kejadian bullying"
+    )
+
+    # =========================
+    # 📎 BUKTI PENDUKUNG
+    # =========================
+    bukti = CloudinaryField(
+        resource_type="auto",
+        blank=True,
+        null=True,
+    )
+
+    # =========================
+    # 🧾 TINDAK LANJUT GURU BK
+    # =========================
     status = models.CharField(
-        max_length=50,
+        max_length=20,
         choices=STATUS_CHOICES,
         default="baru"
     )
 
-    catatan_bk = models.TextField(blank=True, null=True)
+    catatan_bk = models.TextField(
+        blank=True,
+        null=True,
+        help_text="Catatan internal Guru BK"
+    )
 
-    # 🔥 CLOUDINARY FIELD
     bukti_tindak_lanjut = CloudinaryField(
         resource_type="auto",
         blank=True,
-        null=True
+        null=True,
     )
 
-    kode_laporan = models.CharField(max_length=12, unique=True)
-    tanggal = models.DateTimeField(auto_now_add=True)
+    # =========================
+    # 🔑 META DATA
+    # =========================
+    kode_laporan = models.CharField(
+        max_length=12,
+        unique=True
+    )
 
+    tanggal = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    # =========================
+    # REPRESENTASI STRING
+    # =========================
     def __str__(self):
         return f"Laporan {self.kode_laporan}"
+
+    # =========================
+    # HELPER (UI LOGIC)
+    # =========================
+    def tampilkan_pelapor(self):
+        """
+        Digunakan di template.
+        Jika anonim → tampil 'Anonim'
+        Jika tidak → tampil nama user
+        """
+        if self.is_anonymous:
+            return "Anonim"
+        return self.pelapor.get_full_name() or self.pelapor.username

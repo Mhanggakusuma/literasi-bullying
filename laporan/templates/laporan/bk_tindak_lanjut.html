@@ -17,30 +17,81 @@
 
         <div class="bk-tl-info text-start">
 
-          <p><strong>Kode :</strong> {{ laporan.kode_laporan }}</p>
-          <p><strong>Pelapor :</strong> {{ laporan.nama_pelapor }}</p>
-          <p><strong>NIS :</strong> {{ laporan.nis_pelapor }}</p>
-          <p><strong>Kelas :</strong> {{ laporan.kelas_pelapor }}</p>
-          <p><strong>Terlapor :</strong> {{ laporan.terlapor }}</p>
+          <!-- ================= DATA UMUM ================= -->
+          <p><strong>Kode Laporan :</strong> {{ laporan.kode_laporan }}</p>
 
           <p>
-            <strong>Jenis Bullying :</strong>
+            <strong>Pelapor :</strong>
+            {% if laporan.is_anonymous %}
+              Anonim 🔒
+            {% else %}
+              Anonim 🔒
+            {% endif %}
+          </p>
+
+          <p><strong>Korban :</strong> {{ laporan.nama_korban }} ({{ laporan.kelas_korban }})</p>
+
+          {% if laporan.nama_terlapor %}
+            <p>
+              <strong>Terlapor :</strong>
+              {{ laporan.nama_terlapor }}
+              {% if laporan.kelas_terlapor %}
+                ({{ laporan.kelas_terlapor }})
+              {% endif %}
+            </p>
+          {% endif %}
+
+          <p>
+            <strong>Jenis Perundungan :</strong>
             {{ laporan.get_jenis_bullying_display }}
           </p>
 
           <hr>
 
+          <!-- ================= KRONOLOGI ================= -->
           <p>
-            <strong>Isi Laporan :</strong><br>
-            {{ laporan.isi_laporan }}
+            <strong>Kronologi Kejadian :</strong><br>
+            {{ laporan.isi_laporan|linebreaksbr }}
           </p>
 
           {% if laporan.bukti %}
-            <a href="{{ laporan.bukti.url }}" target="_blank"
+            <a href="{{ laporan.bukti.url }}"
+               target="_blank"
                class="bk-tl-btn-success w-100 my-3">
-              Lihat Bukti Pelapor
+              📎 Lihat Bukti Pelapor
             </a>
           {% endif %}
+
+          <hr>
+
+          <!-- ================================================= -->
+          <!-- 🔐 LEVEL 2 : IDENTITAS INTERNAL (GURU BK / ADMIN) -->
+          <!-- ================================================= -->
+          <details class="mt-4">
+            <summary style="cursor:pointer; font-weight:700;">
+              🔐 Lihat Identitas Pelapor (Internal)
+            </summary>
+
+            <div class="mt-3">
+
+              <p><strong>Nama :</strong>
+                {{ laporan.pelapor.get_full_name|default:laporan.pelapor.username }}
+              </p>
+
+              <div class="bk-tl-nis-row">
+                <strong>NIS :</strong>
+                <span class="bk-tl-nis">{{ laporan.pelapor.profile.nis }}</span>
+              </div>
+
+              <p class="mt-2">
+                <strong>Kelas :</strong> {{ laporan.pelapor.profile.kelas }}
+              </p>
+
+              <small class="text-muted d-block mt-2">
+                Informasi ini bersifat rahasia dan hanya untuk keperluan internal.
+              </small>
+            </div>
+          </details>
 
           <hr>
 
@@ -48,35 +99,30 @@
           <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <!-- CATATAN BK -->
-            <label class="bk-tl-label">Catatan BK :</label>
-            <textarea name="catatan_bk"
-                      class="bk-tl-textarea"
-                      placeholder="Tuliskan hasil penanganan atau tindak lanjut..."
-            >{{ laporan.catatan_bk }}</textarea>
+            <label class="bk-tl-label">Status Penanganan</label>
+            {{ form.status }}
 
-            <!-- BUKTI TINDAK LANJUT -->
-            <label class="bk-tl-label mt-3">Bukti Tindak Lanjut (Opsional)</label>
-            <input type="file" name="bukti_tindak_lanjut" class="bk-tl-file">
+            <label class="bk-tl-label mt-3">Catatan Guru BK</label>
+            {{ form.catatan_bk }}
 
-            {% if form and form.bukti_tindak_lanjut.errors %}
-              <div class="text-danger small mt-1">
-                {{ form.bukti_tindak_lanjut.errors.0 }}
-              </div>
-            {% endif %}
+            <label class="bk-tl-label mt-3">
+              Bukti Tindak Lanjut (Opsional)
+            </label>
+            {{ form.bukti_tindak_lanjut }}
 
             <small class="text-muted">
               File bebas (PDF, gambar, audio, video). Maksimal 10 MB.
             </small>
 
-            <button type="submit" class="bk-tl-btn-primary w-100 mt-3">
-              Simpan
+            <button type="submit"
+                    class="bk-tl-btn-primary w-100 mt-4">
+              Simpan Tindak Lanjut
             </button>
           </form>
 
           <a href="{% url 'bk_dashboard' %}"
              class="btn btn-outline-secondary w-100 mt-3">
-            ← Kembali
+            ← Kembali ke Dashboard
           </a>
 
         </div>

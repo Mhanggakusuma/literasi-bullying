@@ -1,84 +1,117 @@
 from django import forms
 from .models import Laporan
-from users.models import Profile
 
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10 MB
 
 
 class LaporanForm(forms.ModelForm):
+    """
+    Form laporan bullying untuk SISWA.
+    Identitas pelapor diambil dari akun (request.user),
+    bukan dari input form.
+    """
 
-    nis_pelapor = forms.CharField(
-        label="NIS Pelapor",
-        max_length=20,
-        help_text="Harus sesuai dengan NIS akun yang terdaftar",
-        widget=forms.TextInput(attrs={
-            "class": "form-control",
-            "placeholder": "Masukkan NIS sesuai akun"
-        })
+    # =========================
+    # 🔒 OPSI ANONIM
+    # =========================
+    is_anonymous = forms.BooleanField(
+        required=False,
+        label="Laporkan sebagai anonim",
+        help_text="Identitas Anda hanya dapat dilihat oleh Guru BK & Admin"
     )
 
     class Meta:
         model = Laporan
         fields = [
-            "nama_pelapor",
-            "nis_pelapor",
-            "kelas_pelapor",
-            "terlapor",
+            # Anonimitas
+            "is_anonymous",
+
+            # Identitas korban
+            "nama_korban",
+            "kelas_korban",
+
+            # Identitas terlapor (opsional)
+            "nama_terlapor",
+            "kelas_terlapor",
+
+            # Detail perundungan
             "jenis_bullying",
             "isi_laporan",
+
+            # Bukti
             "bukti",
         ]
 
         widgets = {
-            "nama_pelapor": forms.TextInput(attrs={
+            "nama_korban": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "Nama lengkap pelapor"
+                "placeholder": "Nama korban perundungan"
             }),
-            "kelas_pelapor": forms.Select(attrs={
-                "class": "form-select"
-            }),
-            "terlapor": forms.TextInput(attrs={
+            "kelas_korban": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "Nama siswa yang dilaporkan"
+                "placeholder": "Contoh: VIII B"
+            }),
+            "nama_terlapor": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Nama terlapor (boleh dikosongkan)"
+            }),
+            "kelas_terlapor": forms.TextInput(attrs={
+                "class": "form-control",
+                "placeholder": "Kelas terlapor (opsional)"
             }),
             "jenis_bullying": forms.Select(attrs={
                 "class": "form-select"
             }),
             "isi_laporan": forms.Textarea(attrs={
                 "class": "form-control",
-                "rows": 4,
-                "placeholder": "Ceritakan kejadian secara detail..."
+                "rows": 5,
+                "placeholder": (
+                    "Ceritakan kejadian secara jelas dan jujur.\n"
+                    "Gunakan bahasa sopan dan fokus pada kejadian."
+                )
             }),
             "bukti": forms.ClearableFileInput(attrs={
                 "class": "form-control"
             }),
         }
 
-    def clean_nis_pelapor(self):
-        nis = self.cleaned_data.get("nis_pelapor")
-        if not Profile.objects.filter(nis=nis).exists():
-            raise forms.ValidationError(
-                "NIS tidak terdaftar. Gunakan NIS sesuai akun siswa."
-            )
-        return nis
-
+    # =========================
+    # VALIDASI FILE BUKTI
+    # =========================
     def clean_bukti(self):
         file = self.cleaned_data.get("bukti")
-        if file and file.size > MAX_UPLOAD_SIZE:
-            raise forms.ValidationError(
-                "Ukuran file terlalu besar! Maksimal 10 MB."
-            )
+        if file:
+            if file.size > MAX_UPLOAD_SIZE:
+                raise forms.ValidationError(
+                    "Ukuran file terlalu besar. Maksimal 10 MB."
+                )
         return file
 
 
+# ==================================================
+# FORM TINDAK LANJUT (KHUSUS GURU BK)
+# ==================================================
 class TindakLanjutForm(forms.ModelForm):
+    """
+    Form khusus Guru BK untuk mencatat tindak lanjut.
+    """
+
     class Meta:
         model = Laporan
-        fields = ["catatan_bk", "bukti_tindak_lanjut"]
+        fields = [
+            "status",
+            "catatan_bk",
+            "bukti_tindak_lanjut",
+        ]
+
         widgets = {
+            "status": forms.Select(attrs={
+                "class": "form-select"
+            }),
             "catatan_bk": forms.Textarea(attrs={
                 "class": "form-control",
                 "rows": 4,
+                "placeholder": "Tuliskan hasil penanganan atau tindak lanjut..."
             }),
             "bukti_tindak_lanjut": forms.ClearableFileInput(attrs={
                 "class": "form-control"
@@ -87,8 +120,9 @@ class TindakLanjutForm(forms.ModelForm):
 
     def clean_bukti_tindak_lanjut(self):
         file = self.cleaned_data.get("bukti_tindak_lanjut")
-        if file and file.size > MAX_UPLOAD_SIZE:
-            raise forms.ValidationError(
-                "Ukuran file terlalu besar! Maksimal 10 MB."
-            )
+        if file:
+            if file.size > MAX_UPLOAD_SIZE:
+                raise forms.ValidationError(
+                    "Ukuran file terlalu besar. Maksimal 10 MB."
+                )
         return file
