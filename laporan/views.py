@@ -16,7 +16,11 @@ from users.models import Profile
 # GENERATE KODE LAPORAN
 # =========================
 def generate_kode():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+    while True:
+        kode = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+        if not Laporan.objects.filter(kode_laporan=kode).exists():
+            return kode
+
 
 
 # =========================
