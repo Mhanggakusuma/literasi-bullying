@@ -9,6 +9,7 @@ from django.db.models import Count
 
 from .models import Laporan
 from .forms import LaporanForm, TindakLanjutForm
+from users.models import Profile  # ⬅️ WAJIB (FIX ERROR 500)
 
 
 # =========================
@@ -52,12 +53,15 @@ def buat_laporan(request):
     else:
         form = LaporanForm()
 
+    # 🔒 AMAN: pastikan Profile SELALU ADA
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+
     return render(
         request,
         "laporan/buat_laporan.html",
         {
             "form": form,
-            "profile": request.user.profile,  # untuk readonly identitas pelapor
+            "profile": profile,
         }
     )
 
