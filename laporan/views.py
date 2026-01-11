@@ -9,7 +9,7 @@ from django.db.models import Count
 
 from .models import Laporan
 from .forms import LaporanForm, TindakLanjutForm
-from users.models import Profile  # ⬅️ WAJIB (FIX ERROR 500)
+from users.models import Profile
 
 
 # =========================
@@ -20,7 +20,7 @@ def generate_kode():
 
 
 # =========================
-# HOME LAPORAN (SISWA)
+# HOME LAPORAN
 # =========================
 @login_required
 def laporan_home(request):
@@ -34,13 +34,12 @@ def laporan_home(request):
 def buat_laporan(request):
     if request.method == "POST":
         form = LaporanForm(request.POST, request.FILES)
+
         if form.is_valid():
             laporan = form.save(commit=False)
 
-            # 🔑 WAJIB: set pelapor dari user login
+            # 🔴 WAJIB DISET (INI PENYEBAB ERROR 500 SEBELUMNYA)
             laporan.pelapor = request.user
-
-            # 🔑 generate kode laporan
             laporan.kode_laporan = generate_kode()
 
             laporan.save()
@@ -53,7 +52,7 @@ def buat_laporan(request):
     else:
         form = LaporanForm()
 
-    # 🔒 AMAN: pastikan Profile SELALU ADA
+    # Ambil profil siswa (untuk identitas read-only)
     profile, _ = Profile.objects.get_or_create(user=request.user)
 
     return render(
@@ -67,11 +66,12 @@ def buat_laporan(request):
 
 
 # =========================
-# CEK STATUS LAPORAN (SISWA)
+# CEK STATUS LAPORAN
 # =========================
 @login_required
 def cek_laporan(request):
     laporan = None
+
     if request.method == "POST":
         kode = request.POST.get("kode")
         laporan = Laporan.objects.filter(kode_laporan=kode).first()
@@ -93,8 +93,12 @@ def bk_dashboard(request):
 
     laporan_qs = Laporan.objects.all()
 
-    if status_filter != "all":
-        laporan_qs = laporan_qs.filter(status=status_filter)
+    if status_filter == "baru":
+        laporan_qs = laporan_qs.filter(status="baru")
+    elif status_filter == "diproses":
+        laporan_qs = laporan_qs.filter(status="diproses")
+    elif status_filter == "selesai":
+        laporan_qs = laporan_qs.filter(status="selesai")
 
     if query:
         laporan_qs = laporan_qs.filter(kode_laporan__icontains=query)
@@ -110,7 +114,7 @@ def bk_dashboard(request):
         "sedang_diproses": Laporan.objects.filter(status="diproses").count(),
         "selesai": Laporan.objects.filter(status="selesai").count(),
 
-        # Filter state
+        # Filter
         "status_filter": status_filter,
         "query": query,
 
@@ -121,7 +125,7 @@ def bk_dashboard(request):
             .order_by("-total")
         ),
 
-        # Aktivitas terkini
+        # Aktivitas terbaru
         "aktivitas_terkini": Laporan.objects.order_by("-tanggal")[:5],
     }
 
@@ -129,7 +133,7 @@ def bk_dashboard(request):
 
 
 # =========================
-# DETAIL & TINDAK LANJUT (GURU BK)
+# TINDAK LANJUT GURU BK
 # =========================
 @login_required
 def bk_tindak_lanjut(request, pk):
@@ -138,7 +142,9 @@ def bk_tindak_lanjut(request, pk):
     if request.method == "POST":
         form = TindakLanjutForm(request.POST, request.FILES, instance=laporan)
         if form.is_valid():
-            form.save()
+            laporan = form.save(commit=False)
+            laporan.status = "selesai"
+            laporan.save()
             return redirect("bk_dashboard")
     else:
         form = TindakLanjutForm(instance=laporan)
@@ -154,7 +160,7 @@ def bk_tindak_lanjut(request, pk):
 
 
 # =========================
-# DOWNLOAD CSV (ADMIN / BK)
+# DOWNLOAD CSV (GURU BK)
 # =========================
 @login_required
 def bk_download_laporan(request):
@@ -165,7 +171,6 @@ def bk_download_laporan(request):
     writer.writerow([
         "Kode",
         "Pelapor",
-        "Anonim",
         "Korban",
         "Kelas Korban",
         "Jenis",
@@ -176,8 +181,7 @@ def bk_download_laporan(request):
     for lap in Laporan.objects.all().order_by("-tanggal"):
         writer.writerow([
             lap.kode_laporan,
-            lap.pelapor.username,
-            "Ya" if lap.is_anonymous else "Tidak",
+            lap.tampilkan_pelapor(),
             lap.nama_korban,
             lap.kelas_korban,
             lap.get_jenis_bullying_display(),
