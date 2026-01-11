@@ -6,7 +6,7 @@ from cloudinary.models import CloudinaryField
 class Laporan(models.Model):
 
     # =========================
-    # PILIHAN KELAS (DROPDOWN)
+    # PILIHAN KELAS
     # =========================
     KELAS_CHOICES = [
         ("VII A", "VII A"), ("VII B", "VII B"), ("VII C", "VII C"),
@@ -52,7 +52,7 @@ class Laporan(models.Model):
     # =========================
     DAMPAK_CHOICES = [
         ("takut", "Takut datang ke sekolah"),
-        ("menangis", "Menangis / tertekan"),
+        ("menangis", "Menangis / Tertekan"),
         ("prestasi", "Prestasi menurun"),
         ("menarik_diri", "Menarik diri"),
         ("lainnya", "Lainnya"),
@@ -76,16 +76,23 @@ class Laporan(models.Model):
     # 🕒 WAKTU & TEMPAT KEJADIAN
     # =========================
     tanggal_kejadian = models.DateField(
+        blank=True,
+        null=True,
         help_text="Tanggal terjadinya perundungan"
     )
 
     perkiraan_waktu = models.CharField(
         max_length=10,
-        choices=WAKTU_CHOICES
+        choices=WAKTU_CHOICES,
+        blank=True,
+        null=True,
+        help_text="Perkiraan waktu kejadian"
     )
 
     lokasi_kejadian = models.CharField(
         max_length=255,
+        blank=True,
+        null=True,
         help_text="Lokasi kejadian bullying"
     )
 
@@ -196,7 +203,9 @@ class Laporan(models.Model):
         unique=True
     )
 
-    tanggal = models.DateTimeField(auto_now_add=True)
+    tanggal = models.DateTimeField(
+        auto_now_add=True
+    )
 
     # =========================
     # HELPER
