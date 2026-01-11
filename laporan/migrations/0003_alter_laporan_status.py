@@ -13,6 +13,14 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='laporan',
             name='status',
-            field=models.CharField(choices=[('baru', 'Laporan Baru'), ('diproses', 'Sedang Diproses'), ('selesai', 'Selesai Ditangani')], default='baru', max_length=20),
+            field=models.CharField(
+                max_length=50,
+                choices=[
+                    ('baru', 'Laporan Baru'),
+                    ('diproses', 'Sedang Diproses'),
+                    ('selesai', 'Selesai Ditangani'),
+                ],
+                default='baru',
+            ),
         ),
     ]
