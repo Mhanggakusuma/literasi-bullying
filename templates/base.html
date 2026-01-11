@@ -25,18 +25,25 @@
 <nav class="navbar navbar-expand-lg navbar-light shadow-sm fixed-top navbar-dashboard">
   <div class="container-fluid px-4">
 
-    {% if user.profile.role == "siswa" %}
-      <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard_siswa' %}">
-    {% elif user.profile.role == "gurubk" %}
-      <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard_guru' %}">
-    {% elif user.profile.role == "admin" %}
-      <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard_admin' %}">
+    {% if user.is_authenticated %}
+      {% if user.profile.role == "siswa" %}
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard_siswa' %}">
+      {% elif user.profile.role == "gurubk" %}
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard_guru' %}">
+      {% elif user.profile.role == "admin" %}
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard_admin' %}">
+      {% else %}
+        <a class="navbar-brand d-flex align-items-center" href="/">
+      {% endif %}
+          <img src="{% static 'img/logo.png' %}" width="45" class="me-2" alt="Logo">
+          <span class="fw-medium">SMP N 1 Madang Suku III</span>
+        </a>
     {% else %}
       <a class="navbar-brand d-flex align-items-center" href="/">
-    {% endif %}
-        <img src="{% static 'img/logo.png' %}" width="45" class="me-2">
+        <img src="{% static 'img/logo.png' %}" width="45" class="me-2" alt="Logo">
         <span class="fw-medium">SMP N 1 Madang Suku III</span>
       </a>
+    {% endif %}
 
     <button class="navbar-toggler" type="button"
             data-bs-toggle="collapse" data-bs-target="#navbarDashboard">
@@ -46,6 +53,8 @@
     <div class="collapse navbar-collapse" id="navbarDashboard">
       <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
 
+        {% if user.is_authenticated %}
+
         <!-- ================= USER INFO (MOBILE ONLY) ================= -->
         <li class="nav-item d-lg-none mb-3">
           <div class="d-flex align-items-center gap-3 px-2">
@@ -53,7 +62,9 @@
               <i class="bi bi-person-fill"></i>
             </div>
             <div>
-              <strong class="d-block">{{ user.first_name|upper }}</strong>
+              <strong class="d-block">
+                {{ user.first_name|default:user.username|upper }}
+              </strong>
             </div>
           </div>
         </li>
@@ -73,7 +84,7 @@
           {% endif %}
         </li>
 
-        <!-- ================= MENU LAIN ================= -->
+        <!-- ================= MENU UMUM ================= -->
         <li class="nav-item">
           <a class="nav-link" href="{% url 'tentang_bullying_login' %}">
             Tentang Bullying
@@ -86,6 +97,7 @@
           </a>
         </li>
 
+        <!-- ================= MENU ROLE ================= -->
         {% if user.profile.role == "siswa" %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'laporan_home' %}">Laporan</a>
@@ -96,11 +108,14 @@
           </li>
         {% elif user.profile.role == "admin" %}
           <li class="nav-item">
+            <a class="nav-link" href="{% url 'bk_dashboard' %}">Laporan</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'admin:index' %}">Admin Panel</a>
           </li>
         {% endif %}
 
-        <!-- ================= DIVIDER ================= -->
+        <!-- ================= DIVIDER MOBILE ================= -->
         <li class="nav-item d-lg-none mt-2">
           <hr class="dropdown-divider">
         </li>
@@ -124,7 +139,7 @@
 
           <ul class="dropdown-menu dropdown-menu-end profile-menu shadow">
             <li class="px-3 py-2 text-center">
-              <strong>{{ user.first_name|upper }}</strong>
+              <strong>{{ user.first_name|default:user.username|upper }}</strong>
             </li>
             <li><hr class="dropdown-divider"></li>
             <li>
@@ -136,13 +151,14 @@
           </ul>
         </li>
 
+        {% endif %}
       </ul>
     </div>
   </div>
 </nav>
 
 <!-- ================= CONTENT ================= -->
-<main class="flex-fill">
+<main class="flex-fill pt-5">
   {% block content %}{% endblock %}
 </main>
 
