@@ -29,9 +29,12 @@ class PertanyaanAdmin(admin.ModelAdmin):
 class OpsiAdmin(admin.ModelAdmin):
     list_display = ("teks_opsi", "pertanyaan", "is_benar")
 
+
 @admin.register(Artikel)
 class ArtikelAdmin(admin.ModelAdmin):
     list_display = ("judul", "tanggal_upload")
-    
+    search_fields = ("judul",)
+    fields = ("judul", "deskripsi", "konten")
+
 
 admin.site.register(Video)

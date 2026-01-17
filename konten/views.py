@@ -1,9 +1,5 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from cloudinary.utils import private_download_url
-import time
-
 from .models import Artikel, Video, Kuis, Opsi
 
 
@@ -25,32 +21,11 @@ def konten_index(request):
 @login_required
 def artikel_detail(request, id):
     artikel = get_object_or_404(Artikel, id=id)
-    return render(request, "konten/artikel_detail.html", {"artikel": artikel})
-
-
-# =====================================================
-# 🔥 DOWNLOAD PDF VIA SIGNED CLOUDINARY URL (FIXED)
-# =====================================================
-@login_required
-def download_artikel_pdf(request, id):
-    artikel = get_object_or_404(Artikel, id=id)
-
-    if not artikel.file_pdf:
-        return HttpResponse("File PDF tidak tersedia", status=404)
-
-    public_id = artikel.file_pdf.public_id
-
-    # ⬅️ FIX UTAMA: expires_at HARUS UNIX TIMESTAMP
-    expires_at = int(time.time()) + 3600  # berlaku 1 jam
-
-    download_url = private_download_url(
-        public_id,
-        format="pdf",
-        resource_type="image",
-        expires_at=expires_at
+    return render(
+        request,
+        "konten/artikel_detail.html",
+        {"artikel": artikel}
     )
-
-    return redirect(download_url)
 
 
 @login_required
@@ -62,7 +37,6 @@ def kuis_detail(request, id):
 
     skor = None
     total = 0
-    hasil = {}
 
     if request.method == "POST":
         skor = 0
@@ -81,6 +55,5 @@ def kuis_detail(request, id):
             "kuis": kuis,
             "skor": skor,
             "total": total,
-            "hasil": hasil,
         },
     )

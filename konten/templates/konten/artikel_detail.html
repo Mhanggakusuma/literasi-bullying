@@ -1,43 +1,29 @@
 {% extends "base.html" %}
-
 {% block title %}{{ artikel.judul }}{% endblock %}
 
 {% block content %}
 <div class="container artikel-detail-page">
 
-  <div class="artikel-detail-header mb-4">
-
+  <div class="artikel-detail-header">
     <a href="{% url 'konten_index' %}?tab=artikel"
-       class="btn btn-outline-secondary mb-3">
-      ← Kembali ke Daftar Artikel
+       class="btn btn-outline-secondary artikel-back-btn">
+      ← Kembali
     </a>
 
-    <h1 class="artikel-judul">
-      {{ artikel.judul }}
-    </h1>
+    <h1 class="artikel-judul">{{ artikel.judul }}</h1>
 
     {% if artikel.deskripsi %}
-      <p class="artikel-deskripsi">
-        {{ artikel.deskripsi }}
-      </p>
+      <p class="artikel-deskripsi">{{ artikel.deskripsi }}</p>
     {% endif %}
 
-    <span class="artikel-tanggal d-block mb-3 text-muted">
-      Upload: {{ artikel.tanggal_upload|date:"d M Y" }}
+    <span class="artikel-tanggal">
+      {{ artikel.tanggal_upload|date:"d M Y" }}
     </span>
+  </div>
 
-    {% if artikel.file_pdf %}
-      <!-- 🔥 DOWNLOAD VIA SIGNED CLOUDINARY URL -->
-      <a href="{% url 'download_artikel_pdf' artikel.id %}"
-         class="btn btn-primary btn-lg">
-        ⬇️ Download Artikel (PDF)
-      </a>
-    {% else %}
-      <div class="alert alert-warning mt-3">
-        Artikel ini belum memiliki file PDF.
-      </div>
-    {% endif %}
-
+  <!-- ISI ARTIKEL -->
+  <div class="artikel-detail-body">
+    {{ artikel.konten|linebreaks }}
   </div>
 
 </div>

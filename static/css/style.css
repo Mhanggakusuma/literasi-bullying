@@ -2115,15 +2115,6 @@ body {
   box-shadow: 0 16px 32px rgba(0,0,0,0.1);
 }
 
-/* ===== TOP BAR (OPSIONAL) ===== */
-.artikel-top {
-  height: 46px;
-  background: #1665f3;
-  display: flex;
-  align-items: center;
-  padding-left: 16px;
-}
-
 /* ===== ICON ===== */
 .artikel-icon {
   width: 36px;
@@ -2175,8 +2166,7 @@ body {
   min-height: 48px;
 }
 
-/* ===== META ===== */
-.artikel-meta,
+/* ===== TANGGAL ===== */
 .artikel-tanggal {
   margin-top: auto;
   font-size: 12px;
@@ -2233,13 +2223,75 @@ body {
   color: #6b7280;
 }
 
-/* ===== PDF VIEWER ===== */
-.artikel-pdf-wrapper {
+
+/* =====================================================
+   =============== ISI ARTIKEL (TEKS) ==================
+   ===================================================== */
+
+.artikel-detail-body {
   max-width: 900px;
   margin: 0 auto;
+  background: #ffffff;
+  padding: 42px 44px;
+  border-radius: 22px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+  font-size: 16px;
+  line-height: 1.9;
+  color: #1f2937;
 }
 
-/* ===== KUIS ===== */
+/* PARAGRAF */
+.artikel-detail-body p {
+  margin-bottom: 18px;
+  text-align: justify;
+}
+
+/* LIST (DARI - atau 1.) */
+.artikel-detail-body ul,
+.artikel-detail-body ol {
+  margin: 18px 0 18px 28px;
+}
+
+.artikel-detail-body li {
+  margin-bottom: 8px;
+}
+
+/* QUOTE (JIKA ADA) */
+.artikel-detail-body blockquote {
+  margin: 26px 0;
+  padding: 18px 24px;
+  background: #f1f5f9;
+  border-left: 5px solid #1665f3;
+  font-style: italic;
+  color: #374151;
+}
+
+/* =====================================================
+   ================== RESPONSIVE =======================
+   ===================================================== */
+
+@media (max-width: 768px) {
+
+  .artikel-detail-header,
+  .artikel-detail-body {
+    padding: 26px 22px;
+    border-radius: 18px;
+  }
+
+  .artikel-detail-header .artikel-judul {
+    font-size: 22px;
+  }
+
+  .artikel-detail-body {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+}
+
+
+/* =====================================================
+   ====================== KUIS ==========================
+   ===================================================== */
 .kuis-container {
   max-width: 1300px;   /* ⬅️ sama seperti artikel/video */
 }
