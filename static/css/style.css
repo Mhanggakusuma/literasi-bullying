@@ -33,6 +33,7 @@ body {
 ===================================================== */
 @media (max-width: 991px) {
 
+  /* Tinggi navbar */
   :root {
     --navbar-height: 70px;
   }
@@ -41,14 +42,14 @@ body {
     z-index: 1050;
   }
 
-  /* Sidebar */
+  /* Sidebar drawer */
   .navbar-collapse {
     position: fixed;
-    top: var(--navbar-height);
+    top: var(--navbar-height);   /* ⬅️ di bawah navbar */
     left: -280px;
     width: 260px;
     height: calc(100vh - var(--navbar-height));
-    background: #fff;
+    background: #ffffff;
     padding: 24px 16px;
     transition: left 0.3s ease;
     box-shadow: 4px 0 24px rgba(0,0,0,0.15);
@@ -56,27 +57,12 @@ body {
     overflow-y: auto;
   }
 
+  /* Saat sidebar dibuka */
   .navbar-collapse.show {
     left: 0;
   }
 
-  /* Overlay */
-  .sidebar-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.4);
-    opacity: 0;
-    pointer-events: none;
-    transition: 0.3s;
-    z-index: 1040;
-  }
-
-  body.nav-open .sidebar-overlay {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  /* Menu */
+  /* Menu item */
   .navbar-nav {
     align-items: flex-start !important;
     gap: 8px;
@@ -86,10 +72,33 @@ body {
     width: 100%;
     padding: 10px 14px;
     border-radius: 10px;
+    font-weight: 500;
   }
 
   .navbar-nav .nav-link:hover {
     background: #f1f5f9;
+  }
+
+  /* Tombol */
+  .navbar-nav .btn {
+    width: 100%;
+  }
+
+  /* Overlay */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s;
+    z-index: 1040;
+  }
+
+  body.nav-open::after {
+    opacity: 1;
+    pointer-events: auto;
   }
 }
 

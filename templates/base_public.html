@@ -61,12 +61,7 @@
 </nav>
 
 <!-- ================= CONTENT ================= -->
-
-<!-- 🔥 OVERLAY (WAJIB) -->
-<div class="sidebar-overlay"></div>
-
-<!-- ================= CONTENT ================= -->
-<main style="padding-top:70px">
+<main>
   {% block content %}{% endblock %}
 </main>
 
@@ -85,13 +80,11 @@
 document.addEventListener("DOMContentLoaded", function () {
   const toggler = document.querySelector(".navbar-toggler");
   const sidebar = document.querySelector(".navbar-collapse");
-  const overlay = document.querySelector(".sidebar-overlay");
 
-  if (!toggler || !sidebar || !overlay) return;
+  if (!toggler || !sidebar) return;
 
   // Klik tombol ☰
-  toggler.addEventListener("click", function (e) {
-    e.stopPropagation();
+  toggler.addEventListener("click", function () {
     setTimeout(() => {
       document.body.classList.toggle(
         "nav-open",
@@ -100,20 +93,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 10);
   });
 
-  // Klik overlay → tutup sidebar
-  overlay.addEventListener("click", function () {
-    sidebar.classList.remove("show");
-    document.body.classList.remove("nav-open");
-  });
-
-  // Klik di dalam sidebar → jangan tutup
-  sidebar.addEventListener("click", function (e) {
-    e.stopPropagation();
+  // Klik di luar sidebar → tutup
+  document.body.addEventListener("click", function (e) {
+    if (
+      document.body.classList.contains("nav-open") &&
+      !sidebar.contains(e.target) &&
+      !toggler.contains(e.target)
+    ) {
+      sidebar.classList.remove("show");
+      document.body.classList.remove("nav-open");
+    }
   });
 });
 </script>
 
-<!-- CLOCK -->
+
+<!-- ✅ CLOCK -->
 <script src="{% static 'js/clock.js' %}"></script>
 
 </body>
