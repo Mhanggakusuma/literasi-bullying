@@ -33,7 +33,6 @@ body {
 ===================================================== */
 @media (max-width: 991px) {
 
-  /* Tinggi navbar */
   :root {
     --navbar-height: 70px;
   }
@@ -42,14 +41,14 @@ body {
     z-index: 1050;
   }
 
-  /* Sidebar drawer */
+  /* Sidebar */
   .navbar-collapse {
     position: fixed;
-    top: var(--navbar-height);   /* ⬅️ di bawah navbar */
+    top: var(--navbar-height);
     left: -280px;
     width: 260px;
     height: calc(100vh - var(--navbar-height));
-    background: #ffffff;
+    background: #fff;
     padding: 24px 16px;
     transition: left 0.3s ease;
     box-shadow: 4px 0 24px rgba(0,0,0,0.15);
@@ -57,36 +56,12 @@ body {
     overflow-y: auto;
   }
 
-  /* Saat sidebar dibuka */
   .navbar-collapse.show {
     left: 0;
   }
 
-  /* Menu item */
-  .navbar-nav {
-    align-items: flex-start !important;
-    gap: 8px;
-  }
-
-  .navbar-nav .nav-link {
-    width: 100%;
-    padding: 10px 14px;
-    border-radius: 10px;
-    font-weight: 500;
-  }
-
-  .navbar-nav .nav-link:hover {
-    background: #f1f5f9;
-  }
-
-  /* Tombol */
-  .navbar-nav .btn {
-    width: 100%;
-  }
-
   /* Overlay */
-  body::after {
-    content: "";
+  .sidebar-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.4);
@@ -96,9 +71,25 @@ body {
     z-index: 1040;
   }
 
-  body.nav-open::after {
+  body.nav-open .sidebar-overlay {
     opacity: 1;
     pointer-events: auto;
+  }
+
+  /* Menu */
+  .navbar-nav {
+    align-items: flex-start !important;
+    gap: 8px;
+  }
+
+  .navbar-nav .nav-link {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+  }
+
+  .navbar-nav .nav-link:hover {
+    background: #f1f5f9;
   }
 }
 
