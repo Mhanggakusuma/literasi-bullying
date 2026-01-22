@@ -29,37 +29,43 @@ body {
   border-radius: 14px;
 }
 /* =====================================================
-   MOBILE NAVBAR – DRAWER STYLE (LIKE UMS)
+   MOBILE NAVBAR – DRAWER STYLE (FIXED & CLEAN)
 ===================================================== */
 @media (max-width: 991px) {
 
-  /* Navbar tetap di atas */
+  /* Tinggi navbar */
+  :root {
+    --navbar-height: 70px;
+  }
+
   .navbar {
     z-index: 1050;
   }
 
-  /* Collapse jadi sidebar */
+  /* Sidebar drawer */
   .navbar-collapse {
     position: fixed;
-    top: 0;
+    top: var(--navbar-height);   /* ⬅️ di bawah navbar */
     left: -280px;
     width: 260px;
-    height: 100vh;
+    height: calc(100vh - var(--navbar-height));
     background: #ffffff;
-    padding: 80px 20px 24px;
+    padding: 24px 16px;
     transition: left 0.3s ease;
     box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+    z-index: 1051;
+    overflow-y: auto;
   }
 
-  /* Saat dibuka */
+  /* Saat sidebar dibuka */
   .navbar-collapse.show {
     left: 0;
   }
 
-  /* Item menu */
+  /* Menu item */
   .navbar-nav {
     align-items: flex-start !important;
-    gap: 10px;
+    gap: 8px;
   }
 
   .navbar-nav .nav-link {
@@ -73,18 +79,12 @@ body {
     background: #f1f5f9;
   }
 
-  /* Tombol Daftar */
+  /* Tombol */
   .navbar-nav .btn {
     width: 100%;
-    text-align: center;
   }
 
-  /* Avatar profile */
-  .profile-avatar {
-    margin-top: 12px;
-  }
-
-  /* Overlay gelap */
+  /* Overlay */
   body::after {
     content: "";
     position: fixed;
