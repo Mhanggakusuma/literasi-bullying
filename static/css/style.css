@@ -62,11 +62,10 @@ body {
 }
 
 /* =====================================================
-   MOBILE NAVBAR – DRAWER STYLE (FIXED & CLEAN)
+   MOBILE NAVBAR – DRAWER STYLE (FINAL & RESPONSIVE)
 ===================================================== */
 @media (max-width: 991px) {
 
-  /* Tinggi navbar */
   :root {
     --navbar-height: 70px;
   }
@@ -75,10 +74,10 @@ body {
     z-index: 1050;
   }
 
-  /* Sidebar drawer */
+  /* ================= SIDEBAR ================= */
   .navbar-collapse {
     position: fixed;
-    top: var(--navbar-height);   /* ⬅️ di bawah navbar */
+    top: var(--navbar-height);
     left: -280px;
     width: 260px;
     height: calc(100vh - var(--navbar-height));
@@ -90,15 +89,19 @@ body {
     overflow-y: auto;
   }
 
-  /* Saat sidebar dibuka */
   .navbar-collapse.show {
     left: 0;
   }
 
-  /* Menu item */
+  /* ================= STRUKTUR MENU ================= */
   .navbar-nav {
+    width: 100%;
     align-items: flex-start !important;
     gap: 8px;
+  }
+
+  .navbar-nav .nav-item {
+    width: 100%;
   }
 
   .navbar-nav .nav-link {
@@ -112,12 +115,17 @@ body {
     background: #f1f5f9;
   }
 
-  /* Tombol */
-  .navbar-nav .btn {
+  /* ================= BUTTON DAFTAR (MOBILE) ================= */
+  .btn-daftar-navbar {
     width: 100%;
+    border-radius: 12px; /* ❗ bukan oval */
+    padding: 12px 0;
+    margin-top: 12px;
+    text-align: center;
+    background: #0D6AC6;
   }
 
-  /* Overlay */
+  /* ================= OVERLAY ================= */
   body::after {
     content: "";
     position: fixed;
