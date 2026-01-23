@@ -6,8 +6,8 @@ body {
 
 /* ================= FIX NAVBAR ================= */
 .navbar {
-  --bs-navbar-bg: #ffffff;
   background-color: #ffffff !important;
+  z-index: 1050;
 }
 
 /* ================= PROFILE NAVBAR ================= */
@@ -29,15 +29,12 @@ body {
   border-radius: 14px;
 }
 
-/* ===============================
-   BUTTON DAFTAR NAVBAR (OVAL)
-   =============================== */
-
+/* ================= BUTTON DAFTAR NAVBAR ================= */
 .btn-daftar-navbar {
   background-color: #0D6AC6;
   color: #ffffff;
   padding: 12px 36px;
-  border-radius: 999px; /* bikin oval penuh */
+  border-radius: 999px; /* oval di desktop */
   font-weight: 700;
   font-size: 16px;
   border: none;
@@ -45,7 +42,6 @@ body {
   text-align: center;
 }
 
-/* Hover effect */
 .btn-daftar-navbar:hover {
   background-color: #0b5bb0;
   color: #ffffff;
@@ -53,16 +49,8 @@ body {
   box-shadow: 0 8px 20px rgba(13,106,198,0.35);
 }
 
-/* Mobile: full width */
-@media (max-width: 991px) {
-  .btn-daftar-navbar {
-    width: 100%;
-    padding: 12px 0;
-  }
-}
-
 /* =====================================================
-   MOBILE NAVBAR – DRAWER STYLE (FINAL & RESPONSIVE)
+   MOBILE NAVBAR – DRAWER / SIDEBAR (FINAL FIX)
 ===================================================== */
 @media (max-width: 991px) {
 
@@ -70,8 +58,9 @@ body {
     --navbar-height: 70px;
   }
 
-  .navbar {
-    z-index: 1050;
+  /* Kunci scroll saat sidebar buka */
+  body.nav-open {
+    overflow: hidden;
   }
 
   /* ================= SIDEBAR ================= */
@@ -118,22 +107,25 @@ body {
   /* ================= BUTTON DAFTAR (MOBILE) ================= */
   .btn-daftar-navbar {
     width: 100%;
-    border-radius: 12px; /* ❗ bukan oval */
+    border-radius: 12px; /* bukan oval di sidebar */
     padding: 12px 0;
     margin-top: 12px;
     text-align: center;
     background: #0D6AC6;
   }
 
-  /* ================= OVERLAY ================= */
+  /* ================= OVERLAY (MENUTUP HALAMAN) ================= */
   body::after {
     content: "";
     position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.4);
+    top: var(--navbar-height);
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - var(--navbar-height));
+    background: rgba(0,0,0,0.45);
     opacity: 0;
     pointer-events: none;
-    transition: 0.3s;
+    transition: opacity 0.3s ease;
     z-index: 1040;
   }
 
