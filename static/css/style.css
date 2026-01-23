@@ -104,6 +104,13 @@ body {
     background: #f1f5f9;
   }
 
+  @media (max-width: 991px) {
+  body::after {
+    cursor: pointer;
+  }
+}
+
+
   /* ================= BUTTON DAFTAR (MOBILE) ================= */
   .btn-daftar-navbar {
     width: 100%;
