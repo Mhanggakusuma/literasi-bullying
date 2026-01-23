@@ -28,6 +28,39 @@ body {
   min-width: 180px;
   border-radius: 14px;
 }
+
+/* ===============================
+   BUTTON DAFTAR NAVBAR (OVAL)
+   =============================== */
+
+.btn-daftar-navbar {
+  background-color: #0D6AC6;
+  color: #ffffff;
+  padding: 12px 36px;
+  border-radius: 999px; /* bikin oval penuh */
+  font-weight: 700;
+  font-size: 16px;
+  border: none;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+/* Hover effect */
+.btn-daftar-navbar:hover {
+  background-color: #0b5bb0;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(13,106,198,0.35);
+}
+
+/* Mobile: full width */
+@media (max-width: 991px) {
+  .btn-daftar-navbar {
+    width: 100%;
+    padding: 12px 0;
+  }
+}
+
 /* =====================================================
    MOBILE NAVBAR – DRAWER STYLE (FIXED & CLEAN)
 ===================================================== */
