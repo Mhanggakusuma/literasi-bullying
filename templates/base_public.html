@@ -83,20 +83,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (!toggler || !sidebar) return;
 
-  // Klik tombol ☰
-  toggler.addEventListener("click", function () {
-    setTimeout(() => {
-      document.body.classList.toggle(
-        "nav-open",
-        sidebar.classList.contains("show")
-      );
-    }, 10);
+  /* =====================
+     BUKA SIDEBAR
+  ===================== */
+  toggler.addEventListener("click", function (e) {
+    e.stopPropagation(); // cegah bentrok event
+    sidebar.classList.toggle("show");
+    document.body.classList.toggle("nav-open");
   });
 
-  // Klik di luar sidebar → tutup
-  document.body.addEventListener("click", function (e) {
+  /* =====================
+     KLIK DI LUAR SIDEBAR → TUTUP
+  ===================== */
+  document.addEventListener("click", function (e) {
+    const isSidebarOpen = sidebar.classList.contains("show");
+
     if (
-      document.body.classList.contains("nav-open") &&
+      isSidebarOpen &&
       !sidebar.contains(e.target) &&
       !toggler.contains(e.target)
     ) {
@@ -104,8 +107,19 @@ document.addEventListener("DOMContentLoaded", function () {
       document.body.classList.remove("nav-open");
     }
   });
+
+  /* =====================
+     KLIK LINK MENU → TUTUP
+  ===================== */
+  sidebar.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", function () {
+      sidebar.classList.remove("show");
+      document.body.classList.remove("nav-open");
+    });
+  });
 });
 </script>
+
 
 
 <!-- ✅ CLOCK -->
