@@ -158,29 +158,22 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+<script>
 document.addEventListener("DOMContentLoaded", function () {
   const toggler = document.querySelector(".navbar-toggler");
   const sidebar = document.querySelector(".navbar-collapse");
 
   if (!toggler || !sidebar) return;
 
-  /* =====================
-     BUKA SIDEBAR
-  ===================== */
   toggler.addEventListener("click", function (e) {
-    e.stopPropagation(); // cegah bentrok event
+    e.stopPropagation();
     sidebar.classList.toggle("show");
     document.body.classList.toggle("nav-open");
   });
 
-  /* =====================
-     KLIK DI LUAR SIDEBAR → TUTUP
-  ===================== */
   document.addEventListener("click", function (e) {
-    const isSidebarOpen = sidebar.classList.contains("show");
-
     if (
-      isSidebarOpen &&
+      sidebar.classList.contains("show") &&
       !sidebar.contains(e.target) &&
       !toggler.contains(e.target)
     ) {
@@ -189,9 +182,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  /* =====================
-     KLIK LINK MENU → TUTUP
-  ===================== */
   sidebar.querySelectorAll("a").forEach(link => {
     link.addEventListener("click", function () {
       sidebar.classList.remove("show");

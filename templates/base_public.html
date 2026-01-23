@@ -83,23 +83,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (!toggler || !sidebar) return;
 
-  /* =====================
-     BUKA SIDEBAR
-  ===================== */
   toggler.addEventListener("click", function (e) {
-    e.stopPropagation(); // cegah bentrok event
+    e.stopPropagation();
     sidebar.classList.toggle("show");
     document.body.classList.toggle("nav-open");
   });
 
-  /* =====================
-     KLIK DI LUAR SIDEBAR → TUTUP
-  ===================== */
   document.addEventListener("click", function (e) {
-    const isSidebarOpen = sidebar.classList.contains("show");
-
     if (
-      isSidebarOpen &&
+      sidebar.classList.contains("show") &&
       !sidebar.contains(e.target) &&
       !toggler.contains(e.target)
     ) {
@@ -108,9 +100,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  /* =====================
-     KLIK LINK MENU → TUTUP
-  ===================== */
   sidebar.querySelectorAll("a").forEach(link => {
     link.addEventListener("click", function () {
       sidebar.classList.remove("show");
@@ -119,8 +108,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 </script>
-
-
 
 <!-- ✅ CLOCK -->
 <script src="{% static 'js/clock.js' %}"></script>

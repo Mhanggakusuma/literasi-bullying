@@ -50,7 +50,7 @@ body {
 }
 
 /* =====================================================
-   MOBILE NAVBAR – DRAWER / SIDEBAR (FINAL FIX)
+   MOBILE NAVBAR – DRAWER / SIDEBAR (NO DELAY FIX)
 ===================================================== */
 @media (max-width: 991px) {
 
@@ -58,7 +58,7 @@ body {
     --navbar-height: 70px;
   }
 
-  /* Kunci scroll saat sidebar buka */
+  /* Kunci scroll hanya saat sidebar buka */
   body.nav-open {
     overflow: hidden;
   }
@@ -67,19 +67,23 @@ body {
   .navbar-collapse {
     position: fixed;
     top: var(--navbar-height);
-    left: -280px;
+    left: 0; /* tetap 0, JANGAN dianimasi */
     width: 260px;
     height: calc(100vh - var(--navbar-height));
     background: #ffffff;
     padding: 24px 16px;
-    transition: left 0.3s ease;
     box-shadow: 4px 0 24px rgba(0,0,0,0.15);
     z-index: 1051;
     overflow-y: auto;
+
+    /* 🔥 ANIMASI HALUS TANPA DELAY */
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    will-change: transform;
   }
 
   .navbar-collapse.show {
-    left: 0;
+    transform: translateX(0);
   }
 
   /* ================= STRUKTUR MENU ================= */
@@ -104,14 +108,7 @@ body {
     background: #f1f5f9;
   }
 
-  @media (max-width: 991px) {
-  body::after {
-    cursor: pointer;
-  }
-}
-
-
-  /* ================= BUTTON DAFTAR (MOBILE) ================= */
+  /* ================= BUTTON MASUK / DAFTAR (MOBILE) ================= */
   .btn-daftar-navbar {
     width: 100%;
     border-radius: 12px; /* bukan oval di sidebar */
@@ -121,7 +118,7 @@ body {
     background: #0D6AC6;
   }
 
-  /* ================= OVERLAY (MENUTUP HALAMAN) ================= */
+  /* ================= OVERLAY (TIDAK MENAHAN BODY) ================= */
   body::after {
     content: "";
     position: fixed;
@@ -132,7 +129,7 @@ body {
     background: rgba(0,0,0,0.45);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.15s ease; /* cepat, tidak delay */
     z-index: 1040;
   }
 
