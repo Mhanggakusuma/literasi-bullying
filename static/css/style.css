@@ -38,19 +38,69 @@ body {
   font-weight: 700;
   font-size: 16px;
   border: none;
-  transition: all 0s ease;
+  transition: background-color 0.2s ease;
   text-align: center;
 }
 
 .btn-daftar-navbar:hover {
   background-color: #0b5bb0;
   color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(13,106,198,0.35);
 }
 
 /* =====================================================
-   MOBILE NAVBAR – DRAWER / SIDEBAR (NO DELAY FIX)
+   TOGGLER ICON ☰ → ❌
+===================================================== */
+.custom-toggler {
+  border: none;
+  background: transparent;
+  padding: 6px;
+}
+
+.toggler-icon {
+  position: relative;
+  width: 26px;
+  height: 2px;
+  background: #333;
+  display: block;
+  transition: 0.25s ease;
+}
+
+.toggler-icon::before,
+.toggler-icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 26px;
+  height: 2px;
+  background: #333;
+  transition: 0.25s ease;
+}
+
+.toggler-icon::before {
+  top: -8px;
+}
+
+.toggler-icon::after {
+  top: 8px;
+}
+
+/* Saat sidebar terbuka → jadi X */
+body.nav-open .toggler-icon {
+  background: transparent;
+}
+
+body.nav-open .toggler-icon::before {
+  transform: rotate(45deg);
+  top: 0;
+}
+
+body.nav-open .toggler-icon::after {
+  transform: rotate(-45deg);
+  top: 0;
+}
+
+/* =====================================================
+   MOBILE NAVBAR – DRAWER / SIDEBAR (SYNC PERFECT)
 ===================================================== */
 @media (max-width: 991px) {
 
@@ -58,7 +108,7 @@ body {
     --navbar-height: 70px;
   }
 
-  /* Kunci scroll hanya saat sidebar buka */
+  /* Kunci scroll */
   body.nav-open {
     overflow: hidden;
   }
@@ -67,7 +117,7 @@ body {
   .navbar-collapse {
     position: fixed;
     top: var(--navbar-height);
-    left: 0; /* tetap 0, JANGAN dianimasi */
+    left: 0;
     width: 260px;
     height: calc(100vh - var(--navbar-height));
     background: #ffffff;
@@ -76,7 +126,7 @@ body {
     z-index: 1051;
     overflow-y: auto;
 
-    /* 🔥 ANIMASI HALUS TANPA DELAY */
+    /* ANIMASI TANPA DELAY */
     transform: translateX(-100%);
     transition: transform 0.22s cubic-bezier(.4,0,.2,1);
     will-change: transform;
@@ -86,7 +136,7 @@ body {
     transform: translateX(0);
   }
 
-  /* ================= STRUKTUR MENU ================= */
+  /* ================= MENU ================= */
   .navbar-nav {
     width: 100%;
     align-items: flex-start !important;
@@ -108,17 +158,16 @@ body {
     background: #f1f5f9;
   }
 
-  /* ================= BUTTON MASUK / DAFTAR (MOBILE) ================= */
+  /* ================= BUTTON (MOBILE) ================= */
   .btn-daftar-navbar {
     width: 100%;
-    border-radius: 12px; /* bukan oval di sidebar */
+    border-radius: 12px;
     padding: 12px 0;
     margin-top: 12px;
-    text-align: center;
     background: #0D6AC6;
   }
 
-  /* ================= OVERLAY (TIDAK MENAHAN BODY) ================= */
+  /* ================= OVERLAY (SYNC BARANG) ================= */
   body::after {
     content: "";
     position: fixed;
@@ -134,10 +183,11 @@ body {
   }
 
   body.nav-open::after {
-    opacity: 0;
+    opacity: 1;
     pointer-events: auto;
   }
 }
+
 
 /* =====================================
    AUTH-LIKE STYLE (LENGKAPI PROFIL)

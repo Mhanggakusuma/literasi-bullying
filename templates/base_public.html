@@ -30,10 +30,10 @@
       <span class="fw-medium">SMP N 1 Madang Suku III</span>
     </a>
 
-    <button class="navbar-toggler" type="button"
-            data-bs-toggle="collapse" data-bs-target="#navbarPublic">
-      <span class="navbar-toggler-icon"></span>
+    <button class="navbar-toggler custom-toggler" type="button">
+      <span class="toggler-icon"></span>
     </button>
+
 
     <div class="collapse navbar-collapse" id="navbarPublic">
       <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-4">
@@ -85,15 +85,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   toggler.addEventListener("click", function (e) {
     e.stopPropagation();
-
-    if (!sidebar.classList.contains("show")) {
-      document.body.classList.add("nav-open");
-      sidebar.offsetHeight; // 🔥 force repaint
-      sidebar.classList.add("show");
-    } else {
-      sidebar.classList.remove("show");
-      document.body.classList.remove("nav-open");
-    }
+    document.body.classList.toggle("nav-open");
+    sidebar.classList.toggle("show");
   });
 
   document.addEventListener("click", function (e) {
@@ -115,6 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 </script>
+
 
 <!-- ✅ CLOCK -->
 <script src="{% static 'js/clock.js' %}"></script>
