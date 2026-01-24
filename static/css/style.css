@@ -655,203 +655,115 @@ body.nav-open .toggler-icon::after {
     font-size: 15px;
   }
 }
+/* =====================================================
+   AUTH PAGE (LOGIN / REGISTER / LUPA PASSWORD)
+   FINAL – CLEAN & CONSISTENT
+===================================================== */
 
-/* ===================================================== */
-/* ================= AUTH (LOGIN / REGISTER / FORGOT) == */
-/* ===================================================== */
-
-.auth-hero {
-  min-height: 100vh;
-  padding: 80px 24px 40px;
+.auth-body {
+  margin: 0;
   background: linear-gradient(
     180deg,
     rgba(13,106,198,0.9),
     rgba(7,51,96,0.95)
   );
+}
+
+/* Container halaman auth */
+.auth-page {
+  min-height: 100svh; /* penting untuk mobile */
   display: flex;
   justify-content: center;
-  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
-/* ================= CARD ================= */
-.login-card,
-.register-card,
-.forgot-card {
-  background: #88B8D8;
-  border-radius: 20px;
-  box-shadow: 0 20px 45px rgba(0,0,0,0.28);
-  padding: 36px 40px;
-  width: 560px;
-  max-width: 100%;
-  margin: auto;
-}
-
-/* ================= LOGO ================= */
-.login-logo {
-  width: 80px;
-}
-
-/* ================= TITLE ================= */
-.login-title {
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  margin-bottom: 10px;
-}
-
-/* ================= FORM ================= */
-.form-label {
-  font-size: 14px;
-  color: #000;
-  font-weight: 500;
-}
-
-.custom-input {
-  border-radius: 14px;
-  border: 1px solid #4285F4;
-  height: 46px;
-  font-size: 14px;
-  padding: 0 14px;
-}
-
-/* ================= BUTTON ================= */
-.btn-login {
-  background: #1C6BEF !important;
-  color: #ffffff !important;
-  font-size: 18px;
-  font-weight: 600;
-  border-radius: 14px;
-  height: 52px;
-  border: none;
-}
-
-/* ===================================================== */
-/* ================= MOBILE RESPONSIVE ================= */
-/* ===================================================== */
-
-@media (max-width: 576px) {
-
-  /* HERO */
-  .auth-hero {
-    min-height: 100vh;
-    padding: 24px 10px;
-    align-items: stretch;
-  }
-
-  /* CARD – HAMPIR FULL SCREEN */
-  .login-card,
-  .register-card,
-  .forgot-card {
-    width: 100%;
-    max-width: 96%;        /* 🔥 kunci biar tidak kecil */
-    padding: 28px 20px;
-    border-radius: 22px;
-    box-shadow: 0 18px 40px rgba(0,0,0,0.25);
-  }
-
-  /* LOGO */
-  .login-logo {
-    width: 64px;
-  }
-
-  /* TITLE */
-  .login-title {
-    font-size: 26px;
-    letter-spacing: 0.04em;
-  }
-
-  /* INPUT */
-  .custom-input {
-    height: 48px;
-    font-size: 14px;
-  }
-
-  /* BUTTON */
-  .btn-login {
-    height: 54px;
-    font-size: 17px;
-  }
-
-  /* LINK BAWAH (LOGIN PAGE) */
-  .login-card .d-flex {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-}
-
-/* ===================================================== */
-/* ================= AUTH-LIKE (LENGKAPI PROFIL) ======= */
-/* ===================================================== */
-
-.auth-like-hero {
-  min-height: calc(100vh - 70px);
-  background: linear-gradient(180deg, #2f80ed, #1c5db6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-
-.auth-like-card {
-  background: #9ec5e5;
-  border-radius: 22px;
-  padding: 36px 32px;
+/* Card utama */
+.auth-card {
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-  text-align: center;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 32px 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
 }
 
-.auth-like-logo {
-  width: 70px;
+/* Logo */
+.auth-logo {
+  width: 180px;
+  display: block;
+  margin: 0 auto 24px;
 }
 
-.auth-like-card h4 {
+/* Judul */
+.auth-title {
+  font-size: 26px;
   font-weight: 700;
+  text-align: center;
   margin-bottom: 6px;
-  color: #000;
 }
 
-.auth-like-desc {
-  font-size: 0.9rem;
-  color: #1e1e1e;
-  margin-bottom: 22px;
-  line-height: 1.6;
+.auth-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.auth-like-input {
-  border-radius: 12px;
-  padding: 12px;
-  font-size: 0.95rem;
-}
-
-.auth-like-btn {
-  background: #1e6bf1;
-  color: #fff;
-  border: none;
-  padding: 14px;
+/* Input */
+.auth-input {
   border-radius: 14px;
+  height: 46px;
+  font-size: 14px;
+}
+
+/* Button */
+.auth-btn {
+  background: #1C6BEF;
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  height: 52px;
+  font-size: 16px;
   font-weight: 600;
-  transition: all 0.25s ease;
 }
 
-.auth-like-btn:hover {
-  background: #1558c0;
+/* Link bawah */
+.auth-links {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-top: 18px;
 }
 
-/* MOBILE – AUTH LIKE */
+.auth-links.center {
+  justify-content: center;
+}
+
+/* =====================================================
+   MOBILE OPTIMIZATION
+===================================================== */
 @media (max-width: 576px) {
-  .auth-like-card {
-    max-width: 96%;
-    padding: 28px 22px;
-    border-radius: 22px;
+
+  .auth-page {
+    padding-top: 24px;
+    padding-bottom: 24px;
   }
 
-  .auth-like-logo {
-    width: 60px;
+  .auth-card {
+    max-width: 92%;
+    padding: 28px 20px;
+  }
+
+  .auth-logo {
+    width: 150px;
+  }
+
+  .auth-title {
+    font-size: 24px;
   }
 }
+
 
 /* ===================================================== */
 /* ================= FOOTER ============================= */
@@ -2561,18 +2473,3 @@ body.nav-open .toggler-icon::after {
   border-radius: 16px;
   margin-top: 28px;
 }
-/* ===============================
-   AUTH PAGE FINAL (CLEAN)
-=============================== */
-
-/* Sembunyikan navbar di halaman auth */
-body.auth-body .navbar {
-  display: none;
-}
-
-/* Auth hero full screen */
-body.auth-body .auth-hero {
-  min-height: 100vh;
-  padding-top: 0;
-}
-

@@ -1,70 +1,63 @@
-{% extends "base_public.html" %}
+{% extends "base_auth.html" %}
 {% load static %}
 
 {% block title %}Login | SMP N 1 Madang Suku III{% endblock %}
-{% block body_class %}auth-body{% endblock %}
+
 {% block content %}
 
-<!-- ================= HERO LOGIN ================= -->
-<section class="auth-hero auth-page">
-  <div class="login-card text-center">
+<section class="auth-page">
+  <div class="auth-card">
 
     <!-- LOGO -->
-    <img src="{% static 'img/logo.png' %}" class="login-logo mb-3" alt="Logo">
+    <img src="{% static 'img/logo.png' %}" class="auth-logo" alt="Logo">
 
-    <h2 class="login-title">Masuk</h2>
+    <h2 class="auth-title">Masuk</h2>
 
-    <!-- ================= FORM LOGIN ================= -->
-    <form method="POST" class="text-start mt-4">
+    <!-- FORM LOGIN -->
+    <form method="POST">
       {% csrf_token %}
 
       <div class="mb-3">
-        <label class="form-label">Masukan Username</label>
+        <label class="form-label">Username</label>
         <input
           type="text"
           name="username"
-          class="form-control custom-input"
-          placeholder="Username"
+          class="form-control auth-input"
+          placeholder="Nama pengguna"
           required
         >
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Masukan Password</label>
+        <label class="form-label">Password</label>
         <input
           type="password"
           name="password"
-          class="form-control custom-input"
-          placeholder="Password"
+          class="form-control auth-input"
+          placeholder="Kata sandi"
           required
         >
       </div>
 
-      <!-- ===== PESAN ERROR LOGIN ===== -->
       {% if messages %}
-        <div class="text-center mb-2">
-          {% for message in messages %}
-            <p class="text-danger small mb-1">{{ message }}</p>
-          {% endfor %}
-        </div>
+        {% for message in messages %}
+          <p class="text-danger small text-center mb-2">{{ message }}</p>
+        {% endfor %}
       {% endif %}
 
-      <button type="submit" class="btn btn-login w-100 mt-2">
-        Masuk
+      <button type="submit" class="btn auth-btn w-100 mt-2">
+        LOGIN
       </button>
     </form>
 
-    <!-- ================= LINK TAMBAHAN ================= -->
-    <div class="d-flex justify-content-between mt-4 small">
-      <div>
+    <!-- LINK -->
+    <div class="auth-links">
+      <span>
         Belum punya akun?
-        <a href="{% url 'register' %}" class="link-primary">Daftar</a>
-      </div>
+        <a href="{% url 'register' %}">Daftar</a>
+      </span>
 
-      <!-- LINK LUPA PASSWORD (AKTIF) -->
-      <a href="{% url 'lupa_password' %}" class="link-primary">
-        Lupa password?
-      </a>
+      <a href="{% url 'lupa_password' %}">Lupa password?</a>
     </div>
 
   </div>
