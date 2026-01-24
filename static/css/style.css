@@ -655,110 +655,153 @@ body.nav-open .toggler-icon::after {
     font-size: 15px;
   }
 }
+
 /* =====================================================
-   AUTH PAGE ONLY (AMAN – TIDAK BOCOR KE BERANDA)
+   ================= PUBLIC (BERANDA) ==================
+   TIDAK DISENTUH AUTH
 ===================================================== */
 
-/* Aktif HANYA jika body pakai class auth-body */
-body.auth-body {
-  background: linear-gradient(180deg, #2f80ed, #1c5db6);
-  min-height: 100vh;
+.navbar {
+  background: #ffffff;
+  z-index: 1050;
 }
 
-/* Wrapper */
+.btn-daftar-navbar {
+  background: #1e6bf1;
+  color: #fff;
+  border-radius: 999px;
+  padding: 10px 28px;
+  font-weight: 600;
+}
+
+.btn-daftar-navbar:hover {
+  background: #1558c0;
+  color: #fff;
+}
+
+/* =====================================================
+   ================= AUTH SCOPE ========================
+   HANYA AKTIF JIKA body.auth-body
+===================================================== */
+
+body.auth-body {
+  background: linear-gradient(180deg, #2f80ed, #1c5db6);
+}
+
+/* PAGE */
 body.auth-body .auth-page {
   min-height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 24px;
+  justify-content: center;
+  padding: 24px 16px;
 }
 
-/* ================= CARD (UKURAN GAMBAR 3) ================= */
+/* CARD */
 body.auth-body .auth-card {
+  background: #ffffff;
   width: 100%;
-  max-width: 520px; /* 🔥 SAMA seperti gambar 3 */
-  background: #9ec5e5;
-  border-radius: 22px;
-  padding: 34px 32px;
-  box-shadow: 0 20px 45px rgba(0,0,0,0.28);
+  max-width: 420px;              /* ⬅️ ukuran seperti contoh */
+  border-radius: 28px;
+  padding: 36px 28px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.35);
   position: relative;
 }
 
-/* Logo */
+/* LOGO */
 body.auth-body .auth-logo {
-  width: 72px;
+  width: 96px;
   display: block;
   margin: 0 auto 12px;
 }
 
-/* Judul */
+/* TITLE */
 body.auth-body .auth-title {
   text-align: center;
-  font-size: 28px;
-  font-weight: 800;
-  margin-bottom: 18px;
-  color: #111;
+  font-weight: 700;
+  margin-bottom: 20px;
 }
 
-/* Input */
+/* SUBTITLE */
+body.auth-body .auth-subtitle {
+  font-size: 14px;
+  text-align: center;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* INPUT */
 body.auth-body .auth-input {
   height: 46px;
-  border-radius: 12px;
+  border-radius: 14px;
   font-size: 14px;
 }
 
-/* Button */
+/* BUTTON */
 body.auth-body .auth-btn {
   background: #1e6bf1;
-  border: none;
-  border-radius: 14px;
-  height: 50px;
-  font-size: 16px;
-  font-weight: 600;
   color: #fff;
+  height: 52px;
+  border-radius: 16px;
+  font-weight: 600;
+  border: none;
 }
 
-/* Link bawah */
+body.auth-body .auth-btn:hover {
+  background: #1558c0;
+}
+
+/* LINKS */
 body.auth-body .auth-links {
   display: flex;
   justify-content: space-between;
-  margin-top: 14px;
-  font-size: 13px;
+  margin-top: 18px;
+  font-size: 14px;
+}
+
+body.auth-body .auth-links.center {
+  justify-content: center;
 }
 
 /* =====================================================
-   TOMBOL KEMBALI (SEPERTI GAMBAR 1 & 2)
+   TOMBOL KEMBALI (HOME)
 ===================================================== */
 
-/* Wrapper tombol (DI LUAR CARD) */
-body.auth-body .auth-back-wrapper {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 999;
-}
-
-/* Tombol */
 body.auth-body .auth-back {
+  position: absolute;
+  top: 16px;
+  right: 16px;
   width: 44px;
   height: 44px;
   background: #1e6bf1;
   color: #fff;
-  border-radius: 12px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-decoration: none;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
   font-size: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  transition: all 0.2s ease;
+  text-decoration: none;
 }
 
-/* ================= MOBILE ================= */
+body.auth-body .auth-back:hover {
+  background: #1558c0;
+  transform: translateY(-2px);
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
 @media (max-width: 576px) {
   body.auth-body .auth-card {
     max-width: 100%;
-    padding: 28px 22px;
+    padding: 32px 22px;
+    border-radius: 24px;
+  }
+
+  body.auth-body .auth-logo {
+    width: 80px;
   }
 }
 
