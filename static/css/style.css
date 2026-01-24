@@ -1,7 +1,6 @@
 /* ================= GLOBAL ================= */
 body {
   font-family: 'Poppins', sans-serif;
-  margin-top: 76px;
 }
 
 /* ================= FIX NAVBAR ================= */
@@ -810,75 +809,120 @@ body.nav-open .toggler-icon::after {
 }
 
 /* ===================================================== */
-/* ============== MOBILE FORCE RESPONSIVE ============== */
+/* ============ FINAL AUTH MOBILE FIX ================== */
 /* ===================================================== */
 
+/* OFFSET NAVBAR HANYA UNTUK PAGE NORMAL */
+main {
+  padding-top: 76px;
+}
+
 @media (max-width: 768px) {
-
-  /* FIX NAVBAR */
-  body {
-    padding-top: 72px !important;
+  main {
+    padding-top: 72px;
   }
+}
 
-  /* HERO */
+/* ================= AUTH HERO ================= */
+
+.auth-hero {
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    rgba(13,106,198,0.85),
+    rgba(7,51,96,0.9)
+  );
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* override navbar offset */
+  margin-top: -76px;
+  padding: 24px 16px 40px;
+}
+
+@media (max-width: 768px) {
   .auth-hero {
-    min-height: calc(100vh - 72px) !important;
-    padding: 12px !important;
-    align-items: flex-start !important;
+    margin-top: -72px;
+    padding: 16px;
   }
+}
 
-  /* CARD — PAKSA FULL & BESAR */
-  .login-card,
-  .register-card,
-  .forgot-card {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 36px 22px !important;
-    border-radius: 22px !important;
-  }
+/* ================= CARD ================= */
 
-  /* LOGO */
-  .login-logo {
-    width: 76px !important;
-  }
+.login-card,
+.register-card,
+.forgot-card {
+  background: #88B8D8;
+  width: 100%;
+  max-width: 420px;
+  padding: 36px 28px;
+  border-radius: 24px;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+}
 
-  /* JUDUL — BESAR */
-  .login-title {
-    font-size: 30px !important;
-    font-weight: 700 !important;
-  }
+/* ================= LOGO ================= */
 
-  /* LABEL */
-  .form-label {
-    font-size: 16px !important;
-  }
+.login-logo {
+  width: 72px;
+  margin-bottom: 12px;
+}
 
-  /* INPUT — TINGGI & JELAS */
-  .custom-input {
-    height: 60px !important;
-    font-size: 17px !important;
-    border-radius: 18px !important;
-  }
+/* ================= TITLE ================= */
 
-  /* BUTTON — DOMINAN */
-  .btn-login {
-    height: 60px !important;
-    font-size: 19px !important;
-    border-radius: 20px !important;
-  }
+.login-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #000;
+  margin-bottom: 14px;
+}
 
-  /* LINK BAWAH */
-  .login-card .d-flex {
-    flex-direction: column !important;
-    gap: 12px !important;
-    text-align: center !important;
-  }
+/* ================= FORM ================= */
 
-  /* REGISTER HELPER */
-  .register-card small {
-    font-size: 14px !important;
-    line-height: 1.5 !important;
-  }
+.form-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 6px;
+}
+
+.custom-input {
+  height: 56px;
+  font-size: 16px;
+  border-radius: 18px;
+  padding: 0 16px;
+  border: 2px solid #3b82f6;
+}
+
+.custom-input:focus {
+  border-color: #0D6AC6;
+  box-shadow: 0 0 0 4px rgba(13,106,198,0.25);
+}
+
+/* ================= BUTTON ================= */
+
+.btn-login {
+  height: 58px;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 20px;
+  background: #1C6BEF !important;
+  color: #ffffff !important;
+  border: none;
+}
+
+/* ================= LINK BAWAH ================= */
+
+.login-card .d-flex {
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.login-card a {
+  font-weight: 600;
+  font-size: 15px;
 }
 
 
