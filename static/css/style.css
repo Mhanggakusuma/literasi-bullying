@@ -2561,20 +2561,18 @@ body.nav-open .toggler-icon::after {
   border-radius: 16px;
   margin-top: 28px;
 }
-
 /* ===============================
-   FIX AUTH PAGE OFFSET (FINAL)
+   AUTH PAGE FINAL (CLEAN)
 =============================== */
 
-/* Hilangkan offset navbar di halaman auth */
-.auth-page {
-  margin-top: -76px;
-  min-height: 100vh;
+/* Sembunyikan navbar di halaman auth */
+body.auth-body .navbar {
+  display: none;
 }
 
-/* Mobile lebih rapat */
-@media (max-width: 576px) {
-  .auth-page {
-    padding-top: 16px;
-  }
+/* Auth hero full screen */
+body.auth-body .auth-hero {
+  min-height: 100vh;
+  padding-top: 0;
 }
+
