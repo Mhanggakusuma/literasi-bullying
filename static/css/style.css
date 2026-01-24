@@ -1,6 +1,7 @@
 /* ================= GLOBAL ================= */
 body {
   font-family: 'Poppins', sans-serif;
+  margin-top: 76px;
 }
 
 /* ================= FIX NAVBAR ================= */
@@ -728,11 +729,11 @@ body.nav-open .toggler-icon::after {
     font-size: 15px;
   }
 }
+
 /* ===================================================== */
-/* ============ AUTH (LOGIN / REGISTER / FORGOT) ======= */
+/* ================= AUTH (LOGIN / REGISTER / FORGOT) == */
 /* ===================================================== */
 
-/* HERO / BACKGROUND */
 .auth-hero {
   min-height: 100vh;
   padding: 80px 16px 40px;
@@ -741,13 +742,9 @@ body.nav-open .toggler-icon::after {
     rgba(13,106,198,0.85),
     rgba(7,51,96,0.9)
   );
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-/* ================= CARD ================= */
-
+/* CARD */
 .login-card,
 .register-card,
 .forgot-card {
@@ -759,27 +756,22 @@ body.nav-open .toggler-icon::after {
   max-width: 100%;
 }
 
-/* ================= LOGO ================= */
-
+/* LOGO */
 .login-logo {
   width: 80px;
 }
 
-/* ================= TITLE ================= */
-
+/* TITLE */
 .login-title {
   font-size: 32px;
   font-weight: 700;
   letter-spacing: 0.06em;
   margin-bottom: 10px;
-  color: #000;
 }
 
-/* ================= FORM ================= */
-
+/* FORM */
 .form-label {
   font-size: 14px;
-  font-weight: 500;
   color: #000;
 }
 
@@ -788,16 +780,9 @@ body.nav-open .toggler-icon::after {
   border: 1px solid #4285F4;
   height: 44px;
   font-size: 14px;
-  padding: 0 12px;
 }
 
-.custom-input:focus {
-  border-color: #0D6AC6;
-  box-shadow: 0 0 0 0.2rem rgba(13,106,198,0.25);
-}
-
-/* ================= BUTTON ================= */
-
+/* BUTTON */
 .btn-login {
   background: #1C6BEF !important;
   color: #ffffff !important;
@@ -809,122 +794,49 @@ body.nav-open .toggler-icon::after {
 }
 
 /* ===================================================== */
-/* ============ FINAL AUTH MOBILE FIX ================== */
+/* ================= MOBILE RESPONSIVE ================= */
 /* ===================================================== */
 
-/* OFFSET NAVBAR HANYA UNTUK PAGE NORMAL */
-main {
-  padding-top: 76px;
-}
+@media (max-width: 576px) {
 
-@media (max-width: 768px) {
-  main {
-    padding-top: 72px;
-  }
-}
-
-/* ================= AUTH HERO ================= */
-
-.auth-hero {
-  min-height: 100vh;
-  background: linear-gradient(
-    180deg,
-    rgba(13,106,198,0.85),
-    rgba(7,51,96,0.9)
-  );
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  /* override navbar offset */
-  margin-top: -76px;
-  padding: 24px 16px 40px;
-}
-
-@media (max-width: 768px) {
   .auth-hero {
-    margin-top: -72px;
-    padding: 16px;
+    padding: 70px 14px 30px;
+  }
+
+  .login-card,
+  .register-card,
+  .forgot-card {
+    width: 100%;
+    padding: 28px 22px;
+    border-radius: 18px;
+  }
+
+  .login-logo {
+    width: 64px;
+  }
+
+  .login-title {
+    font-size: 24px;
+    letter-spacing: 0.04em;
+  }
+
+  .custom-input {
+    height: 46px;
+    font-size: 14px;
+  }
+
+  .btn-login {
+    height: 52px;
+    font-size: 17px;
+  }
+
+  /* LINK BAWAH JADI VERTIKAL */
+  .login-card .d-flex {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
   }
 }
-
-/* ================= CARD ================= */
-
-.login-card,
-.register-card,
-.forgot-card {
-  background: #88B8D8;
-  width: 100%;
-  max-width: 420px;
-  padding: 36px 28px;
-  border-radius: 24px;
-  box-shadow: 0 20px 45px rgba(0,0,0,0.35);
-}
-
-/* ================= LOGO ================= */
-
-.login-logo {
-  width: 72px;
-  margin-bottom: 12px;
-}
-
-/* ================= TITLE ================= */
-
-.login-title {
-  font-size: 28px;
-  font-weight: 800;
-  color: #000;
-  margin-bottom: 14px;
-}
-
-/* ================= FORM ================= */
-
-.form-label {
-  font-size: 15px;
-  font-weight: 600;
-  color: #000;
-  margin-bottom: 6px;
-}
-
-.custom-input {
-  height: 56px;
-  font-size: 16px;
-  border-radius: 18px;
-  padding: 0 16px;
-  border: 2px solid #3b82f6;
-}
-
-.custom-input:focus {
-  border-color: #0D6AC6;
-  box-shadow: 0 0 0 4px rgba(13,106,198,0.25);
-}
-
-/* ================= BUTTON ================= */
-
-.btn-login {
-  height: 58px;
-  font-size: 18px;
-  font-weight: 700;
-  border-radius: 20px;
-  background: #1C6BEF !important;
-  color: #ffffff !important;
-  border: none;
-}
-
-/* ================= LINK BAWAH ================= */
-
-.login-card .d-flex {
-  flex-direction: column;
-  gap: 10px;
-  text-align: center;
-  margin-top: 16px;
-}
-
-.login-card a {
-  font-weight: 600;
-  font-size: 15px;
-}
-
 
 /* ===================================================== */
 /* ================= FOOTER ============================= */
@@ -2634,4 +2546,3 @@ main {
   border-radius: 16px;
   margin-top: 28px;
 }
-
