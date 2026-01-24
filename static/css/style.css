@@ -810,81 +810,77 @@ body.nav-open .toggler-icon::after {
 }
 
 /* ===================================================== */
-/* ================= MOBILE RESPONSIVE ================= */
+/* ============== MOBILE FORCE RESPONSIVE ============== */
 /* ===================================================== */
 
-@media (max-width: 576px) {
+@media (max-width: 768px) {
 
-  /* OFFSET UNTUK NAVBAR FIXED-TOP */
+  /* FIX NAVBAR */
   body {
-    padding-top: 70px;
+    padding-top: 72px !important;
   }
 
   /* HERO */
   .auth-hero {
-    min-height: calc(100vh - 70px);
-    padding: 16px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
+    min-height: calc(100vh - 72px) !important;
+    padding: 12px !important;
+    align-items: flex-start !important;
   }
 
-  /* CARD – FULL & BESAR */
+  /* CARD — PAKSA FULL & BESAR */
   .login-card,
   .register-card,
   .forgot-card {
-    width: 100%;
-    max-width: 100%;
-    padding: 32px 20px;
-    border-radius: 20px;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 36px 22px !important;
+    border-radius: 22px !important;
   }
 
   /* LOGO */
   .login-logo {
-    width: 72px;
-    margin-bottom: 12px;
+    width: 76px !important;
   }
 
-  /* TITLE */
+  /* JUDUL — BESAR */
   .login-title {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
+    font-size: 30px !important;
+    font-weight: 700 !important;
   }
 
   /* LABEL */
   .form-label {
-    font-size: 15px;
+    font-size: 16px !important;
   }
 
-  /* INPUT – LEBIH TINGGI & JELAS */
+  /* INPUT — TINGGI & JELAS */
   .custom-input {
-    height: 56px;
-    font-size: 16px;
-    border-radius: 16px;
-    padding: 0 14px;
+    height: 60px !important;
+    font-size: 17px !important;
+    border-radius: 18px !important;
   }
 
-  /* BUTTON – BESAR & NYAMAN */
+  /* BUTTON — DOMINAN */
   .btn-login {
-    height: 56px;
-    font-size: 18px;
-    border-radius: 18px;
+    height: 60px !important;
+    font-size: 19px !important;
+    border-radius: 20px !important;
   }
 
-  /* LINK BAWAH JADI VERTIKAL */
+  /* LINK BAWAH */
   .login-card .d-flex {
-    flex-direction: column;
-    gap: 10px;
-    text-align: center;
+    flex-direction: column !important;
+    gap: 12px !important;
+    text-align: center !important;
   }
 
-  /* TEKS BANTUAN REGISTER */
+  /* REGISTER HELPER */
   .register-card small {
-    font-size: 13px;
-    line-height: 1.4;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
   }
 }
+
 
 /* ===================================================== */
 /* ================= FOOTER ============================= */
