@@ -656,95 +656,93 @@ body.nav-open .toggler-icon::after {
   }
 }
 /* =====================================================
-   AUTH PAGE – FINAL (CARD + BACK BUTTON)
+   AUTH PAGE ONLY (AMAN – TIDAK BOCOR KE BERANDA)
 ===================================================== */
 
-.auth-body {
-  margin: 0;
-  background: linear-gradient(
-    180deg,
-    #2f80ed,
-    #1c5db6
-  );
+/* Aktif HANYA jika body pakai class auth-body */
+body.auth-body {
+  background: linear-gradient(180deg, #2f80ed, #1c5db6);
+  min-height: 100vh;
 }
 
-/* Wrapper halaman */
-.auth-page {
-  min-height: 100svh;
+/* Wrapper */
+body.auth-body .auth-page {
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 24px;
 }
 
-/* Card utama */
-.auth-card {
+/* ================= CARD (UKURAN GAMBAR 3) ================= */
+body.auth-body .auth-card {
   width: 100%;
-  max-width: 420px;
+  max-width: 520px; /* 🔥 SAMA seperti gambar 3 */
   background: #9ec5e5;
-  border-radius: 24px;
-  padding: 32px 26px;
+  border-radius: 22px;
+  padding: 34px 32px;
   box-shadow: 0 20px 45px rgba(0,0,0,0.28);
   position: relative;
 }
 
 /* Logo */
-.auth-logo {
+body.auth-body .auth-logo {
   width: 72px;
   display: block;
-  margin: 0 auto 14px;
+  margin: 0 auto 12px;
 }
 
 /* Judul */
-.auth-title {
+body.auth-body .auth-title {
   text-align: center;
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 800;
-  margin-bottom: 20px;
-  color: #1f2937;
+  margin-bottom: 18px;
+  color: #111;
 }
 
 /* Input */
-.auth-input {
-  height: 44px;
+body.auth-body .auth-input {
+  height: 46px;
   border-radius: 12px;
   font-size: 14px;
 }
 
-/* Button utama */
-.auth-btn {
+/* Button */
+body.auth-body .auth-btn {
   background: #1e6bf1;
   border: none;
-  border-radius: 12px;
-  height: 48px;
+  border-radius: 14px;
+  height: 50px;
   font-size: 16px;
   font-weight: 600;
   color: #fff;
 }
 
 /* Link bawah */
-.auth-links {
+body.auth-body .auth-links {
   display: flex;
   justify-content: space-between;
   margin-top: 14px;
   font-size: 13px;
 }
 
-.auth-links a {
-  color: #1e40af;
-  text-decoration: none;
-  font-weight: 500;
+/* =====================================================
+   TOMBOL KEMBALI (SEPERTI GAMBAR 1 & 2)
+===================================================== */
+
+/* Wrapper tombol (DI LUAR CARD) */
+body.auth-body .auth-back-wrapper {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999;
 }
 
-/* =====================================================
-   TOMBOL KEMBALI (BERANDA)
-===================================================== */
-.auth-back {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 42px;
-  height: 42px;
+/* Tombol */
+body.auth-body .auth-back {
+  width: 44px;
+  height: 44px;
   background: #1e6bf1;
   color: #fff;
   border-radius: 12px;
@@ -753,22 +751,17 @@ body.nav-open .toggler-icon::after {
   justify-content: center;
   text-decoration: none;
   box-shadow: 0 10px 20px rgba(0,0,0,0.25);
-  font-size: 18px;
+  font-size: 20px;
 }
 
-/* =====================================================
-   MOBILE
-===================================================== */
+/* ================= MOBILE ================= */
 @media (max-width: 576px) {
-  .auth-card {
+  body.auth-body .auth-card {
     max-width: 100%;
     padding: 28px 22px;
   }
-
-  .auth-title {
-    font-size: 24px;
-  }
 }
+
 
 /* ===================================================== */
 /* ================= FOOTER ============================= */
