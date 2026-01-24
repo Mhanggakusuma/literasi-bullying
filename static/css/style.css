@@ -2583,3 +2583,7 @@ body.nav-open .toggler-icon::after {
   border-radius: 16px;
   margin-top: 28px;
 }
+
+body {
+  background: red !important;
+}
