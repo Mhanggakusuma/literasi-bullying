@@ -806,11 +806,6 @@ body.nav-open .toggler-icon::after {
   border-radius: 16px;
   height: 52px;
   border: none;
-  transition: all 0.25s ease;
-}
-
-.btn-login:hover {
-  background: #0D6AC6 !important;
 }
 
 /* ===================================================== */
@@ -819,9 +814,14 @@ body.nav-open .toggler-icon::after {
 
 @media (max-width: 576px) {
 
+  /* Offset navbar fixed-top */
+  body {
+    padding-top: 70px;
+  }
+
   .auth-hero {
-    min-height: 100vh;
-    padding: 20px 14px;
+    min-height: calc(100vh - 70px);
+    padding: 16px;
     align-items: flex-start;
   }
 
@@ -829,10 +829,9 @@ body.nav-open .toggler-icon::after {
   .register-card,
   .forgot-card {
     width: 100%;
-    max-width: 420px;
-    padding: 34px 26px;
-    border-radius: 22px;
-    margin-top: 20px;
+    max-width: 100%;
+    padding: 32px 22px;
+    border-radius: 20px;
   }
 
   .login-logo {
@@ -841,7 +840,7 @@ body.nav-open .toggler-icon::after {
   }
 
   .login-title {
-    font-size: 26px;
+    font-size: 28px;
     letter-spacing: 0.04em;
   }
 
@@ -850,7 +849,7 @@ body.nav-open .toggler-icon::after {
   }
 
   .custom-input {
-    height: 54px;
+    height: 56px;
     font-size: 16px;
     border-radius: 16px;
   }
@@ -861,19 +860,14 @@ body.nav-open .toggler-icon::after {
     border-radius: 18px;
   }
 
-  /* Link bawah (Daftar / Lupa Password) */
   .login-card .d-flex {
     flex-direction: column;
     gap: 10px;
     text-align: center;
   }
 
-  /* Register text kecil */
-  .register-card small {
-    font-size: 13px;
-  }
-
 }
+
 
 /* ===================================================== */
 /* ================= FOOTER ============================= */
@@ -2584,6 +2578,3 @@ body.nav-open .toggler-icon::after {
   margin-top: 28px;
 }
 
-body {
-  background: red !important;
-}
