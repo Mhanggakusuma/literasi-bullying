@@ -189,80 +189,6 @@ body.nav-open .toggler-icon::after {
 }
 
 
-/* =====================================
-   AUTH-LIKE STYLE (LENGKAPI PROFIL)
-   Mirip halaman LOGIN
-   ===================================== */
-
-.auth-like-hero {
-  min-height: calc(100vh - 70px); /* tinggi navbar */
-  background: linear-gradient(180deg, #2f80ed, #1c5db6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-
-.auth-like-card {
-  background: #9ec5e5;
-  border-radius: 20px;
-  padding: 36px 32px;
-  width: 100%;
-  max-width: 420px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-  text-align: center;
-}
-
-.auth-like-logo {
-  width: 70px;
-}
-
-.auth-like-card h4 {
-  font-weight: 700;
-  margin-bottom: 6px;
-  color: #000;
-}
-
-.auth-like-desc {
-  font-size: 0.85rem;
-  color: #1e1e1e;
-  margin-bottom: 22px;
-  line-height: 1.5;
-}
-
-.auth-like-input {
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 0.95rem;
-}
-
-.auth-like-btn {
-  background: #1e6bf1;
-  color: #fff;
-  border: none;
-  padding: 12px;
-  border-radius: 12px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.auth-like-btn:hover {
-  background: #1558c0;
-}
-
-/* ===============================
-   RESPONSIVE
-   =============================== */
-@media (max-width: 576px) {
-  .auth-like-card {
-    padding: 28px 22px;
-  }
-
-  .auth-like-logo {
-    width: 60px;
-  }
-}
-
 /* =====================================================
    DASHBOARD HOME – FINAL (FULL + MOBILE FIX)
 ===================================================== */
@@ -736,60 +662,66 @@ body.nav-open .toggler-icon::after {
 
 .auth-hero {
   min-height: 100vh;
-  padding: 80px 16px 40px;
+  padding: 80px 24px 40px;
   background: linear-gradient(
     180deg,
-    rgba(13,106,198,0.85),
-    rgba(7,51,96,0.9)
+    rgba(13,106,198,0.9),
+    rgba(7,51,96,0.95)
   );
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* CARD */
+/* ================= CARD ================= */
 .login-card,
 .register-card,
 .forgot-card {
   background: #88B8D8;
-  border-radius: 16px;
-  box-shadow: 8px 12px 24px rgba(0,0,0,0.32);
+  border-radius: 20px;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.28);
   padding: 36px 40px;
   width: 560px;
   max-width: 100%;
+  margin: auto;
 }
 
-/* LOGO */
+/* ================= LOGO ================= */
 .login-logo {
   width: 80px;
 }
 
-/* TITLE */
+/* ================= TITLE ================= */
 .login-title {
   font-size: 32px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   margin-bottom: 10px;
 }
 
-/* FORM */
+/* ================= FORM ================= */
 .form-label {
   font-size: 14px;
   color: #000;
+  font-weight: 500;
 }
 
 .custom-input {
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid #4285F4;
-  height: 44px;
+  height: 46px;
   font-size: 14px;
+  padding: 0 14px;
 }
 
-/* BUTTON */
+/* ================= BUTTON ================= */
 .btn-login {
   background: #1C6BEF !important;
   color: #ffffff !important;
   font-size: 18px;
   font-weight: 600;
   border-radius: 14px;
-  height: 50px;
+  height: 52px;
   border: none;
 }
 
@@ -799,42 +731,125 @@ body.nav-open .toggler-icon::after {
 
 @media (max-width: 576px) {
 
+  /* HERO */
   .auth-hero {
-    padding: 70px 14px 30px;
+    min-height: 100vh;
+    padding: 24px 10px;
+    align-items: stretch;
   }
 
+  /* CARD – HAMPIR FULL SCREEN */
   .login-card,
   .register-card,
   .forgot-card {
     width: 100%;
-    padding: 28px 22px;
-    border-radius: 18px;
+    max-width: 96%;        /* 🔥 kunci biar tidak kecil */
+    padding: 28px 20px;
+    border-radius: 22px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.25);
   }
 
+  /* LOGO */
   .login-logo {
     width: 64px;
   }
 
+  /* TITLE */
   .login-title {
-    font-size: 24px;
+    font-size: 26px;
     letter-spacing: 0.04em;
   }
 
+  /* INPUT */
   .custom-input {
-    height: 46px;
+    height: 48px;
     font-size: 14px;
   }
 
+  /* BUTTON */
   .btn-login {
-    height: 52px;
+    height: 54px;
     font-size: 17px;
   }
 
-  /* LINK BAWAH JADI VERTIKAL */
+  /* LINK BAWAH (LOGIN PAGE) */
   .login-card .d-flex {
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+  }
+}
+
+/* ===================================================== */
+/* ================= AUTH-LIKE (LENGKAPI PROFIL) ======= */
+/* ===================================================== */
+
+.auth-like-hero {
+  min-height: calc(100vh - 70px);
+  background: linear-gradient(180deg, #2f80ed, #1c5db6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.auth-like-card {
+  background: #9ec5e5;
+  border-radius: 22px;
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.auth-like-logo {
+  width: 70px;
+}
+
+.auth-like-card h4 {
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #000;
+}
+
+.auth-like-desc {
+  font-size: 0.9rem;
+  color: #1e1e1e;
+  margin-bottom: 22px;
+  line-height: 1.6;
+}
+
+.auth-like-input {
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 0.95rem;
+}
+
+.auth-like-btn {
+  background: #1e6bf1;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 14px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.auth-like-btn:hover {
+  background: #1558c0;
+}
+
+/* MOBILE – AUTH LIKE */
+@media (max-width: 576px) {
+  .auth-like-card {
+    max-width: 96%;
+    padding: 28px 22px;
+    border-radius: 22px;
+  }
+
+  .auth-like-logo {
+    width: 60px;
   }
 }
 
