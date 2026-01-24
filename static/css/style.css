@@ -2561,3 +2561,20 @@ body.nav-open .toggler-icon::after {
   border-radius: 16px;
   margin-top: 28px;
 }
+
+/* ===============================
+   FIX AUTH PAGE OFFSET (FINAL)
+=============================== */
+
+/* Hilangkan offset navbar di halaman auth */
+.auth-page {
+  margin-top: -76px;
+  min-height: 100vh;
+}
+
+/* Mobile lebih rapat */
+@media (max-width: 576px) {
+  .auth-page {
+    padding-top: 16px;
+  }
+}
