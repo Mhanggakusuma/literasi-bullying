@@ -656,114 +656,119 @@ body.nav-open .toggler-icon::after {
   }
 }
 /* =====================================================
-   AUTH PAGE (LOGIN / REGISTER / LUPA PASSWORD)
-   FINAL – CLEAN & CONSISTENT
+   AUTH PAGE – FINAL (CARD + BACK BUTTON)
 ===================================================== */
 
 .auth-body {
   margin: 0;
   background: linear-gradient(
     180deg,
-    rgba(13,106,198,0.9),
-    rgba(7,51,96,0.95)
+    #2f80ed,
+    #1c5db6
   );
 }
 
-/* Container halaman auth */
+/* Wrapper halaman */
 .auth-page {
-  min-height: 100svh; /* penting untuk mobile */
+  min-height: 100svh;
   display: flex;
   justify-content: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  align-items: center;
+  padding: 24px;
 }
 
 /* Card utama */
 .auth-card {
   width: 100%;
   max-width: 420px;
-  background: #ffffff;
-  border-radius: 22px;
-  padding: 32px 24px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  background: #9ec5e5;
+  border-radius: 24px;
+  padding: 32px 26px;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.28);
+  position: relative;
 }
 
 /* Logo */
 .auth-logo {
-  width: 180px;
+  width: 72px;
   display: block;
-  margin: 0 auto 24px;
+  margin: 0 auto 14px;
 }
 
 /* Judul */
 .auth-title {
+  text-align: center;
   font-size: 26px;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 6px;
-}
-
-.auth-subtitle {
-  font-size: 14px;
-  color: #6b7280;
-  text-align: center;
+  font-weight: 800;
   margin-bottom: 20px;
+  color: #1f2937;
 }
 
 /* Input */
 .auth-input {
-  border-radius: 14px;
-  height: 46px;
+  height: 44px;
+  border-radius: 12px;
   font-size: 14px;
 }
 
-/* Button */
+/* Button utama */
 .auth-btn {
-  background: #1C6BEF;
-  color: #ffffff;
+  background: #1e6bf1;
   border: none;
-  border-radius: 14px;
-  height: 52px;
+  border-radius: 12px;
+  height: 48px;
   font-size: 16px;
   font-weight: 600;
+  color: #fff;
 }
 
 /* Link bawah */
 .auth-links {
   display: flex;
   justify-content: space-between;
-  font-size: 14px;
-  margin-top: 18px;
+  margin-top: 14px;
+  font-size: 13px;
 }
 
-.auth-links.center {
-  justify-content: center;
+.auth-links a {
+  color: #1e40af;
+  text-decoration: none;
+  font-weight: 500;
 }
 
 /* =====================================================
-   MOBILE OPTIMIZATION
+   TOMBOL KEMBALI (BERANDA)
+===================================================== */
+.auth-back {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 42px;
+  height: 42px;
+  background: #1e6bf1;
+  color: #fff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+  font-size: 18px;
+}
+
+/* =====================================================
+   MOBILE
 ===================================================== */
 @media (max-width: 576px) {
-
-  .auth-page {
-    padding-top: 24px;
-    padding-bottom: 24px;
-  }
-
   .auth-card {
-    max-width: 92%;
-    padding: 28px 20px;
-  }
-
-  .auth-logo {
-    width: 150px;
+    max-width: 100%;
+    padding: 28px 22px;
   }
 
   .auth-title {
     font-size: 24px;
   }
 }
-
 
 /* ===================================================== */
 /* ================= FOOTER ============================= */
