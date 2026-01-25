@@ -659,9 +659,15 @@ body.nav-open .toggler-icon::after {
 /* ========== AUTH (LOGIN / REGISTER / FORGOT) ========= */
 /* ===================================================== */
 
+/* OFFSET GLOBAL UNTUK NAVBAR FIXED-TOP */
+.main-offset {
+  padding-top: 80px; /* tinggi navbar */
+}
+
+/* HERO AUTH */
 .auth-hero {
-  min-height: 100vh;
-  padding: 64px 16px 24px;
+  min-height: calc(100vh - 80px); /* FIX: navbar fixed-top */
+  padding: 24px 16px;
   background: linear-gradient(
     180deg,
     rgba(13,106,198,0.9),
@@ -681,7 +687,7 @@ body.nav-open .toggler-icon::after {
   box-shadow: 0 20px 50px rgba(0,0,0,0.35);
   padding: 36px 32px;
   width: 100%;
-  max-width: 420px; /* PENTING: biar jelas & tidak kecil */
+  max-width: 420px; /* KUNCI BIAR JELAS DI MOBILE */
 }
 
 /* LOGO */
@@ -729,6 +735,7 @@ body.nav-open .toggler-icon::after {
   text-decoration: none;
 }
 
+
 /* ===================================================== */
 /* ================= MOBILE RESPONSIVE ================= */
 /* ===================================================== */
@@ -736,13 +743,13 @@ body.nav-open .toggler-icon::after {
 @media (max-width: 576px) {
 
   .auth-hero {
-    padding: 56px 14px 20px;
+    padding: 16px 14px;
   }
 
   .login-card,
   .register-card,
   .forgot-card {
-    padding: 30px 22px;
+    padding: 28px 20px;
     border-radius: 20px;
   }
 
@@ -760,11 +767,11 @@ body.nav-open .toggler-icon::after {
   }
 
   .btn-login {
-    height: 58px;
+    height: 56px;
     font-size: 18px;
   }
 
-  /* LINK BAWAH JADI RAPI */
+  /* LINK BAWAH JADI VERTIKAL */
   .login-card .d-flex {
     flex-direction: column;
     align-items: center;
@@ -778,7 +785,7 @@ body.nav-open .toggler-icon::after {
 /* ===================================================== */
 
 .auth-like-hero {
-  min-height: calc(100vh - 70px);
+  min-height: calc(100vh - 80px); /* SAMA DENGAN AUTH */
   background: linear-gradient(180deg, #2f80ed, #1c5db6);
   display: flex;
   align-items: center;
@@ -828,7 +835,7 @@ body.nav-open .toggler-icon::after {
   font-weight: 600;
 }
 
-/* MOBILE */
+/* MOBILE AUTH-LIKE */
 @media (max-width: 576px) {
   .auth-like-card {
     padding: 28px 22px;
