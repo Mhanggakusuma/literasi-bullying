@@ -5,9 +5,6 @@
   <meta charset="UTF-8">
   <title>{% block title %}SMP N 1 Madang Suku III{% endblock %}</title>
 
-  <!-- VIEWPORT (WAJIB UNTUK MOBILE) -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -18,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Global Style -->
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260125">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <link rel="stylesheet" href="{% static 'css/footer_info.css' %}">
 </head>
 
@@ -37,8 +34,10 @@
       <span class="toggler-icon"></span>
     </button>
 
+
     <div class="collapse navbar-collapse" id="navbarPublic">
       <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-4">
+
         <li class="nav-item">
           <a class="nav-link" href="/">Beranda</a>
         </li>
@@ -50,28 +49,29 @@
         </li>
 
         <li class="nav-item mt-2 mt-lg-0">
-          <a class="btn btn-daftar-navbar" href="{% url 'login' %}">
+          <a class="btn btn-daftar-navbar"
+             href="{% url 'login' %}">
             Masuk
           </a>
         </li>
+
       </ul>
     </div>
   </div>
 </nav>
 
 <!-- ================= CONTENT ================= -->
-<main class="main-offset">
+<main>
   {% block content %}{% endblock %}
 </main>
 
-<!-- ================= FOOTER (NON AUTH) ================= -->
-{% if not request.path|slice:":6" == "/users" %}
-  {% include "includes/footer_info.html" %}
+<!-- ================= FOOTER INFO ================= -->
+{% include "includes/footer_info.html" %}
 
-  <footer class="footer text-center text-white py-4">
-    © 2025 SMP N 1 Madang Suku III - Sistem Literasi & Anti-Bullying
-  </footer>
-{% endif %}
+<!-- ================= FOOTER ================= -->
+<footer class="footer text-center text-white py-4">
+  © 2025 SMP N 1 Madang Suku III - Sistem Literasi & Anti-Bullying
+</footer>
 
 <!-- ================= SCRIPTS ================= -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -85,6 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   toggler.addEventListener("click", function (e) {
     e.stopPropagation();
+    document.body.classList.toggle("nav-open");
     sidebar.classList.toggle("show");
   });
 
@@ -95,17 +96,21 @@ document.addEventListener("DOMContentLoaded", function () {
       !toggler.contains(e.target)
     ) {
       sidebar.classList.remove("show");
+      document.body.classList.remove("nav-open");
     }
   });
 
   sidebar.querySelectorAll("a").forEach(link => {
     link.addEventListener("click", function () {
       sidebar.classList.remove("show");
+      document.body.classList.remove("nav-open");
     });
   });
 });
 </script>
 
+
+<!-- ✅ CLOCK -->
 <script src="{% static 'js/clock.js' %}"></script>
 
 </body>

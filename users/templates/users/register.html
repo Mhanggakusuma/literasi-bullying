@@ -1,107 +1,52 @@
-{% extends "base_public.html" %}
+{% extends "base_auth.html" %}
 {% load static %}
 
 {% block title %}Daftar | SMP N 1 Madang Suku III{% endblock %}
 
 {% block content %}
-
-<!-- ================= AUTH REGISTER ================= -->
-<section class="auth-hero d-flex justify-content-center align-items-center">
+<section class="auth-hero">
   <div class="register-card text-center">
 
-    <!-- LOGO -->
-    <img src="{% static 'img/logo.png' %}" class="login-logo mb-3" alt="Logo Sekolah">
+    <img src="{% static 'img/logo.png' %}" class="login-logo mb-3" alt="Logo">
 
     <h2 class="login-title">Daftar Akun Siswa</h2>
-    <p class="text-muted small mb-3">
-      Silakan isi data dengan benar sesuai data sekolah
-    </p>
+    <p class="text-muted small mb-3">Silakan isi data dengan benar sesuai data sekolah</p>
 
-    <!-- ================= FORM REGISTER ================= -->
     <form method="POST" class="text-start mt-4">
       {% csrf_token %}
 
-      <!-- NAMA -->
       <div class="mb-3">
         <label class="form-label">Nama Lengkap</label>
-        <input
-          type="text"
-          name="nama"
-          class="form-control custom-input"
-          placeholder="Nama Lengkap"
-          value="{{ form.nama.value|default:'' }}"
-          required
-        >
+        <input type="text" name="nama" class="form-control custom-input" required>
       </div>
 
-      <!-- USERNAME -->
       <div class="mb-3">
         <label class="form-label">Username</label>
-        <input
-          type="text"
-          name="username"
-          class="form-control custom-input"
-          placeholder="Username"
-          value="{{ form.username.value|default:'' }}"
-          required
-        >
+        <input type="text" name="username" class="form-control custom-input" required>
       </div>
 
-      <!-- NIS -->
       <div class="mb-3">
         <label class="form-label">NIS</label>
-        <input
-          type="text"
-          name="nis"
-          class="form-control custom-input"
-          placeholder="Nomor Induk Siswa"
-          value="{{ form.nis.value|default:'' }}"
-          required
-        >
+        <input type="text" name="nis" class="form-control custom-input" required>
       </div>
 
-      <!-- TANGGAL MASUK -->
       <div class="mb-3">
         <label class="form-label">Tanggal Masuk Sekolah</label>
-        <input
-          type="date"
-          name="tanggal_masuk"
-          class="form-control custom-input"
-          value="{{ form.tanggal_masuk.value|default:'' }}"
-          required
-        >
-        <small class="text-muted">
-          Masukkan tanggal bergabung menjadi siswa di sekolah ini
-        </small>
+        <input type="date" name="tanggal_masuk" class="form-control custom-input" required>
       </div>
 
-      <!-- PASSWORD -->
       <div class="mb-3">
         <label class="form-label">Password</label>
-        <input
-          type="password"
-          name="password"
-          class="form-control custom-input"
-          placeholder="Password"
-          required
-        >
+        <input type="password" name="password" class="form-control custom-input" required>
       </div>
 
-      <!-- ULANGI PASSWORD -->
       <div class="mb-3">
         <label class="form-label">Ulangi Password</label>
-        <input
-          type="password"
-          name="ulangi_password"
-          class="form-control custom-input"
-          placeholder="Ulangi Password"
-          required
-        >
+        <input type="password" name="ulangi_password" class="form-control custom-input" required>
       </div>
 
-      <!-- ================= ERROR FORM ================= -->
       {% if form.errors %}
-        <div class="alert alert-danger mt-3 small">
+        <div class="alert alert-danger small">
           {% for field, errors in form.errors.items %}
             {% for error in errors %}
               <p class="mb-1">{{ error }}</p>
@@ -110,19 +55,14 @@
         </div>
       {% endif %}
 
-      <!-- SUBMIT -->
-      <button type="submit" class="btn btn-login w-100 mt-3">
-        Daftar
-      </button>
+      <button type="submit" class="btn btn-login w-100 mt-3">Daftar</button>
     </form>
 
-    <!-- LINK LOGIN -->
-    <div class="mt-4 small text-center">
-      Sudah memiliki akun?
+    <div class="mt-4 small">
+      Sudah punya akun?
       <a href="{% url 'login' %}" class="link-primary">Masuk</a>
     </div>
 
   </div>
 </section>
-
 {% endblock %}
