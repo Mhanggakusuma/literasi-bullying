@@ -1021,132 +1021,130 @@ body.nav-open .toggler-icon::after {
 /* ============ BUAT LAPORAN (SCOPED) ================== */
 /* ===================================================== */
 
+/* ================= PAGE ================= */
 .buat-laporan-page {
   width: 100%;
 }
 
 /* ================= HERO ================= */
-.buat-laporan-page .buat-laporan-hero {
+.buat-laporan-hero {
   min-height: calc(100vh - 70px);
   padding: 110px 20px 80px;
-  background: linear-gradient(
-    180deg,
-    rgba(13,106,198,0.81),
-    rgba(7,51,96,0.81)
-  );
-  display: flex;
-  align-items: flex-start;
+  background: linear-gradient(180deg, #0d6ac6, #073360);
 }
 
-.buat-laporan-page .hero-title {
+/* ================= HERO TEXT ================= */
+.hero-title {
   font-family: 'Poppins', sans-serif;
-  font-size: clamp(34px, 5vw, 48px);
+  font-size: 42px;
   font-weight: 700;
   color: #ffffff;
-  margin-bottom: 10px;
 }
 
-.buat-laporan-page .hero-subtitle {
+.hero-subtitle {
   font-size: 18px;
   color: #e5e7eb;
 }
 
 /* ================= FORM CARD ================= */
-.buat-laporan-page .form-card {
+.form-card {
   background: #ffffff;
-  width: 100%;
   max-width: 900px;
   padding: 50px 60px;
   border-radius: 18px;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
-  color: #000000;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.25);
 }
 
-/* ICON */
-.buat-laporan-page .form-icon {
+/* ================= ICON & TITLE ================= */
+.form-icon {
   width: 90px;
-  display: block;
-  margin: 0 auto 15px;
+  margin-bottom: 10px;
 }
 
-/* TITLE */
-.buat-laporan-page .form-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 34px;
+.form-title {
+  font-size: 32px;
   font-weight: 600;
-  text-align: center;
   margin-bottom: 40px;
 }
 
-/* ================= FORM FIELD ================= */
-.buat-laporan-page .form-label {
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  color: #000000;
-  margin-bottom: 6px;
+/* ================= SECTION ================= */
+.form-section {
+  background: #f9fbff;
+  border: 1px solid #e3ebf7;
+  border-radius: 14px;
+  padding: 28px;
+  margin-bottom: 32px;
 }
 
-/* INPUT AMAN (TIDAK GLOBAL) */
-.buat-laporan-page .form-control,
-.buat-laporan-page textarea,
-.buat-laporan-page select {
-  width: 100%;
-  border: 1px solid #4285F4;
-  border-radius: 12px;
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0d2b5c;
+}
+
+.section-desc {
   font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 18px;
+}
+
+.required {
+  color: #dc2626;
+}
+
+/* ================= FORM ================= */
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-control,
+textarea,
+select {
+  border-radius: 12px;
+  border: 1px solid #4285f4;
   padding: 10px 14px;
 }
 
-.buat-laporan-page .form-control::placeholder,
-.buat-laporan-page textarea::placeholder {
-  color: #736A6A;
-}
-
 /* ================= BUTTON ================= */
-.buat-laporan-page .btn-submit {
-  background: #1C6BEF;
+.btn-submit {
+  background: #1c6bef;
   color: #ffffff;
   font-size: 18px;
   font-weight: 700;
   padding: 14px;
   border-radius: 14px;
-  border: none;
 }
 
-.buat-laporan-page .btn-submit:hover {
+.btn-submit:hover {
   background: #155bd6;
+}
+
+.btn-kembali {
+  background: transparent;
+  color: #1c6bef;
+  border: 2px solid #1c6bef;
+  border-radius: 14px;
+  padding: 12px;
+  font-weight: 600;
+}
+
+.btn-kembali:hover {
+  background: #1c6bef;
+  color: #ffffff;
 }
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
-  .buat-laporan-page .form-card {
+  .form-card {
     padding: 35px 25px;
   }
 
-  .buat-laporan-page .form-title {
-    font-size: 28px;
+  .hero-title {
+    font-size: 32px;
   }
 }
 
-/* ================= BUTTON KEMBALI ================= */
-.buat-laporan-page .btn-kembali {
-  display: block;
-  text-align: center;
-  background: transparent;
-  color: #1C6BEF;
-  font-size: 16px;
-  font-weight: 600;
-  padding: 12px;
-  border-radius: 14px;
-  border: 2px solid #1C6BEF;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.buat-laporan-page .btn-kembali:hover {
-  background: #1C6BEF;
-  color: #ffffff;
-}
 /* =====================================================
    SUCCESS PAGE – PELAPOR KODE
 ===================================================== */
