@@ -96,7 +96,7 @@ class LaporanForm(forms.ModelForm):
             }),
             "nama_terlapor": forms.TextInput(attrs={
                 "class": "form-control",
-                "placeholder": "Opsional"
+                "placeholder": ""
             }),
             "kelas_terlapor": forms.TextInput(attrs={
                 "class": "form-control",
