@@ -73,20 +73,26 @@
           </div>
 
           <!-- ================= IDENTITAS TERLAPOR ================= -->
-          <div class="form-section">
-            <h5 class="section-title">Identitas Terlapor</h5>
-
-            <div class="mb-3">
-              <label class="form-label">Nama Terlapor</label>
-              {{ form.nama_terlapor }}
+            <div class="form-section">
+              <h5 class="section-title">
+                Identitas Terlapor <span class="required">*</span>
+              </h5>
+              <p class="section-desc">
+                Isi identitas pihak yang diduga melakukan perundungan
+              </p>
+              <div class="mb-3">
+                <label class="form-label">
+                  Nama Terlapor <span class="required">*</span>
+                </label>
+                {{ form.nama_terlapor }}
+              </div>
+              <div class="mb-3">
+                <label class="form-label">
+                  Kelas Terlapor <span class="required">*</span>
+                </label>
+                {{ form.kelas_terlapor }}
+              </div>
             </div>
-
-            <div class="mb-3">
-              <label class="form-label">Kelas Terlapor</label>
-              {{ form.kelas_terlapor }}
-            </div>
-          </div>
-
           <!-- ================= JENIS ================= -->
           <div class="form-section">
             <h5 class="section-title">Jenis Perundungan</h5>
