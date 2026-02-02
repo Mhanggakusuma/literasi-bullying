@@ -1,20 +1,23 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Formulir Laporan Bullying{% endblock %}
+{% block title %}Formulir Laporan Perundungan{% endblock %}
 
 {% block content %}
 <div class="buat-laporan-page">
 
-  <!-- HERO -->
   <section class="buat-laporan-hero">
-    <div class="container text-center">
+    <div class="container">
 
-      <h1 class="hero-title">Formulir Laporan Perundungan</h1>
-      <p class="hero-subtitle">
-        Silakan mengisi formulir laporan sesuai dengan kejadian yang dialami atau disaksikan
-      </p>
+      <!-- JUDUL SAJA YANG TENGAH -->
+      <div class="text-center">
+        <h1 class="hero-title">Formulir Laporan Perundungan</h1>
+        <p class="hero-subtitle">
+          Silakan mengisi formulir laporan sesuai dengan kejadian yang dialami atau disaksikan
+        </p>
+      </div>
 
+      <!-- FORM CARD (TIDAK CENTER TEXT) -->
       <div class="form-card mx-auto mt-5">
 
         <img src="{% static 'img/ribbon.png' %}" class="form-icon" alt="Icon">
@@ -26,7 +29,9 @@
           <!-- ================= IDENTITAS PELAPOR ================= -->
           <div class="form-section">
             <h5 class="section-title">Identitas Pelapor</h5>
-            <p class="section-desc">Informasi ini bersifat rahasia dan hanya dapat diakses oleh pihak berwenang</p>
+            <p class="section-desc">
+              Informasi ini bersifat rahasia dan hanya dapat diakses oleh pihak berwenang
+            </p>
 
             <div class="mb-3">
               <label class="form-label">Nama Pelapor</label>
@@ -44,9 +49,9 @@
               <input type="text" class="form-control" value="{{ profile.kelas }}" readonly>
             </div>
 
-            <div class="form-check mt-3">
+            <div class="form-check">
               {{ form.is_anonymous }}
-              <label class="form-check-label ms-2">
+              <label class="form-check-label">
                 Laporkan sebagai anonim
               </label>
             </div>
@@ -55,7 +60,6 @@
           <!-- ================= IDENTITAS KORBAN ================= -->
           <div class="form-section">
             <h5 class="section-title">Identitas Korban</h5>
-            <p class="section-desc">Masukkan data siswa yang menjadi korban perundungan</p>
 
             <div class="mb-3">
               <label class="form-label">Nama Korban</label>
@@ -71,7 +75,6 @@
           <!-- ================= IDENTITAS TERLAPOR ================= -->
           <div class="form-section">
             <h5 class="section-title">Identitas Terlapor</h5>
-            <p class="section-desc">Bagian ini bersifat opsional jika identitas pelaku diketahui</p>
 
             <div class="mb-3">
               <label class="form-label">Nama Terlapor</label>
@@ -87,7 +90,6 @@
           <!-- ================= JENIS ================= -->
           <div class="form-section">
             <h5 class="section-title">Jenis Perundungan</h5>
-            <p class="section-desc">Pilih jenis perundungan yang terjadi</p>
             {{ form.jenis_bullying }}
           </div>
 
@@ -116,28 +118,24 @@
             <h5 class="section-title">
               Kronologi Kejadian <span class="required">*</span>
             </h5>
-            <p class="section-desc">
-              Jelaskan kejadian secara runtut dan objektif
-            </p>
-
             {{ form.isi_laporan }}
           </div>
 
           <!-- ================= DAMPAK ================= -->
           <div class="form-section">
             <h5 class="section-title">Dampak terhadap Korban</h5>
-            {{ form.dampak_korban }}
+
+            <div class="checkbox-group">
+              {{ form.dampak_korban }}
+            </div>
+
             {{ form.dampak_lainnya }}
           </div>
 
           <!-- ================= BUKTI ================= -->
           <div class="form-section">
             <h5 class="section-title">Bukti Pendukung</h5>
-            <p class="section-desc">Unggah bukti pendukung jika tersedia</p>
             {{ form.bukti }}
-            <small class="text-muted d-block mt-2">
-              Format JPG / PNG / Video • Maksimal 10 MB
-            </small>
           </div>
 
           <!-- ================= HARAPAN ================= -->
@@ -152,14 +150,13 @@
 
             <div class="form-check">
               {{ form.pernyataan_setuju }}
-              <label class="form-check-label ms-2">
+              <label class="form-check-label">
                 Saya menyatakan bahwa seluruh informasi dalam laporan ini
                 adalah benar dan dapat dipertanggungjawabkan.
               </label>
             </div>
           </div>
 
-          <!-- ================= BUTTON ================= -->
           <button type="submit" class="btn btn-submit w-100">
             Kirim Laporan
           </button>
