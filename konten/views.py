@@ -5,6 +5,7 @@ from .models import Artikel, Video, Kuis, Opsi
 
 @login_required
 def konten_index(request):
+    # Menampilkan halaman utama konten (artikel, video, dan kuis) berdasarkan tab yang dipilih
     tab = request.GET.get("tab", "artikel")
     return render(
         request,
@@ -20,6 +21,7 @@ def konten_index(request):
 
 @login_required
 def artikel_detail(request, id):
+    # Menampilkan detail artikel berdasarkan ID yang dipilih penggun
     artikel = get_object_or_404(Artikel, id=id)
     return render(
         request,
@@ -30,6 +32,7 @@ def artikel_detail(request, id):
 
 @login_required
 def kuis_detail(request, id):
+    # Menampilkan kuis dan menghitung skor berdasarkan jawaban yang dikirim pengguna
     kuis = get_object_or_404(
         Kuis.objects.prefetch_related("pertanyaan__opsi"),
         id=id
