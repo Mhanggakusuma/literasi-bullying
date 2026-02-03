@@ -2,12 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 
-
+# Model untuk menyimpan seluruh data laporan bullying
 class Laporan(models.Model):
 
-    # =========================
-    # PILIHAN KELAS
-    # =========================
+
     KELAS_CHOICES = [
         ("VII A", "VII A"), ("VII B", "VII B"), ("VII C", "VII C"),
         ("VII D", "VII D"), ("VII E", "VII E"),
@@ -17,9 +15,7 @@ class Laporan(models.Model):
         ("IX D", "IX D"), ("IX E", "IX E"),
     ]
 
-    # =========================
-    # JENIS BULLYING
-    # =========================
+
     JENIS_BULLYING_CHOICES = [
         ("verbal", "Verbal"),
         ("fisik", "Fisik"),
@@ -29,27 +25,21 @@ class Laporan(models.Model):
         ("lainnya", "Lainnya"),
     ]
 
-    # =========================
-    # STATUS PENANGANAN
-    # =========================
+
     STATUS_CHOICES = [
         ("baru", "Laporan Baru"),
         ("diproses", "Sedang Diproses"),
         ("selesai", "Selesai Ditangani"),
     ]
 
-    # =========================
-    # PERKIRAAN WAKTU KEJADIAN
-    # =========================
+ 
     WAKTU_CHOICES = [
         ("pagi", "Pagi"),
         ("siang", "Siang"),
         ("sore", "Sore"),
     ]
 
-    # =========================
-    # DAMPAK KORBAN (MULTI PILIH)
-    # =========================
+
     DAMPAK_CHOICES = [
         ("takut", "Takut datang ke sekolah"),
         ("menangis", "Menangis / Tertekan"),
@@ -58,9 +48,7 @@ class Laporan(models.Model):
         ("lainnya", "Lainnya"),
     ]
 
-    # =========================
-    # 🔒 IDENTITAS PELAPOR
-    # =========================
+
     pelapor = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -72,9 +60,7 @@ class Laporan(models.Model):
         help_text="Jika dicentang, identitas pelapor disembunyikan"
     )
 
-    # =========================
-    # 🕒 WAKTU & TEMPAT KEJADIAN
-    # =========================
+
     tanggal_kejadian = models.DateField(
         blank=True,
         null=True,
@@ -96,9 +82,7 @@ class Laporan(models.Model):
         help_text="Lokasi kejadian bullying"
     )
 
-    # =========================
-    # 👤 IDENTITAS KORBAN
-    # =========================
+
     nama_korban = models.CharField(
         max_length=100
     )
@@ -108,9 +92,7 @@ class Laporan(models.Model):
         choices=KELAS_CHOICES
     )
 
-    # =========================
-    # ⚠️ IDENTITAS TERLAPOR
-    # =========================
+  
     nama_terlapor = models.CharField(
         max_length=100,
         blank=True,
@@ -123,9 +105,7 @@ class Laporan(models.Model):
         null=True
     )
 
-    # =========================
-    # 🚨 DETAIL PERUNDUNGAN
-    # =========================
+
     jenis_bullying = models.CharField(
         max_length=20,
         choices=JENIS_BULLYING_CHOICES
@@ -135,9 +115,7 @@ class Laporan(models.Model):
         help_text="Kronologi kejadian bullying"
     )
 
-    # =========================
-    # 💔 DAMPAK YANG DIRASAKAN
-    # =========================
+
     dampak_korban = models.JSONField(
         blank=True,
         null=True,
@@ -150,26 +128,20 @@ class Laporan(models.Model):
         null=True
     )
 
-    # =========================
-    # 🤝 HARAPAN PELAPOR
-    # =========================
+
     harapan_pelapor = models.TextField(
         blank=True,
         null=True
     )
 
-    # =========================
-    # 📎 BUKTI PENDUKUNG
-    # =========================
+
     bukti = CloudinaryField(
         resource_type="auto",
         blank=True,
         null=True
     )
 
-    # =========================
-    # 🧾 TINDAK LANJUT BK
-    # =========================
+  # Status penanganan laporan oleh Guru BK
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -187,17 +159,13 @@ class Laporan(models.Model):
         null=True
     )
 
-    # =========================
-    # ✅ PERNYATAAN
-    # =========================
+
     pernyataan_setuju = models.BooleanField(
         default=False,
         help_text="Pernyataan bahwa laporan dibuat dengan jujur"
     )
 
-    # =========================
-    # 🔑 META DATA
-    # =========================
+
     kode_laporan = models.CharField(
         max_length=12,
         unique=True
@@ -207,12 +175,11 @@ class Laporan(models.Model):
         auto_now_add=True
     )
 
-    # =========================
-    # HELPER
-    # =========================
+ # Menampilkan kode laporan saat objek dipanggil
     def __str__(self):
         return f"Laporan {self.kode_laporan}"
-
+    
+# Fungsi helper untuk menampilkan nama pelapor
     def tampilkan_pelapor(self):
         if self.is_anonymous:
             return "Anonim"

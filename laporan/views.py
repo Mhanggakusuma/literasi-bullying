@@ -14,9 +14,7 @@ from users.decorators import role_required
 
 
 
-# ==================================================
-# GENERATE KODE LAPORAN UNIK
-# ==================================================
+# Fungsi untuk membuat kode laporan acak dan memastikan tidak ada duplikasi di database
 def generate_kode():
     while True:
         kode = ''.join(
@@ -25,19 +23,14 @@ def generate_kode():
         if not Laporan.objects.filter(kode_laporan=kode).exists():
             return kode
 
-
-# ==================================================
-# HOME LAPORAN (SISWA)
-# ==================================================
+# Menampilkan halaman utama menu laporan untuk siswa
 @login_required
 @role_required(['siswa'])
 def laporan_home(request):
     return render(request, "laporan/laporan_home.html")
 
 
-# ==================================================
-# BUAT LAPORAN (SISWA)
-# ==================================================
+# Menangani proses pembuatan laporan bullying oleh siswa
 @login_required
 @role_required(['siswa'])
 def buat_laporan(request):
@@ -78,9 +71,7 @@ def buat_laporan(request):
     )
 
 
-# ==================================================
-# CEK STATUS LAPORAN (SISWA)
-# ==================================================
+# Digunakan siswa untuk mengecek status laporan berdasarkan kode laporan
 @login_required
 @role_required(['siswa'])
 def cek_laporan(request):
@@ -99,9 +90,7 @@ def cek_laporan(request):
     )
 
 
-# ==================================================
-# DASHBOARD GURU BK
-# ==================================================
+# Menampilkan ringkasan, filter, pencarian, dan statistik laporan bullying
 @login_required
 @role_required(['gurubk', 'admin'])
 def bk_dashboard(request):
@@ -158,9 +147,7 @@ def bk_dashboard(request):
     )
 
 
-# ==================================================
-# TINDAK LANJUT GURU BK (STATUS OTOMATIS)
-# ==================================================
+# Guru BK memberikan tindak lanjut dan status laporan berubah otomatis
 @login_required
 @role_required(['gurubk', 'admin'])
 def bk_tindak_lanjut(request, pk):
@@ -198,9 +185,7 @@ def bk_tindak_lanjut(request, pk):
     )
 
 
-# ==================================================
-# DOWNLOAD CSV (GURU BK)
-# ==================================================
+# DOWNLOAD DATA LAPORAN DALAM FORMAT CSV Digunakan oleh Guru BK atau Ad
 @login_required
 @role_required(['gurubk', 'admin'])
 def bk_download_laporan(request):
