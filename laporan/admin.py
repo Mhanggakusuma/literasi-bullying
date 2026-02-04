@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Laporan
 
-
+# Konfigurasi tampilan dan pengelolaan data laporan bullying pada Django Admin
 @admin.register(Laporan)
 class LaporanAdmin(admin.ModelAdmin):
     """
@@ -10,9 +10,6 @@ class LaporanAdmin(admin.ModelAdmin):
     - Admin: tetap bisa memantau & mengoreksi jika diperlukan
     """
 
-    # =========================
-    # TAMPILAN LIST
-    # =========================
     list_display = (
         "kode_laporan",
         "get_pelapor_admin",
@@ -23,9 +20,6 @@ class LaporanAdmin(admin.ModelAdmin):
         "tanggal",
     )
 
-    # =========================
-    # FILTER & SEARCH
-    # =========================
     list_filter = (
         "status",
         "jenis_bullying",
@@ -43,9 +37,7 @@ class LaporanAdmin(admin.ModelAdmin):
         "lokasi_kejadian",
     )
 
-    # =========================
-    # GROUPING FIELD
-    # =========================
+
     fieldsets = (
         ("🔒 Identitas Pelapor (Internal)", {
             "fields": (
@@ -97,17 +89,13 @@ class LaporanAdmin(admin.ModelAdmin):
         }),
     )
 
-    # =========================
-    # READ ONLY FIELD
-    # =========================
+
     readonly_fields = (
         "kode_laporan",
         "tanggal",
     )
 
-    # =========================
-    # HELPER DISPLAY
-    # =========================
+    # Menampilkan nama pelapor pada halaman admin
     @admin.display(description="Pelapor")
     def get_pelapor_admin(self, obj):
         """

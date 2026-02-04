@@ -5,6 +5,7 @@ from django.views import View
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm
 from .models import Profile
+from users.decorators import role_required
 
 # ================= LOGIN =================
 def login_view(request):
@@ -58,6 +59,7 @@ def register_view(request):
 
 # ================= LENGKAPI PROFIL (ISI KELAS) =================
 @login_required
+@role_required(['siswa'])
 def lengkapi_profil(request):
     profile = request.user.profile
 

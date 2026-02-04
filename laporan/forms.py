@@ -4,26 +4,20 @@ from .models import Laporan
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10 MB
 
 
-# ==================================================
-# FORM LAPORAN SISWA
-# ==================================================
+# Form laporan bullying yang digunakan siswa untuk mengisi laporan
 class LaporanForm(forms.ModelForm):
     """
     Form laporan bullying untuk SISWA.
     Identitas pelapor diambil dari akun login.
     """
 
-    # =========================
     # OPSI ANONIM
-    # =========================
     is_anonymous = forms.BooleanField(
         required=False,
         label="Laporkan sebagai anonim"
     )
 
-    # =========================
     # DAMPAK KORBAN (MULTI PILIH)
-    # =========================
     dampak_korban = forms.MultipleChoiceField(
         choices=Laporan.DAMPAK_CHOICES,
         widget=forms.CheckboxSelectMultiple,
@@ -31,9 +25,7 @@ class LaporanForm(forms.ModelForm):
         label="Dampak yang Dirasakan Korban"
     )
 
-    # =========================
     # PERNYATAAN KEJUJURAN
-    # =========================
     pernyataan_setuju = forms.BooleanField(
         required=True,
         label="Saya menyatakan laporan ini dibuat dengan jujur dan bertanggung jawab"
@@ -127,9 +119,7 @@ class LaporanForm(forms.ModelForm):
             }),
         }
 
-    # =========================
-    # VALIDASI BUKTI (AMAN CLOUDINARY)
-    # =========================
+ # Validasi ukuran file bukti upload
     def clean_bukti(self):
         file = self.cleaned_data.get("bukti")
 
@@ -145,9 +135,7 @@ class LaporanForm(forms.ModelForm):
         return file
 
 
-# ==================================================
-# FORM TINDAK LANJUT GURU BK
-# ==================================================
+# Form tindak lanjut laporan yang digunakan Guru BK
 class TindakLanjutForm(forms.ModelForm):
     """
     Guru BK hanya mengisi catatan & bukti.
@@ -172,13 +160,11 @@ class TindakLanjutForm(forms.ModelForm):
             }),
         }
 
-    # =========================
-    # VALIDASI BUKTI BK (AMAN CLOUDINARY)
-    # =========================
+# Validasi ukuran file bukti tindak lanjut BK
     def clean_bukti_tindak_lanjut(self):
         file = self.cleaned_data.get("bukti_tindak_lanjut")
 
-        # Jika file lama Cloudinary
+       
         if file and not hasattr(file, "size"):
             return file
 
