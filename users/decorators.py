@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from django.core.exceptions import PermissionDenied
 
-
+# Decorator untuk membatasi akses view berdasarkan role user
 def role_required(allowed_roles):
     """
     Membatasi akses view berdasarkan role user.

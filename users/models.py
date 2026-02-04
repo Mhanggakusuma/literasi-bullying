@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date
-
+# Model Profile digunakan untuk menyimpan data tambahan pengguna seperti role, kelas, NIS, dan status aktif
 class Profile(models.Model):
     ROLE_CHOICES = [
         ('admin', 'Admin'),
@@ -37,11 +37,13 @@ class Profile(models.Model):
 
     tanggal_masuk = models.DateField(null=True, blank=True)
     tanggal_akhir_aktif = models.DateField(null=True, blank=True)
-
+    
+    # Mengecek apakah user masih aktif
     def is_masih_aktif(self):
         if not self.tanggal_akhir_aktif:
             return True
         return date.today() <= self.tanggal_akhir_aktif
-
+    
+    # Menampilkan nama user dan kelas pada admin
     def __str__(self):
         return f"{self.user.first_name} - {self.kelas or 'Belum isi kelas'}"

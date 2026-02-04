@@ -7,7 +7,7 @@ from .forms import RegisterForm
 from .models import Profile
 from users.decorators import role_required
 
-# ================= LOGIN =================
+# Proses login pengguna dan pengalihan dashboard sesuai role
 def login_view(request):
     if request.method == "POST":
         user = authenticate(
@@ -47,7 +47,7 @@ def login_view(request):
     return render(request, "users/login.html")
 
 
-# ================= REGISTER =================
+# Proses registrasi akun baru
 def register_view(request):
     form = RegisterForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
@@ -57,7 +57,7 @@ def register_view(request):
     return render(request, "users/register.html", {"form": form})
 
 
-# ================= LENGKAPI PROFIL (ISI KELAS) =================
+# Halaman siswa untuk melengkapi profil kelas
 @login_required
 @role_required(['siswa'])
 def lengkapi_profil(request):
@@ -77,14 +77,14 @@ def lengkapi_profil(request):
     })
 
 
-# ================= LOGOUT =================
+# Logout user dan kembali ke halaman login
 class LogoutAllowGet(View):
     def get(self, request):
         logout(request)
         return redirect("login")
 
 
-# ================= LUPA PASSWORD =================
+# Halaman lupa password berdasarkan NIS
 def lupa_password_view(request):
     if request.method == "POST":
         nis = request.POST.get("nis")
@@ -98,7 +98,7 @@ def lupa_password_view(request):
     return render(request, "users/lupa_password.html")
 
 
-# ================= PASSWORD CHANGE DONE =================
+# Mengatur status setelah password berhasil diganti
 def password_change_done_view(request):
     profile = request.user.profile
     profile.force_password_change = False

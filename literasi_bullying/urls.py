@@ -2,6 +2,7 @@
 from django.contrib import admin
 from django.urls import path, include
 
+# Konfigurasi URL utama project untuk menghubungkan semua aplikasi
 urlpatterns = [
     path('admin/', admin.site.urls),
 

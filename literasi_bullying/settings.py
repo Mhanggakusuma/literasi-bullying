@@ -7,19 +7,16 @@ from pathlib import Path
 import os
 import dj_database_url
 
-# =====================================================
-# BASE DIR
-# =====================================================
+# Menentukan direktori utama project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# =====================================================
-# SECURITY
-# =====================================================
+# Pengaturan keamanan project
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-local-only")
 
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
+# Daftar domain yang diizinkan mengakses project
 ALLOWED_HOSTS = [
     "literasi-bullying-production.up.railway.app",
     ".up.railway.app",
@@ -27,17 +24,15 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
 ]
 
+# Daftar domain terpercaya untuk CSRF
 CSRF_TRUSTED_ORIGINS = [
     "https://literasi-bullying-production.up.railway.app",
     "https://*.railway.app",
 ]
 
-
-# =====================================================
-# APPLICATIONS
-# =====================================================
+# Aplikasi yang digunakan dalam project
 INSTALLED_APPS = [
-    "jazzmin",  # ⬅️ HARUS PALING ATAS
+    "jazzmin",  
 
     "django.contrib.admin",
     "django.contrib.auth",
@@ -58,17 +53,13 @@ INSTALLED_APPS = [
 ]
 
 
-# =====================================================
-# AUTH
-# =====================================================
+# Pengaturan login dan logout
 LOGIN_URL = "/users/login/"
 LOGIN_REDIRECT_URL = "/dashboard/home/"
 LOGOUT_REDIRECT_URL = "/users/login/"
 
 
-# =====================================================
-# MIDDLEWARE
-# =====================================================
+# Middleware keamanan dan session
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -82,9 +73,7 @@ MIDDLEWARE = [
 ]
 
 
-# =====================================================
-# URLS & TEMPLATES
-# =====================================================
+# Konfigurasi template
 ROOT_URLCONF = "literasi_bullying.urls"
 
 TEMPLATES = [
@@ -106,9 +95,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "literasi_bullying.wsgi.application"
 
 
-# =====================================================
-# DATABASE
-# =====================================================
+# Konfigurasi database Railway / SQLite fallback
 DATABASES = {
     "default": dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
@@ -117,9 +104,7 @@ DATABASES = {
     )
 }
 
-# =====================================================
-# PASSWORD VALIDATION
-# =====================================================
+# Digunakan untuk meningkatkan keamanan password user
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -128,26 +113,20 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# =====================================================
-# INTERNATIONALIZATION
-# =====================================================
+# Pengaturan bahasa dan zona waktu
 LANGUAGE_CODE = "id"
 TIME_ZONE = "Asia/Jakarta"
 USE_I18N = True
 USE_TZ = True
 
 
-# =====================================================
-# STATIC FILES
-# =====================================================
+# Pengaturan static file
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 
-# =====================================================
-# STORAGE
-# =====================================================
+# Penyimpanan file menggunakan Cloudinary
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
@@ -160,9 +139,7 @@ STORAGES = {
 MEDIA_URL = "/media/"
 
 
-# =====================================================
-# CLOUDINARY
-# =====================================================
+# Konfigurasi Cloudinary
 CLOUDINARY_STORAGE = {
     "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
     "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
@@ -170,9 +147,7 @@ CLOUDINARY_STORAGE = {
 }
 
 
-# =====================================================
-# UPLOAD LIMIT
-# =====================================================
+# Batas ukuran upload file
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
 
@@ -189,9 +164,7 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-# =====================================================
-# JAZZMIN ADMIN CONFIG (🔥 TAMPILAN MODERN)
-# =====================================================
+# Konfigurasi tampilan admin Jazzmin
 JAZZMIN_SETTINGS = {
     "site_title": "Admin Literasi Bullying",
     "site_header": "Sistem Literasi & Anti-Bullying",
