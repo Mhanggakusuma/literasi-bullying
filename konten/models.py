@@ -1,8 +1,7 @@
 from django.db import models
 
-
+# Model untuk menyimpan data artikel literasi
 class Artikel(models.Model):
-    # Model untuk menyimpan data artikel literasi
     judul = models.CharField(max_length=200)
     deskripsi = models.TextField(blank=True)
     konten = models.TextField(help_text="Isi artikel dalam bentuk teks")
@@ -11,9 +10,8 @@ class Artikel(models.Model):
     def __str__(self):
         return self.judul
 
-
+# Model untuk menyimpan video edukasi dari YouTube
 class Video(models.Model):
-    # Model untuk menyimpan video edukasi dari YouTube
     judul = models.CharField(max_length=200)
     youtube_id = models.CharField(max_length=50)
     tanggal_upload = models.DateTimeField(auto_now_add=True)
@@ -21,9 +19,8 @@ class Video(models.Model):
     def __str__(self):
         return self.judul
 
-
+# Model untuk menyimpan data kuis
 class Kuis(models.Model):
-    # Model untuk menyimpan data kuis
     judul = models.CharField(max_length=200)
     deskripsi = models.TextField(blank=True)
 
