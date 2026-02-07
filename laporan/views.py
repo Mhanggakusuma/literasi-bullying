@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from django.db.models.functions import TruncDay, TruncMonth, TruncYear
+from django.db.models.functions import TruncDay, TruncMonth
 
 from .models import Laporan
 from .forms import LaporanForm, TindakLanjutForm
@@ -127,26 +127,43 @@ def bk_dashboard(request):
             tanggal__year=tahun
         )
 
-    # ===== GRAFIK =====
+    # ===== GRAFIK STATUS / JENIS / KELAS =====
     grafik_status = laporan_qs.values("status").annotate(total=Count("id"))
     grafik_jenis = laporan_qs.values("jenis_bullying").annotate(total=Count("id"))
     grafik_kelas = laporan_qs.values("kelas_korban").annotate(total=Count("id"))
 
-    # ===== GRAFIK TREN =====
-    if periode == "hari":
-        grafik_tren = laporan_qs.annotate(
-            waktu=TruncDay("tanggal")
-        ).values("waktu").annotate(total=Count("id")).order_by("waktu")
+    # =================================================
+    # GRAFIK TREN FINAL
+    # =================================================
+    # Periode BULAN → X = tanggal dalam 1 bulan
+    if periode == "bulan" and bulan and tahun:
+        grafik_tren = (
+            laporan_qs
+            .annotate(waktu=TruncDay("tanggal"))
+            .values("waktu")
+            .annotate(total=Count("id"))
+            .order_by("waktu")
+        )
 
-    elif periode == "tahun":
-        grafik_tren = laporan_qs.annotate(
-            waktu=TruncYear("tanggal")
-        ).values("waktu").annotate(total=Count("id")).order_by("waktu")
+    # Periode TAHUN → X = bulan dalam 1 tahun
+    elif periode == "tahun" and tahun:
+        grafik_tren = (
+            laporan_qs
+            .annotate(waktu=TruncMonth("tanggal"))
+            .values("waktu")
+            .annotate(total=Count("id"))
+            .order_by("waktu")
+        )
 
+    # Default → tren semua waktu per bulan
     else:
-        grafik_tren = laporan_qs.annotate(
-            waktu=TruncMonth("tanggal")
-        ).values("waktu").annotate(total=Count("id")).order_by("waktu")
+        grafik_tren = (
+            laporan_qs
+            .annotate(waktu=TruncMonth("tanggal"))
+            .values("waktu")
+            .annotate(total=Count("id"))
+            .order_by("waktu")
+        )
 
     # ===== OPTION TAHUN DINAMIS =====
     daftar_tahun = Laporan.objects.dates("tanggal", "year")
