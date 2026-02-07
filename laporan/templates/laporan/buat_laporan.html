@@ -9,18 +9,17 @@
   <section class="buat-laporan-hero">
     <div class="container">
 
-      <!-- JUDUL SAJA YANG TENGAH -->
+      <!-- ================= HEADER ================= -->
       <div class="text-center">
         <h1 class="hero-title">Formulir Laporan Perundungan</h1>
         <p class="hero-subtitle">
-          Silakan mengisi formulir laporan sesuai dengan kejadian yang dialami atau disaksikan
+          Isi laporan sesuai kejadian yang dialami atau disaksikan
         </p>
       </div>
 
-      <!-- FORM CARD (TIDAK CENTER TEXT) -->
       <div class="form-card mx-auto mt-5">
 
-        <img src="{% static 'img/ribbon.png' %}" class="form-icon" alt="Icon">
+        <img src="{% static 'img/ribbon.png' %}" class="form-icon">
         <h3 class="form-title">Laporan Perundungan Siswa</h3>
 
         <form method="post" enctype="multipart/form-data">
@@ -30,7 +29,7 @@
           <div class="form-section">
             <h5 class="section-title">Identitas Pelapor</h5>
             <p class="section-desc">
-              Informasi ini bersifat rahasia dan hanya dapat diakses oleh pihak berwenang
+              Informasi pelapor bersifat rahasia
             </p>
 
             <div class="mb-3">
@@ -41,12 +40,14 @@
 
             <div class="mb-3">
               <label class="form-label">NIS</label>
-              <input type="text" class="form-control" value="{{ profile.nis }}" readonly>
+              <input type="text" class="form-control"
+                     value="{{ profile.nis }}" readonly>
             </div>
 
             <div class="mb-3">
               <label class="form-label">Kelas</label>
-              <input type="text" class="form-control" value="{{ profile.kelas }}" readonly>
+              <input type="text" class="form-control"
+                     value="{{ profile.kelas }}" readonly>
             </div>
 
             <div class="form-check">
@@ -70,29 +71,33 @@
               <label class="form-label">Kelas Korban</label>
               {{ form.kelas_korban }}
             </div>
+
+            <!-- ⭐ ANONIM KORBAN -->
+            <div class="form-check">
+              {{ form.is_korban_anonim }}
+              <label class="form-check-label">
+                Sembunyikan identitas korban pada tampilan umum
+              </label>
+            </div>
           </div>
 
           <!-- ================= IDENTITAS TERLAPOR ================= -->
-            <div class="form-section">
-              <h5 class="section-title">
-                Identitas Terlapor <span class="required">*</span>
-              </h5>
-              <p class="section-desc">
-                Isi identitas pihak yang diduga melakukan perundungan
-              </p>
-              <div class="mb-3">
-                <label class="form-label">
-                  Nama Terlapor <span class="required">*</span>
-                </label>
-                {{ form.nama_terlapor }}
-              </div>
-              <div class="mb-3">
-                <label class="form-label">
-                  Kelas Terlapor <span class="required">*</span>
-                </label>
-                {{ form.kelas_terlapor }}
-              </div>
+          <div class="form-section">
+            <h5 class="section-title">
+              Identitas Terlapor
+            </h5>
+
+            <div class="mb-3">
+              <label class="form-label">Nama Terlapor</label>
+              {{ form.nama_terlapor }}
             </div>
+
+            <div class="mb-3">
+              <label class="form-label">Kelas Terlapor</label>
+              {{ form.kelas_terlapor }}
+            </div>
+          </div>
+
           <!-- ================= JENIS ================= -->
           <div class="form-section">
             <h5 class="section-title">Jenis Perundungan</h5>
@@ -122,7 +127,7 @@
           <!-- ================= KRONOLOGI ================= -->
           <div class="form-section">
             <h5 class="section-title">
-              Kronologi Kejadian <span class="required">*</span>
+              Kronologi Kejadian *
             </h5>
             {{ form.isi_laporan }}
           </div>
@@ -152,23 +157,23 @@
 
           <!-- ================= PERNYATAAN ================= -->
           <div class="form-section">
-            <h5 class="section-title">Pernyataan Kebenaran Laporan</h5>
+            <h5 class="section-title">Pernyataan Kebenaran</h5>
 
             <div class="form-check">
               {{ form.pernyataan_setuju }}
               <label class="form-check-label">
-                Saya menyatakan bahwa seluruh informasi dalam laporan ini
-                adalah benar dan dapat dipertanggungjawabkan.
+                Saya menyatakan laporan ini benar dan dapat dipertanggungjawabkan
               </label>
             </div>
           </div>
 
+          <!-- ================= SUBMIT ================= -->
           <button type="submit" class="btn btn-submit w-100">
             Kirim Laporan
           </button>
 
           <a href="{% url 'laporan_home' %}" class="btn btn-kembali w-100 mt-3">
-            Kembali ke Halaman Laporan
+            Kembali
           </a>
 
         </form>

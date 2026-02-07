@@ -13,7 +13,7 @@
       </p>
 
       <div class="bk-tl-card mx-auto mt-5">
-        <img src="{% static 'img/ribbon.png' %}" class="bk-tl-icon" alt="Icon">
+        <img src="{% static 'img/ribbon.png' %}" class="bk-tl-icon">
 
         <div class="bk-tl-info text-start">
 
@@ -21,7 +21,7 @@
           <p><strong>Kode Laporan :</strong> {{ laporan.kode_laporan }}</p>
 
           <p>
-            <strong>Status Saat Ini :</strong>
+            <strong>Status :</strong>
             <span class="badge
               {% if laporan.status == 'selesai' %}bg-success
               {% elif laporan.status == 'diproses' %}bg-warning
@@ -47,18 +47,20 @@
           </p>
 
           <p>
-            <strong>Lokasi Kejadian :</strong>
+            <strong>Lokasi :</strong>
             {{ laporan.lokasi_kejadian|default:"-" }}
           </p>
 
           <hr>
 
-          <!-- ================= KORBAN & TERLAPOR ================= -->
+          <!-- ================= KORBAN ================= -->
           <p>
             <strong>Korban :</strong>
-            {{ laporan.nama_korban }} ({{ laporan.kelas_korban }})
+            {{ laporan.tampilkan_korban(request.user) }}
+            ({{ laporan.kelas_korban }})
           </p>
 
+          <!-- ================= TERLAPOR ================= -->
           {% if laporan.nama_terlapor %}
           <p>
             <strong>Terlapor :</strong>
@@ -70,7 +72,7 @@
           {% endif %}
 
           <p>
-            <strong>Jenis Perundungan :</strong>
+            <strong>Jenis :</strong>
             {{ laporan.get_jenis_bullying_display }}
           </p>
 
@@ -78,14 +80,14 @@
 
           <!-- ================= KRONOLOGI ================= -->
           <p>
-            <strong>Kronologi Kejadian :</strong><br>
+            <strong>Kronologi :</strong><br>
             {{ laporan.isi_laporan|linebreaksbr }}
           </p>
 
           <!-- ================= DAMPAK ================= -->
           {% if laporan.dampak_korban %}
           <hr>
-          <p><strong>Dampak yang Dirasakan :</strong></p>
+          <p><strong>Dampak :</strong></p>
           <ul>
             {% for d in laporan.dampak_korban %}
               <li>{{ d }}</li>
@@ -109,7 +111,7 @@
           </p>
           {% endif %}
 
-          <!-- ================= BUKTI PELAPOR ================= -->
+          <!-- ================= BUKTI ================= -->
           {% if laporan.bukti %}
           <a href="{{ laporan.bukti.url }}"
              target="_blank"
@@ -118,14 +120,15 @@
           </a>
           {% endif %}
 
-          <!-- ================= IDENTITAS INTERNAL ================= -->
+          <!-- ================= IDENTITAS INTERNAL BK ================= -->
           <hr>
           <details class="mt-4">
             <summary style="cursor:pointer; font-weight:700;">
-              🔐 Lihat Identitas Pelapor (Internal)
+              🔐 Identitas Pelapor (Internal BK)
             </summary>
 
             <div class="mt-3">
+
               <p>
                 <strong>Nama :</strong>
                 {{ laporan.pelapor.get_full_name|default:laporan.pelapor.username }}
@@ -141,13 +144,14 @@
                 {{ laporan.pelapor.profile.kelas }}
               </p>
 
-              <small class="text-muted d-block mt-2">
-                Informasi ini bersifat rahasia dan hanya untuk keperluan internal.
+              <small class="text-muted">
+                Data ini hanya untuk keperluan penanganan kasus.
               </small>
+
             </div>
           </details>
 
-          <!-- ================= FORM TINDAK LANJUT ================= -->
+          <!-- ================= FORM BK ================= -->
           <hr>
           <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -156,18 +160,13 @@
             {{ form.catatan_bk }}
 
             <label class="bk-tl-label mt-3">
-              Bukti Tindak Lanjut (Opsional)
+              Bukti Tindak Lanjut
             </label>
             {{ form.bukti_tindak_lanjut }}
 
-            <small class="text-muted">
-              File bebas (PDF, gambar, audio, video). Maksimal 10 MB.
-            </small>
-
-            <!-- ====== ACTION BUTTONS ====== -->
             <button type="submit"
                     class="bk-tl-btn-primary w-100 mt-4">
-              💾 Simpan Tindak Lanjut
+              Simpan Tindak Lanjut
             </button>
 
             {% if laporan.status != "selesai" %}
@@ -175,14 +174,15 @@
                     name="selesai"
                     value="1"
                     class="btn btn-success w-100 mt-2">
-              ✅ Tandai Kasus Selesai
+              Tandai Selesai
             </button>
             {% endif %}
+
           </form>
 
           <a href="{% url 'bk_dashboard' %}"
              class="btn btn-outline-secondary w-100 mt-3">
-            ← Kembali ke Dashboard
+            ← Kembali
           </a>
 
         </div>

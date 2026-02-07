@@ -1,0 +1,133 @@
+{% extends "admin/change_list.html" %}
+
+{% block content %}
+
+<div style="margin-bottom: 25px;">
+    <h2>📊 Dashboard Analitik Bullying</h2>
+</div>
+
+<!-- ================= SUMMARY ================= -->
+<div style="display:flex; gap:20px; margin-bottom:20px;">
+
+    <div style="background:#f8f9fa; padding:15px; border-radius:8px;">
+        <strong>Total Laporan</strong><br>
+        <span style="font-size:22px;">{{ total_laporan }}</span>
+    </div>
+
+    <div style="background:#ffeeba; padding:15px; border-radius:8px;">
+        <strong>Laporan Baru</strong><br>
+        <span style="font-size:22px;">{{ laporan_baru }}</span>
+    </div>
+
+    <div style="background:#cce5ff; padding:15px; border-radius:8px;">
+        <strong>Diproses</strong><br>
+        <span style="font-size:22px;">{{ laporan_diproses }}</span>
+    </div>
+
+    <div style="background:#d4edda; padding:15px; border-radius:8px;">
+        <strong>Selesai</strong><br>
+        <span style="font-size:22px;">{{ laporan_selesai }}</span>
+    </div>
+
+</div>
+
+<hr>
+
+<!-- ================= FILTER ================= -->
+<form method="get" style="margin-bottom:20px; display:flex; gap:15px;">
+
+    <select name="jenis">
+        <option value="">Semua Jenis</option>
+        {% for val,label in jenis_choices %}
+        <option value="{{ val }}">{{ label }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="kelas">
+        <option value="">Semua Kelas</option>
+        {% for val,label in kelas_choices %}
+        <option value="{{ val }}">{{ label }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="periode">
+        <option value="hari">Per Hari</option>
+        <option value="bulan" selected>Per Bulan</option>
+        <option value="tahun">Per Tahun</option>
+    </select>
+
+    <button type="submit">Filter</button>
+
+</form>
+
+<hr>
+
+<!-- ================= CHART ================= -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:30px;">
+
+    <canvas id="statusChart"></canvas>
+    <canvas id="jenisChart"></canvas>
+    <canvas id="kelasChart"></canvas>
+    <canvas id="trenChart"></canvas>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- STATUS -->
+<script>
+new Chart(document.getElementById("statusChart"), {
+    type: 'pie',
+    data: {
+        labels: [{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
+        datasets: [{
+            data: [{% for i in grafik_status %}{{ i.total }},{% endfor %}]
+        }]
+    }
+});
+</script>
+
+<!-- JENIS -->
+<script>
+new Chart(document.getElementById("jenisChart"), {
+    type: 'bar',
+    data: {
+        labels: [{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
+        datasets: [{
+            data: [{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
+        }]
+    }
+});
+</script>
+
+<!-- KELAS -->
+<script>
+new Chart(document.getElementById("kelasChart"), {
+    type: 'bar',
+    data: {
+        labels: [{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
+        datasets: [{
+            data: [{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
+        }]
+    }
+});
+</script>
+
+<!-- TREN -->
+<script>
+new Chart(document.getElementById("trenChart"), {
+    type: 'line',
+    data: {
+        labels: [{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
+        datasets: [{
+            data: [{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
+        }]
+    }
+});
+</script>
+
+<hr>
+
+{{ block.super }}
+
+{% endblock %}

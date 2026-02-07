@@ -12,7 +12,7 @@
       <div>
         <span class="bk-badge">Akses Khusus Guru BK</span>
         <h1>Dashboard Guru BK</h1>
-        <p>Kelola dan pantau laporan bullying dari siswa</p>
+        <p>Monitoring dan analisis kasus bullying</p>
       </div>
 
       <a href="{% url 'bk_download_laporan' %}" class="btn-download">
@@ -24,164 +24,164 @@
     <section class="dashboard-cards">
 
       <div class="summary-card">
-        <div class="summary-header">
-          <span class="icon bg-blue"><i class="bi bi-file-earmark-text"></i></span>
-          <p>Total Laporan</p>
-        </div>
+        <p>Total Laporan</p>
         <h2>{{ total_laporan }}</h2>
       </div>
 
       <div class="summary-card">
-        <div class="summary-header">
-          <span class="icon bg-orange"><i class="bi bi-patch-plus"></i></span>
-          <p>Laporan Baru</p>
-        </div>
+        <p>Laporan Baru</p>
         <h2>{{ laporan_baru }}</h2>
       </div>
 
       <div class="summary-card">
-        <div class="summary-header">
-          <span class="icon bg-purple"><i class="bi bi-hourglass-split"></i></span>
-          <p>Sedang Diproses</p>
-        </div>
+        <p>Diproses</p>
         <h2>{{ sedang_diproses }}</h2>
       </div>
 
       <div class="summary-card">
-        <div class="summary-header">
-          <span class="icon bg-green"><i class="bi bi-check-circle"></i></span>
-          <p>Selesai Ditangani</p>
-        </div>
+        <p>Selesai</p>
         <h2>{{ selesai }}</h2>
       </div>
 
     </section>
 
-    <!-- ================= MAIN ================= -->
-    <main class="dashboard-content">
+    <!-- ================= FILTER GRAFIK ================= -->
+    <form method="get" class="filter-bar">
 
-      <!-- ================= LEFT ================= -->
-      <section class="dashboard-left">
+      <select name="jenis">
+        <option value="">Semua Jenis</option>
+        {% for val,label in jenis_choices %}
+        <option value="{{ val }}">{{ label }}</option>
+        {% endfor %}
+      </select>
 
-        <!-- SEARCH -->
-        <form method="get" class="search-box">
-          <input type="hidden" name="status" value="{{ status_filter }}">
-          <input
-            type="text"
-            name="q"
-            placeholder="Cari kode laporan..."
-            value="{{ query|default:'' }}"
-          >
-          <button type="submit">
-            <i class="bi bi-search"></i>
-          </button>
-        </form>
+      <select name="kelas">
+        <option value="">Semua Kelas</option>
+        {% for val,label in kelas_choices %}
+        <option value="{{ val }}">{{ label }}</option>
+        {% endfor %}
+      </select>
 
-        <!-- FILTER -->
-        <div class="filter-bar">
-          <a href="?status=all"
-             class="filter-btn {% if status_filter == 'all' %}active{% endif %}">
-            Semua
-          </a>
-          <a href="?status=baru"
-             class="filter-btn {% if status_filter == 'baru' %}active{% endif %}">
-            Baru
-          </a>
-          <a href="?status=diproses"
-             class="filter-btn {% if status_filter == 'diproses' %}active{% endif %}">
-            Diproses
-          </a>
-          <a href="?status=selesai"
-             class="filter-btn {% if status_filter == 'selesai' %}active{% endif %}">
-            Selesai
-          </a>
+      <select name="status">
+        <option value="">Semua Status</option>
+        <option value="baru">Baru</option>
+        <option value="diproses">Diproses</option>
+        <option value="selesai">Selesai</option>
+      </select>
+
+      <select name="periode">
+        <option value="hari">Per Hari</option>
+        <option value="bulan" selected>Per Bulan</option>
+        <option value="tahun">Per Tahun</option>
+      </select>
+
+      <button type="submit" class="btn btn-primary">
+        Filter Grafik
+      </button>
+
+    </form>
+
+    <!-- ================= GRAFIK ================= -->
+    <div class="chart-container">
+
+      <canvas id="statusChart"></canvas>
+      <canvas id="jenisChart"></canvas>
+      <canvas id="kelasChart"></canvas>
+      <canvas id="trenChart"></canvas>
+
+    </div>
+
+    <!-- ================= LIST LAPORAN ================= -->
+    <div class="laporan-card mt-5">
+      <h3>Daftar Laporan</h3>
+
+      {% for lap in laporan %}
+      <div class="laporan-item">
+
+        <div class="laporan-top d-flex justify-content-between">
+          <strong>{{ lap.kode_laporan }}</strong>
+
+          <span class="status {{ lap.status }}">
+            {{ lap.get_status_display }}
+          </span>
         </div>
 
-        <!-- ================= LIST LAPORAN ================= -->
-        <div class="laporan-card">
-          <h3>Daftar Laporan</h3>
+        <p class="laporan-meta">
+          <strong>Pelapor:</strong>
+          {{ lap.tampilkan_pelapor(request.user) }}
 
-          {% for lap in laporan %}
-          <div class="laporan-item">
+          • {{ lap.get_jenis_bullying_display }}
+          • {{ lap.tanggal|date:"d M Y" }}
+        </p>
 
-            <div class="laporan-top d-flex justify-content-between align-items-center">
-              <strong>{{ lap.kode_laporan }}</strong>
+        <p class="laporan-meta">
+          <strong>Korban:</strong>
+          {{ lap.tampilkan_korban(request.user) }}
+          ({{ lap.kelas_korban }})
+        </p>
 
-              <span class="status
-                {% if lap.status == 'selesai' %}
-                  selesai
-                {% elif lap.status == 'diproses' %}
-                  proses
-                {% else %}
-                  baru
-                {% endif %}
-              ">
-                {{ lap.get_status_display }}
-              </span>
-            </div>
+        <a href="{% url 'bk_tindak_lanjut' lap.id %}" class="btn-detail">
+          Lihat Detail
+        </a>
 
-            <!-- ANONIM DI LIST -->
-            <p class="laporan-meta">
-              <strong>Pelapor:</strong> Anonim 🔒
-              • {{ lap.get_jenis_bullying_display }}
-              • {{ lap.tanggal|date:"d M Y" }}
-            </p>
-
-            <!-- INFO TAMBAHAN -->
-            <p class="laporan-meta">
-              <strong>Kejadian:</strong>
-              {{ lap.tanggal_kejadian|date:"d M Y" }}
-              ({{ lap.get_perkiraan_waktu_display }})
-              • <strong>Lokasi:</strong> {{ lap.lokasi_kejadian }}
-            </p>
-
-            <a href="{% url 'bk_tindak_lanjut' lap.id %}" class="btn-detail">
-              <i class="bi bi-eye"></i> Lihat Detail
-            </a>
-
-          </div>
-          {% empty %}
-          <p class="empty">Tidak ada laporan</p>
-          {% endfor %}
-        </div>
-
-      </section>
-
-      <!-- ================= RIGHT ================= -->
-      <aside class="dashboard-right">
-
-        <!-- STATISTIK KELAS -->
-        <div class="side-card">
-          <h4><i class="bi bi-bar-chart"></i> Statistik Kelas Korban</h4>
-          {% for k in statistik_kelas %}
-          <div class="stat-row">
-            <span>{{ k.kelas_korban }}</span>
-            <span>{{ k.total }}</span>
-          </div>
-          {% empty %}
-          <p class="text-muted small">Belum ada data</p>
-          {% endfor %}
-        </div>
-
-        <!-- AKTIVITAS -->
-        <div class="side-card">
-          <h4><i class="bi bi-clock-history"></i> Aktivitas Terkini</h4>
-          <ul class="activity-list">
-            {% for a in aktivitas_terkini %}
-            <li>
-              <strong>{{ a.kode_laporan }}</strong><br>
-              <small>{{ a.tanggal|timesince }} lalu</small>
-            </li>
-            {% empty %}
-            <li class="text-muted">Belum ada aktivitas</li>
-            {% endfor %}
-          </ul>
-        </div>
-
-      </aside>
-
-    </main>
+      </div>
+      {% empty %}
+      <p>Tidak ada laporan</p>
+      {% endfor %}
+    </div>
 
   </div>
 </div>
+
+<!-- ================= CHART JS ================= -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+new Chart(document.getElementById("statusChart"), {
+  type: 'pie',
+  data: {
+    labels: [{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
+    datasets: [{
+      data: [{% for i in grafik_status %}{{ i.total }},{% endfor %}]
+    }]
+  }
+});
+</script>
+
+<script>
+new Chart(document.getElementById("jenisChart"), {
+  type: 'bar',
+  data: {
+    labels: [{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
+    datasets: [{
+      data: [{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
+    }]
+  }
+});
+</script>
+
+<script>
+new Chart(document.getElementById("kelasChart"), {
+  type: 'bar',
+  data: {
+    labels: [{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
+    datasets: [{
+      data: [{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
+    }]
+  }
+});
+</script>
+
+<script>
+new Chart(document.getElementById("trenChart"), {
+  type: 'line',
+  data: {
+    labels: [{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
+    datasets: [{
+      data: [{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
+    }]
+  }
+});
+</script>
+
 {% endblock %}
