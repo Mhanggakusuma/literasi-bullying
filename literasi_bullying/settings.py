@@ -172,37 +172,14 @@ JAZZMIN_SETTINGS = {
     "welcome_sign": "Selamat Datang Admin",
     "copyright": "© 2026 Literasi Bullying",
 
-    # =====================================
-    # SEARCH MODEL
-    # =====================================
     "search_model": ["auth.User", "laporan.Laporan"],
 
-    # =====================================
-    # TOP MENU
-    # =====================================
     "topmenu_links": [
         {"name": "Dashboard", "url": "/dashboard/home/", "permissions": ["auth.view_user"]},
         {"model": "auth.User"},
         {"app": "laporan"},
     ],
 
-    # =====================================
-    # CUSTOM LINK SIDEBAR LAPORAN
-    # =====================================
-    "custom_links": {
-        "laporan": [
-            {
-                "name": "Dashboard Analitik BK",
-                "url": "/laporan/bk/dashboard/",
-                "icon": "fas fa-chart-bar",
-                "permissions": ["auth.view_user"],
-            }
-        ]
-    },
-
-    # =====================================
-    # ICON MENU
-    # =====================================
     "icons": {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
@@ -218,8 +195,5 @@ JAZZMIN_SETTINGS = {
         "users.profile": "fas fa-id-badge",
     },
 
-    # =====================================
-    # THEME
-    # =====================================
-    "theme": "darkly",
+    "theme": "darkly",  # 🔥 DARK MODE
 }

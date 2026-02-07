@@ -1,20 +1,17 @@
 from django.contrib import admin
-from django.urls import reverse
-from django.utils.html import format_html
+from django.urls import path
+from django.shortcuts import render
+from django.db.models import Count
+from django.db.models.functions import TruncMonth
+
 from .models import Laporan
 
 
 @admin.register(Laporan)
 class LaporanAdmin(admin.ModelAdmin):
 
-    # =================================================
-    # TEMPLATE CUSTOM UNTUK TOMBOL DASHBOARD
-    # =================================================
     change_list_template = "admin/laporan/change_list.html"
 
-    # =================================================
-    # TAMPILAN LIST DATA ADMIN
-    # =================================================
     list_display = (
         "kode_laporan",
         "get_pelapor_admin",
@@ -23,7 +20,6 @@ class LaporanAdmin(admin.ModelAdmin):
         "jenis_bullying",
         "status",
         "tanggal",
-        "dashboard_button",   # ⭐ Tombol Dashboard
     )
 
     list_filter = (
@@ -36,92 +32,52 @@ class LaporanAdmin(admin.ModelAdmin):
     search_fields = (
         "kode_laporan",
         "pelapor__username",
-        "pelapor__first_name",
-        "pelapor__last_name",
         "nama_korban",
-        "nama_terlapor",
-        "lokasi_kejadian",
     )
 
-    readonly_fields = (
-        "kode_laporan",
-        "tanggal",
-    )
+    readonly_fields = ("kode_laporan", "tanggal")
 
     # =================================================
-    # FIELDSET TAMPILAN ADMIN
+    # TAMBAH URL ADMIN DASHBOARD
     # =================================================
-    fieldsets = (
-        ("🔒 Identitas Pelapor (Internal)", {
-            "fields": (
-                "pelapor",
-                "is_anonymous",
-            )
-        }),
+    def get_urls(self):
+        urls = super().get_urls()
 
-        ("🕒 Waktu & Tempat Kejadian", {
-            "fields": (
-                "tanggal_kejadian",
-                "perkiraan_waktu",
-                "lokasi_kejadian",
-            )
-        }),
+        custom_urls = [
+            path(
+                "dashboard/",
+                self.admin_site.admin_view(self.dashboard_view),
+                name="laporan_dashboard",
+            ),
+        ]
 
-        ("👤 Korban & Terlapor", {
-            "fields": (
-                "nama_korban",
-                "kelas_korban",
-                "nama_terlapor",
-                "kelas_terlapor",
-            )
-        }),
-
-        ("🚨 Detail Perundungan", {
-            "fields": (
-                "jenis_bullying",
-                "isi_laporan",
-                "bukti",
-            )
-        }),
-
-        ("💔 Dampak & Harapan", {
-            "fields": (
-                "dampak_korban",
-                "dampak_lainnya",
-                "harapan_pelapor",
-            )
-        }),
-
-        ("🧾 Tindak Lanjut Guru BK", {
-            "fields": (
-                "status",
-                "catatan_bk",
-                "bukti_tindak_lanjut",
-            )
-        }),
-
-        ("🔑 Meta Data", {
-            "fields": (
-                "kode_laporan",
-                "tanggal",
-            )
-        }),
-    )
+        return custom_urls + urls
 
     # =================================================
-    # TAMPILKAN NAMA PELAPOR
+    # VIEW DASHBOARD ADMIN
     # =================================================
+    def dashboard_view(self, request):
+
+        laporan = Laporan.objects.all()
+
+        jenis = laporan.values("jenis_bullying").annotate(total=Count("id"))
+        kelas = laporan.values("kelas_korban").annotate(total=Count("id"))
+        status = laporan.values("status").annotate(total=Count("id"))
+
+        waktu = laporan.annotate(
+            bulan=TruncMonth("tanggal")
+        ).values("bulan").annotate(total=Count("id")).order_by("bulan")
+
+        context = dict(
+            self.admin_site.each_context(request),
+            jenis=list(jenis),
+            kelas=list(kelas),
+            status=list(status),
+            waktu=list(waktu),
+        )
+
+        return render(request, "admin/laporan/dashboard.html", context)
+
     @admin.display(description="Pelapor")
     def get_pelapor_admin(self, obj):
         return obj.pelapor.get_full_name() or obj.pelapor.username
-
-    # =================================================
-    # TOMBOL DASHBOARD BK
-    # =================================================
-    @admin.display(description="Dashboard")
-    def dashboard_button(self, obj=None):
-        url = reverse("bk_dashboard")
-        return format_html(
-            '<a class="button" href="{}" target="_blank">📊 Dashboard BK</a>',
-            url
-        )
