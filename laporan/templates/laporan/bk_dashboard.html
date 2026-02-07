@@ -6,6 +6,7 @@
 <div class="bk-dashboard-page">
 <div class="bk-dashboard">
 
+<!-- ================= HEADER ================= -->
 <header class="dashboard-header">
   <div>
     <span class="bk-badge">Akses Khusus Guru BK</span>
@@ -15,6 +16,8 @@
   <a href="{% url 'bk_download_laporan' %}" class="btn-download">Download Laporan</a>
 </header>
 
+
+<!-- ================= SUMMARY ================= -->
 <section class="dashboard-cards">
   <div class="summary-card">
     <p>Total Laporan</p>
@@ -35,6 +38,7 @@
 </section>
 
 
+<!-- ================= FILTER ================= -->
 <form method="get" class="filter-bar">
 
 <select name="jenis">
@@ -94,6 +98,7 @@
 </form>
 
 
+<!-- ================= CHART ================= -->
 <div class="chart-container">
 
 <div class="chart-card">
@@ -118,10 +123,49 @@
 
 </div>
 
+
+<!-- ================= LIST LAPORAN ================= -->
+<div class="laporan-card mt-5">
+  <h3>Daftar Laporan</h3>
+
+  {% for lap in laporan %}
+  <div class="laporan-item">
+
+    <div class="laporan-top d-flex justify-content-between">
+      <strong>{{ lap.kode_laporan }}</strong>
+      <span class="status {{ lap.status }}">
+        {{ lap.get_status_display }}
+      </span>
+    </div>
+
+    <p class="laporan-meta">
+      <strong>Pelapor:</strong>
+      {{ lap.tampilkan_pelapor }}
+      • {{ lap.get_jenis_bullying_display }}
+      • {{ lap.tanggal|date:"d M Y" }}
+    </p>
+
+    <p class="laporan-meta">
+      <strong>Korban:</strong>
+      {{ lap.tampilkan_korban }} ({{ lap.kelas_korban }})
+    </p>
+
+    <a href="{% url 'bk_tindak_lanjut' lap.id %}" class="btn-detail">
+      Lihat Detail
+    </a>
+
+  </div>
+
+  {% empty %}
+    <p>Tidak ada laporan</p>
+  {% endfor %}
+</div>
+
 </div>
 </div>
 
 
+<!-- ================= CHART JS ================= -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
@@ -211,6 +255,7 @@ options:sharedOptions
 </script>
 
 
+<!-- ================= FILTER DINAMIS ================= -->
 <script>
 const periode = document.getElementById("periodeSelect");
 const tanggal = document.getElementById("filterTanggal");
