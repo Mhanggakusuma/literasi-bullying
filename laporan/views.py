@@ -49,7 +49,6 @@ def buat_laporan(request):
             laporan.pelapor = request.user
             laporan.kode_laporan = generate_kode()
 
-            # Simpan dampak JSON
             laporan.dampak_korban = form.cleaned_data.get("dampak_korban")
 
             laporan.save()
@@ -119,7 +118,7 @@ def bk_dashboard(request):
     # ================= GRAFIK KELAS =================
     grafik_kelas = laporan_qs.values("kelas_korban").annotate(total=Count("id"))
 
-    # ================= GRAFIK TREN WAKTU =================
+    # ================= GRAFIK TREN =================
     if periode == "hari":
         grafik_tren = laporan_qs.annotate(
             waktu=TruncDay("tanggal")
@@ -136,24 +135,26 @@ def bk_dashboard(request):
         ).values("waktu").annotate(total=Count("id")).order_by("waktu")
 
     context = {
-
-        # ================= DATA LIST =================
+        # DATA LIST
         "laporan": laporan_qs.order_by("-tanggal"),
 
-        # ================= SUMMARY =================
+        # SUMMARY
         "total_laporan": laporan_qs.count(),
         "laporan_baru": laporan_qs.filter(status="baru").count(),
         "sedang_diproses": laporan_qs.filter(status="diproses").count(),
         "selesai": laporan_qs.filter(status="selesai").count(),
 
-        # ================= GRAFIK =================
+        # GRAFIK
         "grafik_status": list(grafik_status),
         "grafik_jenis": list(grafik_jenis),
         "grafik_kelas": list(grafik_kelas),
         "grafik_tren": list(grafik_tren),
 
-        # ================= FILTER OPTION =================
+        # FILTER OPTION
         "periode": periode,
+        "selected_jenis": jenis_filter,
+        "selected_kelas": kelas_filter,
+        "selected_status": status_filter,
         "jenis_choices": Laporan.JENIS_BULLYING_CHOICES,
         "kelas_choices": Laporan.KELAS_CHOICES,
     }
@@ -171,11 +172,9 @@ def bk_tindak_lanjut(request, pk):
     laporan = get_object_or_404(Laporan, pk=pk)
 
     if request.method == "POST":
-
         form = TindakLanjutForm(request.POST, request.FILES, instance=laporan)
 
         if form.is_valid():
-
             laporan = form.save(commit=False)
 
             if "selesai" in request.POST:
@@ -218,11 +217,10 @@ def bk_download_laporan(request):
     ])
 
     for lap in Laporan.objects.all().order_by("-tanggal"):
-
         writer.writerow([
             lap.kode_laporan,
-            lap.tampilkan_pelapor(request.user),
-            lap.tampilkan_korban(request.user),
+            lap.tampilkan_pelapor,
+            lap.tampilkan_korban,
             lap.kelas_korban,
             lap.get_jenis_bullying_display(),
             lap.get_status_display(),

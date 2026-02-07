@@ -45,34 +45,40 @@
 
     </section>
 
-    <!-- ================= FILTER GRAFIK ================= -->
+    <!-- ================= FILTER ================= -->
     <form method="get" class="filter-bar">
 
       <select name="jenis">
         <option value="">Semua Jenis</option>
         {% for val,label in jenis_choices %}
-        <option value="{{ val }}">{{ label }}</option>
+        <option value="{{ val }}"
+          {% if val == selected_jenis %}selected{% endif %}>
+          {{ label }}
+        </option>
         {% endfor %}
       </select>
 
       <select name="kelas">
         <option value="">Semua Kelas</option>
         {% for val,label in kelas_choices %}
-        <option value="{{ val }}">{{ label }}</option>
+        <option value="{{ val }}"
+          {% if val == selected_kelas %}selected{% endif %}>
+          {{ label }}
+        </option>
         {% endfor %}
       </select>
 
       <select name="status">
         <option value="">Semua Status</option>
-        <option value="baru">Baru</option>
-        <option value="diproses">Diproses</option>
-        <option value="selesai">Selesai</option>
+        <option value="baru" {% if selected_status == "baru" %}selected{% endif %}>Baru</option>
+        <option value="diproses" {% if selected_status == "diproses" %}selected{% endif %}>Diproses</option>
+        <option value="selesai" {% if selected_status == "selesai" %}selected{% endif %}>Selesai</option>
       </select>
 
       <select name="periode">
-        <option value="hari">Per Hari</option>
-        <option value="bulan" selected>Per Bulan</option>
-        <option value="tahun">Per Tahun</option>
+        <option value="hari" {% if periode == "hari" %}selected{% endif %}>Per Hari</option>
+        <option value="bulan" {% if periode == "bulan" %}selected{% endif %}>Per Bulan</option>
+        <option value="tahun" {% if periode == "tahun" %}selected{% endif %}>Per Tahun</option>
       </select>
 
       <button type="submit" class="btn btn-primary">
@@ -83,12 +89,10 @@
 
     <!-- ================= GRAFIK ================= -->
     <div class="chart-container">
-
       <canvas id="statusChart"></canvas>
       <canvas id="jenisChart"></canvas>
       <canvas id="kelasChart"></canvas>
       <canvas id="trenChart"></canvas>
-
     </div>
 
     <!-- ================= LIST LAPORAN ================= -->
@@ -108,7 +112,7 @@
 
         <p class="laporan-meta">
           <strong>Pelapor:</strong>
-          {{ lap.tampilkan_pelapor(request.user) }}
+          {{ lap.tampilkan_pelapor }}
 
           • {{ lap.get_jenis_bullying_display }}
           • {{ lap.tanggal|date:"d M Y" }}
@@ -116,7 +120,7 @@
 
         <p class="laporan-meta">
           <strong>Korban:</strong>
-          {{ lap.tampilkan_korban(request.user) }}
+          {{ lap.tampilkan_korban }}
           ({{ lap.kelas_korban }})
         </p>
 
