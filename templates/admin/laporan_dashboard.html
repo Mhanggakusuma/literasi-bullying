@@ -4,52 +4,62 @@
 
 <h2>Dashboard Analitik Bullying</h2>
 
-<!-- FILTER -->
 <form method="get" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
 
 <select name="jenis">
 <option value="">Semua Jenis</option>
 {% for val,label in jenis_choices %}
-<option value="{{ val }}">{{ label }}</option>
+<option value="{{ val }}" {% if request.GET.jenis == val %}selected{% endif %}>
+{{ label }}
+</option>
 {% endfor %}
 </select>
 
 <select name="kelas">
 <option value="">Semua Kelas</option>
 {% for val,label in kelas_choices %}
-<option value="{{ val }}">{{ label }}</option>
+<option value="{{ val }}" {% if request.GET.kelas == val %}selected{% endif %}>
+{{ label }}
+</option>
 {% endfor %}
 </select>
 
 <select name="status">
 <option value="">Semua Status</option>
-<option value="baru">Baru</option>
-<option value="diproses">Diproses</option>
-<option value="selesai">Selesai</option>
+<option value="baru" {% if request.GET.status == "baru" %}selected{% endif %}>Baru</option>
+<option value="diproses" {% if request.GET.status == "diproses" %}selected{% endif %}>Diproses</option>
+<option value="selesai" {% if request.GET.status == "selesai" %}selected{% endif %}>Selesai</option>
 </select>
 
-<select name="periode">
-<option value="all">Seluruh Waktu</option>
-<option value="tahun">Per Tahun</option>
-<option value="bulan">Per Bulan</option>
-<option value="hari">Per Hari</option>
+
+<!-- PERIODE -->
+<select name="periode" id="periodeSelect" onchange="toggleTanggal()">
+<option value="all" {% if periode == "all" %}selected{% endif %}>Semua Waktu</option>
+<option value="tahun" {% if periode == "tahun" %}selected{% endif %}>Per Tahun</option>
+<option value="bulan" {% if periode == "bulan" %}selected{% endif %}>Per Bulan</option>
+<option value="hari" {% if periode == "hari" %}selected{% endif %}>Per Hari</option>
 </select>
 
-<select name="tahun">
-<option value="">Semua Tahun</option>
+
+<select name="tahun" id="tahunField">
+<option value="">Pilih Tahun</option>
 {% for t in tahun_list %}
-<option value="{{ t }}">{{ t }}</option>
+<option value="{{ t }}" {% if request.GET.tahun == t|stringformat:"s" %}selected{% endif %}>{{ t }}</option>
 {% endfor %}
 </select>
 
-<select name="bulan">
-<option value="">Semua Bulan</option>
+
+<select name="bulan" id="bulanField">
+<option value="">Pilih Bulan</option>
 {% for i in "123456789101112"|make_list %}
-<option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+<option value="{{ forloop.counter }}" {% if request.GET.bulan == forloop.counter|stringformat:"s" %}selected{% endif %}>
+{{ forloop.counter }}
+</option>
 {% endfor %}
 </select>
 
-<input type="date" name="hari">
+
+<input type="date" name="hari" id="hariField" value="{{ request.GET.hari }}">
 
 <button type="submit">Filter</button>
 
@@ -65,17 +75,44 @@
 </div>
 
 
-<!-- CHART -->
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:30px;">
-
 <canvas id="statusChart"></canvas>
 <canvas id="jenisChart"></canvas>
 <canvas id="kelasChart"></canvas>
 <canvas id="trenChart"></canvas>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+function toggleTanggal(){
+
+    let periode = document.getElementById("periodeSelect").value;
+
+    let tahun = document.getElementById("tahunField");
+    let bulan = document.getElementById("bulanField");
+    let hari = document.getElementById("hariField");
+
+    tahun.style.display = "none";
+    bulan.style.display = "none";
+    hari.style.display = "none";
+
+    if(periode === "tahun"){
+        tahun.style.display = "inline-block";
+    }
+
+    if(periode === "bulan"){
+        tahun.style.display = "inline-block";
+        bulan.style.display = "inline-block";
+    }
+
+    if(periode === "hari"){
+        hari.style.display = "inline-block";
+    }
+}
+toggleTanggal();
+</script>
+
 
 <script>
 new Chart(document.getElementById("statusChart"), {
