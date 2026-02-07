@@ -2,61 +2,75 @@
 
 {% block content %}
 
-<div style="margin-bottom: 25px;">
-    <h2>📊 Dashboard Analitik Bullying</h2>
-</div>
+<h2>📊 Dashboard Analitik Bullying</h2>
 
 <!-- ================= SUMMARY ================= -->
-<div style="display:flex; gap:20px; margin-bottom:20px;">
+<div style="display:flex; gap:20px; margin-bottom:25px;">
 
-    <div style="background:#f8f9fa; padding:15px; border-radius:8px;">
-        <strong>Total Laporan</strong><br>
-        <span style="font-size:22px;">{{ total_laporan }}</span>
-    </div>
+<div style="background:#f8f9fa; padding:15px; border-radius:8px;">
+<strong>Total</strong><br>{{ total_laporan }}
+</div>
 
-    <div style="background:#ffeeba; padding:15px; border-radius:8px;">
-        <strong>Laporan Baru</strong><br>
-        <span style="font-size:22px;">{{ laporan_baru }}</span>
-    </div>
+<div style="background:#ffeeba; padding:15px; border-radius:8px;">
+<strong>Baru</strong><br>{{ laporan_baru }}
+</div>
 
-    <div style="background:#cce5ff; padding:15px; border-radius:8px;">
-        <strong>Diproses</strong><br>
-        <span style="font-size:22px;">{{ laporan_diproses }}</span>
-    </div>
+<div style="background:#cce5ff; padding:15px; border-radius:8px;">
+<strong>Diproses</strong><br>{{ laporan_diproses }}
+</div>
 
-    <div style="background:#d4edda; padding:15px; border-radius:8px;">
-        <strong>Selesai</strong><br>
-        <span style="font-size:22px;">{{ laporan_selesai }}</span>
-    </div>
+<div style="background:#d4edda; padding:15px; border-radius:8px;">
+<strong>Selesai</strong><br>{{ laporan_selesai }}
+</div>
 
 </div>
 
 <hr>
 
 <!-- ================= FILTER ================= -->
-<form method="get" style="margin-bottom:20px; display:flex; gap:15px;">
+<form method="get" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
 
-    <select name="jenis">
-        <option value="">Semua Jenis</option>
-        {% for val,label in jenis_choices %}
-        <option value="{{ val }}">{{ label }}</option>
-        {% endfor %}
-    </select>
+<select name="periode">
+<option value="all">Seluruh Waktu</option>
+<option value="tahun" {% if periode == "tahun" %}selected{% endif %}>Per Tahun</option>
+<option value="bulan" {% if periode == "bulan" %}selected{% endif %}>Per Bulan</option>
+<option value="hari" {% if periode == "hari" %}selected{% endif %}>Per Hari</option>
+</select>
 
-    <select name="kelas">
-        <option value="">Semua Kelas</option>
-        {% for val,label in kelas_choices %}
-        <option value="{{ val }}">{{ label }}</option>
-        {% endfor %}
-    </select>
+<select name="tahun">
+<option value="">Semua Tahun</option>
+{% for t in tahun_list %}
+<option value="{{ t }}"
+{% if t|stringformat:"s" == selected_tahun %}selected{% endif %}>
+{{ t }}
+</option>
+{% endfor %}
+</select>
 
-    <select name="periode">
-        <option value="hari">Per Hari</option>
-        <option value="bulan" selected>Per Bulan</option>
-        <option value="tahun">Per Tahun</option>
-    </select>
+<select name="bulan">
+<option value="">Semua Bulan</option>
+<option value="1">Januari</option>
+<option value="2">Februari</option>
+<option value="3">Maret</option>
+<option value="4">April</option>
+<option value="5">Mei</option>
+<option value="6">Juni</option>
+<option value="7">Juli</option>
+<option value="8">Agustus</option>
+<option value="9">September</option>
+<option value="10">Oktober</option>
+<option value="11">November</option>
+<option value="12">Desember</option>
+</select>
 
-    <button type="submit">Filter</button>
+<select name="hari">
+<option value="">Semua Hari</option>
+{% for i in "12345678910111213141516171819202122232425262728293031"|make_list %}
+<option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+{% endfor %}
+</select>
+
+<button type="submit">Filter</button>
 
 </form>
 
@@ -65,65 +79,53 @@
 <!-- ================= CHART ================= -->
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:30px;">
 
-    <canvas id="statusChart"></canvas>
-    <canvas id="jenisChart"></canvas>
-    <canvas id="kelasChart"></canvas>
-    <canvas id="trenChart"></canvas>
+<canvas id="statusChart"></canvas>
+<canvas id="jenisChart"></canvas>
+<canvas id="kelasChart"></canvas>
+<canvas id="trenChart"></canvas>
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- STATUS -->
 <script>
 new Chart(document.getElementById("statusChart"), {
-    type: 'pie',
-    data: {
-        labels: [{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
-        datasets: [{
-            data: [{% for i in grafik_status %}{{ i.total }},{% endfor %}]
-        }]
-    }
-});
+type:'pie',
+data:{
+labels:[{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
+datasets:[{data:[{% for i in grafik_status %}{{ i.total }},{% endfor %}]}]
+}
+})
 </script>
 
-<!-- JENIS -->
 <script>
 new Chart(document.getElementById("jenisChart"), {
-    type: 'bar',
-    data: {
-        labels: [{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
-        datasets: [{
-            data: [{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
-        }]
-    }
-});
+type:'bar',
+data:{
+labels:[{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
+datasets:[{data:[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]}]
+}
+})
 </script>
 
-<!-- KELAS -->
 <script>
 new Chart(document.getElementById("kelasChart"), {
-    type: 'bar',
-    data: {
-        labels: [{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
-        datasets: [{
-            data: [{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
-        }]
-    }
-});
+type:'bar',
+data:{
+labels:[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
+datasets:[{data:[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]}]
+}
+})
 </script>
 
-<!-- TREN -->
 <script>
 new Chart(document.getElementById("trenChart"), {
-    type: 'line',
-    data: {
-        labels: [{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
-        datasets: [{
-            data: [{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
-        }]
-    }
-});
+type:'line',
+data:{
+labels:[{% for i in grafik_tren %}"{{ i.waktu|date:'d M Y' }}",{% endfor %}],
+datasets:[{data:[{% for i in grafik_tren %}{{ i.total }},{% endfor %}]}]
+}
+})
 </script>
 
 <hr>

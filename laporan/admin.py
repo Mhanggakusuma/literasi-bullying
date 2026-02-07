@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.db.models import Count
-from django.db.models.functions import TruncDay, TruncMonth, TruncYear
+from django.db.models.functions import (
+    TruncDay, TruncMonth, TruncYear, ExtractYear
+)
+
 from .models import Laporan
 
 
@@ -15,19 +18,6 @@ class LaporanAdmin(admin.ModelAdmin):
         "jenis_bullying",
         "status",
         "tanggal",
-    )
-
-    list_filter = (
-        "status",
-        "jenis_bullying",
-        "kelas_korban",
-        "tanggal",
-    )
-
-    search_fields = (
-        "kode_laporan",
-        "nama_korban",
-        "nama_terlapor",
     )
 
     change_list_template = "admin/laporan_dashboard.html"
@@ -45,16 +35,20 @@ class LaporanAdmin(admin.ModelAdmin):
             return "Anonim 🔒"
         return obj.nama_korban
 
-    # ================= DASHBOARD DATA =================
+    # ================= DASHBOARD =================
     def changelist_view(self, request, extra_context=None):
 
         qs = Laporan.objects.all()
 
-        # ===== FILTER MANUAL =====
+        # ================= FILTER =================
         jenis = request.GET.get("jenis")
         kelas = request.GET.get("kelas")
         status = request.GET.get("status")
-        periode = request.GET.get("periode", "bulan")
+
+        periode = request.GET.get("periode", "all")
+        tahun = request.GET.get("tahun")
+        bulan = request.GET.get("bulan")
+        hari = request.GET.get("hari")
 
         if jenis:
             qs = qs.filter(jenis_bullying=jenis)
@@ -65,18 +59,28 @@ class LaporanAdmin(admin.ModelAdmin):
         if status:
             qs = qs.filter(status=status)
 
-        # ===== SUMMARY =====
+        # ===== FILTER WAKTU =====
+        if tahun:
+            qs = qs.filter(tanggal__year=tahun)
+
+        if bulan:
+            qs = qs.filter(tanggal__month=bulan)
+
+        if hari:
+            qs = qs.filter(tanggal__day=hari)
+
+        # ================= SUMMARY =================
         total = qs.count()
         baru = qs.filter(status="baru").count()
         diproses = qs.filter(status="diproses").count()
         selesai = qs.filter(status="selesai").count()
 
-        # ===== GRAFIK =====
+        # ================= GRAFIK =================
         grafik_status = qs.values("status").annotate(total=Count("id"))
         grafik_jenis = qs.values("jenis_bullying").annotate(total=Count("id"))
         grafik_kelas = qs.values("kelas_korban").annotate(total=Count("id"))
 
-        # ===== TREN =====
+        # ================= TREN =================
         if periode == "hari":
             grafik_tren = qs.annotate(
                 waktu=TruncDay("tanggal")
@@ -87,10 +91,24 @@ class LaporanAdmin(admin.ModelAdmin):
                 waktu=TruncYear("tanggal")
             ).values("waktu").annotate(total=Count("id")).order_by("waktu")
 
+        elif periode == "bulan":
+            grafik_tren = qs.annotate(
+                waktu=TruncMonth("tanggal")
+            ).values("waktu").annotate(total=Count("id")).order_by("waktu")
+
         else:
             grafik_tren = qs.annotate(
                 waktu=TruncMonth("tanggal")
             ).values("waktu").annotate(total=Count("id")).order_by("waktu")
+
+        # ================= AMBIL TAHUN DINAMIS =================
+        tahun_list = (
+            Laporan.objects
+            .annotate(tahun=ExtractYear("tanggal"))
+            .values_list("tahun", flat=True)
+            .distinct()
+            .order_by("tahun")
+        )
 
         extra_context = extra_context or {}
         extra_context.update({
@@ -107,7 +125,12 @@ class LaporanAdmin(admin.ModelAdmin):
 
             "jenis_choices": Laporan.JENIS_BULLYING_CHOICES,
             "kelas_choices": Laporan.KELAS_CHOICES,
-            "periode": periode
+
+            "periode": periode,
+            "tahun_list": tahun_list,
+            "selected_tahun": tahun,
+            "selected_bulan": bulan,
+            "selected_hari": hari,
         })
 
         return super().changelist_view(request, extra_context=extra_context)
