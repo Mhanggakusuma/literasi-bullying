@@ -2,79 +2,77 @@
 
 {% block content %}
 
-<h1>Dashboard Analitik Laporan</h1>
+<h2>Dashboard Statistik Laporan Bullying</h2>
 
-<div style="display:grid; grid-template-columns:repeat(2,1fr); gap:30px;">
+<div style="display:flex; gap:20px; margin-bottom:20px; flex-wrap:wrap;">
 
-    <canvas id="jenisChart"></canvas>
-    <canvas id="kelasChart"></canvas>
-    <canvas id="statusChart"></canvas>
-    <canvas id="waktuChart"></canvas>
+<div class="admin-card">Total Laporan <b>{{ total_laporan }}</b></div>
+<div class="admin-card">Baru <b>{{ laporan_baru }}</b></div>
+<div class="admin-card">Diproses <b>{{ diproses }}</b></div>
+<div class="admin-card">Selesai <b>{{ selesai }}</b></div>
 
 </div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:25px;">
+
+<div class="admin-card chart-box">
+<canvas id="statusChart"></canvas>
+</div>
+
+<div class="admin-card chart-box">
+<canvas id="jenisChart"></canvas>
+</div>
+
+<div class="admin-card chart-box">
+<canvas id="kelasChart"></canvas>
+</div>
+
+<div class="admin-card chart-box">
+<canvas id="trenChart"></canvas>
+</div>
+
+</div>
+
+<style>
+.admin-card{
+background:white;
+padding:15px 20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+.chart-box{ height:300px; }
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const jenisData = JSON.parse('{{ jenis_json|escapejs }}');
-    const kelasData = JSON.parse('{{ kelas_json|escapejs }}');
-    const statusData = JSON.parse('{{ status_json|escapejs }}');
-    const waktuData = JSON.parse('{{ waktu_json|escapejs }}');
-
-    function chart(id, labels, data, label){
-
-        const ctx = document.getElementById(id);
-
-        if (!ctx) return;
-
-        new Chart(ctx, {
-            type:'bar',
-            data:{
-                labels:labels,
-                datasets:[{
-                    label:label,
-                    data:data
-                }]
-            },
-            options:{
-                responsive:true,
-                maintainAspectRatio:false
-            }
-        });
-    }
-
-    chart(
-        "jenisChart",
-        jenisData.map(x=>x.jenis_bullying),
-        jenisData.map(x=>x.total),
-        "Jenis Bullying"
-    );
-
-    chart(
-        "kelasChart",
-        kelasData.map(x=>x.kelas_korban),
-        kelasData.map(x=>x.total),
-        "Kelas Korban"
-    );
-
-    chart(
-        "statusChart",
-        statusData.map(x=>x.status),
-        statusData.map(x=>x.total),
-        "Status Laporan"
-    );
-
-    chart(
-        "waktuChart",
-        waktuData.map(x=>new Date(x.bulan).toLocaleDateString("id-ID",{month:'short',year:'numeric'})),
-        waktuData.map(x=>x.total),
-        "Tren Waktu"
-    );
-
+function chart(id,type,labels,data){
+new Chart(document.getElementById(id),{
+type:type,
+data:{labels:labels,datasets:[{data:data}]},
+options:{responsive:true,maintainAspectRatio:false}
 });
+}
+
+chart("statusChart","pie",
+[{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
+[{% for i in grafik_status %}{{ i.total }},{% endfor %}]
+);
+
+chart("jenisChart","bar",
+[{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
+[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
+);
+
+chart("kelasChart","bar",
+[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
+[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
+);
+
+chart("trenChart","line",
+[{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
+[{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
+);
 </script>
 
 {% endblock %}
