@@ -19,18 +19,12 @@ class LaporanAdmin(admin.ModelAdmin):
         "tanggal",
     )
 
-    # ❌ MATIKAN FILTER DJANGO ADMIN
+    # MATIKAN FILTER DEFAULT ADMIN
     list_filter = ()
-
-    search_fields = (
-        "kode_laporan",
-        "pelapor__username",
-        "nama_korban",
-    )
 
     readonly_fields = ("kode_laporan", "tanggal")
 
-    # ================= QUERYSET FILTER =================
+    # ================= FILTER QUERYSET =================
     def get_queryset(self, request):
 
         qs = super().get_queryset(request)
@@ -38,7 +32,6 @@ class LaporanAdmin(admin.ModelAdmin):
         jenis = request.GET.get("jenis")
         kelas = request.GET.get("kelas")
         status = request.GET.get("status")
-
         periode = request.GET.get("periode")
         tanggal = request.GET.get("tanggal")
         bulan = request.GET.get("bulan")
@@ -68,10 +61,15 @@ class LaporanAdmin(admin.ModelAdmin):
         return qs
 
 
-    # ================= DASHBOARD DATA =================
+    # ================= DASHBOARD =================
     def changelist_view(self, request, extra_context=None):
 
-        qs = self.get_queryset(request)
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        try:
+            qs = response.context_data["cl"].queryset
+        except:
+            return response
 
         grafik_status = list(qs.values("status").annotate(total=Count("id")))
         grafik_jenis = list(qs.values("jenis_bullying").annotate(total=Count("id")))
@@ -105,8 +103,7 @@ class LaporanAdmin(admin.ModelAdmin):
 
         daftar_tahun = Laporan.objects.dates("tanggal", "year")
 
-        extra_context = extra_context or {}
-        extra_context.update({
+        response.context_data.update({
             "total_laporan": qs.count(),
             "laporan_baru": qs.filter(status="baru").count(),
             "diproses": qs.filter(status="diproses").count(),
@@ -122,7 +119,7 @@ class LaporanAdmin(admin.ModelAdmin):
             "daftar_tahun": daftar_tahun,
         })
 
-        return super().changelist_view(request, extra_context=extra_context)
+        return response
 
 
     @admin.display(description="Pelapor")
