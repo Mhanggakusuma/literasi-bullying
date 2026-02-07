@@ -1,10 +1,20 @@
 from django.contrib import admin
+from django.urls import reverse
+from django.utils.html import format_html
 from .models import Laporan
 
 
 @admin.register(Laporan)
 class LaporanAdmin(admin.ModelAdmin):
 
+    # =================================================
+    # TEMPLATE CUSTOM UNTUK TOMBOL DASHBOARD
+    # =================================================
+    change_list_template = "admin/laporan/change_list.html"
+
+    # =================================================
+    # TAMPILAN LIST DATA ADMIN
+    # =================================================
     list_display = (
         "kode_laporan",
         "get_pelapor_admin",
@@ -13,6 +23,7 @@ class LaporanAdmin(admin.ModelAdmin):
         "jenis_bullying",
         "status",
         "tanggal",
+        "dashboard_button",   # ⭐ Tombol Dashboard
     )
 
     list_filter = (
@@ -37,6 +48,9 @@ class LaporanAdmin(admin.ModelAdmin):
         "tanggal",
     )
 
+    # =================================================
+    # FIELDSET TAMPILAN ADMIN
+    # =================================================
     fieldsets = (
         ("🔒 Identitas Pelapor (Internal)", {
             "fields": (
@@ -94,6 +108,20 @@ class LaporanAdmin(admin.ModelAdmin):
         }),
     )
 
+    # =================================================
+    # TAMPILKAN NAMA PELAPOR
+    # =================================================
     @admin.display(description="Pelapor")
     def get_pelapor_admin(self, obj):
         return obj.pelapor.get_full_name() or obj.pelapor.username
+
+    # =================================================
+    # TOMBOL DASHBOARD BK
+    # =================================================
+    @admin.display(description="Dashboard")
+    def dashboard_button(self, obj=None):
+        url = reverse("bk_dashboard")
+        return format_html(
+            '<a class="button" href="{}" target="_blank">📊 Dashboard BK</a>',
+            url
+        )
