@@ -1406,14 +1406,16 @@ select {
 }
 
 /* ===================================================== */
-/* ============ BK DASHBOARD FINAL RESPONSIVE =========== */
+/* ============ BK DASHBOARD FINAL PROFESSIONAL ========= */
 /* ===================================================== */
+
 
 /* ================= PAGE ================= */
 .bk-dashboard-page {
   min-height: 100vh;
   background: #0d6efd;
 }
+
 
 /* ================= CONTAINER ================= */
 .bk-dashboard {
@@ -1422,12 +1424,13 @@ select {
   font-family: 'Inter', sans-serif;
 }
 
+
 /* ================= HEADER ================= */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #3d72be;
+  background: linear-gradient(135deg,#3d72be,#0d6efd);
   padding: 26px;
   border-radius: 18px;
   color: #ffffff;
@@ -1436,7 +1439,9 @@ select {
   gap: 20px;
 }
 
-.dashboard-header p { opacity: .9; }
+.dashboard-header p {
+  opacity: .9;
+}
 
 .bk-badge {
   background: #ffffff;
@@ -1464,6 +1469,7 @@ select {
   color: #ffffff;
 }
 
+
 /* ================= SUMMARY ================= */
 .dashboard-cards {
   display: grid;
@@ -1477,6 +1483,11 @@ select {
   padding: 20px;
   border-radius: 16px;
   box-shadow: 0 10px 25px rgba(0,0,0,.12);
+  transition: .3s;
+}
+
+.summary-card:hover {
+  transform: translateY(-4px);
 }
 
 .summary-card p {
@@ -1488,36 +1499,56 @@ select {
 
 .summary-card h2 {
   margin-top: 10px;
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 800;
   color: #0d6efd;
 }
 
-/* ================= FILTER ================= */
+
+/* ================= FILTER CARD ================= */
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 28px;
+  align-items: center;
+  gap: 14px;
   background: #ffffff;
-  padding: 18px;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,.08);
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0,0,0,.08);
+  margin-bottom: 30px;
 }
 
 .filter-bar select,
 .filter-bar input {
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid #ced4da;
-  min-width: 150px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1px solid #dee2e6;
+  min-width: 170px;
+  font-weight: 500;
+  transition: .3s;
+}
+
+.filter-bar select:focus,
+.filter-bar input:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13,110,253,.15);
+  outline: none;
 }
 
 .filter-bar button {
-  padding: 10px 22px;
-  border-radius: 10px;
+  background: #0d6efd;
+  color: #ffffff;
+  padding: 11px 26px;
+  border-radius: 12px;
   font-weight: 700;
+  border: none;
+  transition: .3s;
 }
+
+.filter-bar button:hover {
+  background: #0a58ca;
+}
+
 
 /* ================= MAIN DASHBOARD GRID ================= */
 .dashboard-main {
@@ -1527,22 +1558,35 @@ select {
   margin-top: 25px;
 }
 
+
 /* ================= LAPORAN AREA ================= */
 .laporan-area {
   background: #ffffff;
   padding: 20px;
   border-radius: 16px;
   box-shadow: 0 8px 25px rgba(0,0,0,.12);
-  height: fit-content;
 }
 
-/* ================= ITEM LAPORAN ================= */
+
+/* ================= LAPORAN ITEM ================= */
 .laporan-item {
   background: #ffffff;
   padding: 18px;
   border-radius: 14px;
   box-shadow: 0 6px 18px rgba(0,0,0,.10);
   margin-bottom: 14px;
+  transition: .25s;
+}
+
+.laporan-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.15);
+}
+
+.laporan-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .laporan-meta {
@@ -1550,20 +1594,34 @@ select {
   color: #495057;
 }
 
+
 /* ================= STATUS BADGE ================= */
 .status {
-  padding: 6px 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 18px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: #ffffff;
+  min-width: 120px;
 }
 
-.status.baru { background: #6c757d; }
-.status.diproses { background: #ff9800; }
-.status.selesai { background: #198754; }
+.status.baru {
+  background: linear-gradient(135deg,#6c757d,#495057);
+}
 
-/* ================= DETAIL BUTTON ================= */
+.status.diproses {
+  background: linear-gradient(135deg,#ff9800,#e65100);
+}
+
+.status.selesai {
+  background: linear-gradient(135deg,#198754,#0f5132);
+}
+
+
+/* ================= BUTTON DETAIL ================= */
 .btn-detail {
   display: inline-flex;
   align-items: center;
@@ -1581,6 +1639,7 @@ select {
   background: #084298;
 }
 
+
 /* ================= CHART AREA ================= */
 .chart-area {
   display: grid;
@@ -1588,7 +1647,6 @@ select {
   gap: 20px;
 }
 
-/* Chart Card */
 .chart-card {
   background: #ffffff;
   border-radius: 16px;
@@ -1596,11 +1654,12 @@ select {
   box-shadow: 0 8px 25px rgba(0,0,0,.12);
 }
 
-/* Ukuran Chart Seragam */
+/* Chart ukuran sama */
 .chart-card canvas {
   width: 100% !important;
   height: 260px !important;
 }
+
 
 /* ================= RESPONSIVE ================= */
 
@@ -1624,7 +1683,7 @@ select {
   }
 }
 
-/* HP */
+/* Mobile */
 @media (max-width: 576px) {
 
   .bk-dashboard {
@@ -1642,10 +1701,22 @@ select {
 
   .filter-bar {
     flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-bar select,
+  .filter-bar input,
+  .filter-bar button {
+    width: 100%;
   }
 
   .chart-card canvas {
     height: 240px !important;
+  }
+
+  .status {
+    min-width: 100px;
+    font-size: 12px;
   }
 }
 
