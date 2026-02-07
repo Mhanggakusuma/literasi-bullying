@@ -19,15 +19,13 @@ class LaporanAdmin(admin.ModelAdmin):
         "tanggal",
     )
 
-    # MATIKAN FILTER DEFAULT ADMIN
-    list_filter = ()
-
     readonly_fields = ("kode_laporan", "tanggal")
 
-    # ================= FILTER QUERYSET =================
-    def get_queryset(self, request):
 
-        qs = super().get_queryset(request)
+    # ================= FILTER CUSTOM =================
+    def filter_queryset(self, request):
+
+        qs = Laporan.objects.all()
 
         jenis = request.GET.get("jenis")
         kelas = request.GET.get("kelas")
@@ -61,16 +59,15 @@ class LaporanAdmin(admin.ModelAdmin):
         return qs
 
 
-    # ================= DASHBOARD =================
+    # ================= DASHBOARD ADMIN =================
     def changelist_view(self, request, extra_context=None):
 
         response = super().changelist_view(request, extra_context=extra_context)
 
-        try:
-            qs = response.context_data["cl"].queryset
-        except:
-            return response
+        # 🔥 Gunakan filter custom
+        qs = self.filter_queryset(request)
 
+        # ===== Grafik =====
         grafik_status = list(qs.values("status").annotate(total=Count("id")))
         grafik_jenis = list(qs.values("jenis_bullying").annotate(total=Count("id")))
         grafik_kelas = list(qs.values("kelas_korban").annotate(total=Count("id")))
