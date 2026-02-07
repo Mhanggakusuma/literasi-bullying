@@ -22,7 +22,9 @@ class LaporanAdmin(admin.ModelAdmin):
     readonly_fields = ("kode_laporan", "tanggal")
 
 
-    # ================= FILTER CUSTOM =================
+    # =================================================
+    # FILTER CUSTOM (Dipakai Semua Komponen)
+    # =================================================
     def filter_queryset(self, request):
 
         qs = Laporan.objects.all()
@@ -59,22 +61,34 @@ class LaporanAdmin(admin.ModelAdmin):
         return qs
 
 
-    # ================= CHANGE LIST =================
+    # =================================================
+    # AGAR TABEL ADMIN IKUT FILTER
+    # =================================================
+    def get_queryset(self, request):
+        return self.filter_queryset(request)
+
+
+    # =================================================
+    # DASHBOARD ADMIN + CHART
+    # =================================================
     def changelist_view(self, request, extra_context=None):
 
         response = super().changelist_view(request, extra_context=extra_context)
 
+        # ⭐ Hindari error redirect
         if not hasattr(response, "context_data"):
             return response
 
         qs = self.filter_queryset(request)
 
+        # ===== Statistik =====
         grafik_status = list(qs.values("status").annotate(total=Count("id")))
         grafik_jenis = list(qs.values("jenis_bullying").annotate(total=Count("id")))
         grafik_kelas = list(qs.values("kelas_korban").annotate(total=Count("id")))
 
         periode = request.GET.get("periode")
 
+        # ===== Grafik Tren =====
         if periode == "hari":
             grafik_tren = list(
                 qs.annotate(waktu=TruncDay("tanggal"))
@@ -120,7 +134,9 @@ class LaporanAdmin(admin.ModelAdmin):
         return response
 
 
-    # ⭐ METHOD YANG HILANG
+    # =================================================
+    # TAMPILKAN PELAPOR DI ADMIN
+    # =================================================
     @admin.display(description="Pelapor")
     def get_pelapor_admin(self, obj):
         return obj.pelapor.get_full_name() or obj.pelapor.username
