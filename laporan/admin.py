@@ -22,102 +22,101 @@ class LaporanAdmin(admin.ModelAdmin):
     readonly_fields = ("kode_laporan", "tanggal")
 
 
-    # ================= DASHBOARD ADMIN =================
-def changelist_view(self, request, extra_context=None):
-
-    response = super().changelist_view(request, extra_context)
-
-    if hasattr(response, "context_data"):
-
-        cl = response.context_data["cl"]
-
-        qs = cl.queryset
-
-        # ===== FILTER MANUAL =====
-        jenis = request.GET.get("jenis")
-        kelas = request.GET.get("kelas")
-        status = request.GET.get("status")
-        periode = request.GET.get("periode", "semua")
-        tanggal = request.GET.get("tanggal")
-        bulan = request.GET.get("bulan")
-        tahun = request.GET.get("tahun")
-
-        if jenis:
-            qs = qs.filter(jenis_bullying=jenis)
-
-        if kelas:
-            qs = qs.filter(kelas_korban=kelas)
-
-        if status:
-            qs = qs.filter(status=status)
-
-        if periode == "hari" and tanggal:
-            qs = qs.filter(tanggal__date=tanggal)
-
-        elif periode == "bulan" and bulan and tahun:
-            qs = qs.filter(
-                tanggal__month=bulan,
-                tanggal__year=tahun
-            )
-
-        elif periode == "tahun" and tahun:
-            qs = qs.filter(tanggal__year=tahun)
-
-        # ⭐ PENTING BANGET
-        cl.queryset = qs
-        cl.result_list = qs
-
-        # ===== DASHBOARD =====
-        grafik_status = list(qs.values("status").annotate(total=Count("id")))
-        grafik_jenis = list(qs.values("jenis_bullying").annotate(total=Count("id")))
-        grafik_kelas = list(qs.values("kelas_korban").annotate(total=Count("id")))
-
-        if periode == "hari":
-            grafik_tren = list(
-                qs.annotate(waktu=TruncDay("tanggal"))
-                .values("waktu")
-                .annotate(total=Count("id"))
-                .order_by("waktu")
-            )
-
-        elif periode == "tahun":
-            grafik_tren = list(
-                qs.annotate(waktu=TruncYear("tanggal"))
-                .values("waktu")
-                .annotate(total=Count("id"))
-                .order_by("waktu")
-            )
-
-        else:
-            grafik_tren = list(
-                qs.annotate(waktu=TruncMonth("tanggal"))
-                .values("waktu")
-                .annotate(total=Count("id"))
-                .order_by("waktu")
-            )
-
-        daftar_tahun = Laporan.objects.dates("tanggal", "year")
-
-        response.context_data.update({
-            "total_laporan": qs.count(),
-            "laporan_baru": qs.filter(status="baru").count(),
-            "diproses": qs.filter(status="diproses").count(),
-            "selesai": qs.filter(status="selesai").count(),
-
-            "grafik_status": grafik_status,
-            "grafik_jenis": grafik_jenis,
-            "grafik_kelas": grafik_kelas,
-            "grafik_tren": grafik_tren,
-
-            "jenis_choices": Laporan.JENIS_BULLYING_CHOICES,
-            "kelas_choices": Laporan.KELAS_CHOICES,
-            "daftar_tahun": daftar_tahun,
-        })
-
-    return response
-
-
-
+    # ================= METHOD PELAPOR =================
     @admin.display(description="Pelapor")
     def get_pelapor_admin(self, obj):
         return obj.pelapor.get_full_name() or obj.pelapor.username
+
+
+    # ================= DASHBOARD ADMIN =================
+    def changelist_view(self, request, extra_context=None):
+
+        response = super().changelist_view(request, extra_context)
+
+        if hasattr(response, "context_data"):
+
+            cl = response.context_data["cl"]
+            qs = cl.queryset
+
+            # ===== FILTER =====
+            jenis = request.GET.get("jenis")
+            kelas = request.GET.get("kelas")
+            status = request.GET.get("status")
+            periode = request.GET.get("periode", "semua")
+            tanggal = request.GET.get("tanggal")
+            bulan = request.GET.get("bulan")
+            tahun = request.GET.get("tahun")
+
+            if jenis:
+                qs = qs.filter(jenis_bullying=jenis)
+
+            if kelas:
+                qs = qs.filter(kelas_korban=kelas)
+
+            if status:
+                qs = qs.filter(status=status)
+
+            if periode == "hari" and tanggal:
+                qs = qs.filter(tanggal__date=tanggal)
+
+            elif periode == "bulan" and bulan and tahun:
+                qs = qs.filter(
+                    tanggal__month=bulan,
+                    tanggal__year=tahun
+                )
+
+            elif periode == "tahun" and tahun:
+                qs = qs.filter(tanggal__year=tahun)
+
+            # ⭐ override queryset admin
+            cl.queryset = qs
+            cl.result_list = qs
+
+            # ===== GRAFIK =====
+            grafik_status = list(qs.values("status").annotate(total=Count("id")))
+            grafik_jenis = list(qs.values("jenis_bullying").annotate(total=Count("id")))
+            grafik_kelas = list(qs.values("kelas_korban").annotate(total=Count("id")))
+
+            if periode == "hari":
+                grafik_tren = list(
+                    qs.annotate(waktu=TruncDay("tanggal"))
+                    .values("waktu")
+                    .annotate(total=Count("id"))
+                    .order_by("waktu")
+                )
+
+            elif periode == "tahun":
+                grafik_tren = list(
+                    qs.annotate(waktu=TruncYear("tanggal"))
+                    .values("waktu")
+                    .annotate(total=Count("id"))
+                    .order_by("waktu")
+                )
+
+            else:
+                grafik_tren = list(
+                    qs.annotate(waktu=TruncMonth("tanggal"))
+                    .values("waktu")
+                    .annotate(total=Count("id"))
+                    .order_by("waktu")
+                )
+
+            daftar_tahun = Laporan.objects.dates("tanggal", "year")
+
+            response.context_data.update({
+                "total_laporan": qs.count(),
+                "laporan_baru": qs.filter(status="baru").count(),
+                "diproses": qs.filter(status="diproses").count(),
+                "selesai": qs.filter(status="selesai").count(),
+
+                "grafik_status": grafik_status,
+                "grafik_jenis": grafik_jenis,
+                "grafik_kelas": grafik_kelas,
+                "grafik_tren": grafik_tren,
+
+                "jenis_choices": Laporan.JENIS_BULLYING_CHOICES,
+                "kelas_choices": Laporan.KELAS_CHOICES,
+                "daftar_tahun": daftar_tahun,
+            })
+
+        return response
