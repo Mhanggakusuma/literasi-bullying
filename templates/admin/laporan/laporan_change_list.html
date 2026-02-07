@@ -2,66 +2,112 @@
 
 {% block content %}
 
-<h2>Dashboard Statistik Laporan Bullying</h2>
+<h2 style="margin-bottom:15px;">Dashboard Statistik Laporan Bullying</h2>
 
-<div style="display:flex; gap:20px; margin-bottom:20px;">
-  <div>Total Laporan: <b>{{ total_laporan }}</b></div>
-  <div>Baru: <b>{{ laporan_baru }}</b></div>
-  <div>Diproses: <b>{{ diproses }}</b></div>
-  <div>Selesai: <b>{{ selesai }}</b></div>
+<!-- SUMMARY -->
+<div style="display:flex; gap:20px; margin-bottom:20px; flex-wrap:wrap;">
+
+  <div class="admin-card">Total Laporan <b>{{ total_laporan }}</b></div>
+  <div class="admin-card">Baru <b>{{ laporan_baru }}</b></div>
+  <div class="admin-card">Diproses <b>{{ diproses }}</b></div>
+  <div class="admin-card">Selesai <b>{{ selesai }}</b></div>
+
 </div>
 
-<div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px;">
-  <canvas id="statusChart"></canvas>
-  <canvas id="jenisChart"></canvas>
-  <canvas id="kelasChart"></canvas>
-  <canvas id="trenChart"></canvas>
+<!-- GRAFIK -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:25px;">
+
+  <div class="admin-card chart-box">
+    <canvas id="statusChart"></canvas>
+  </div>
+
+  <div class="admin-card chart-box">
+    <canvas id="jenisChart"></canvas>
+  </div>
+
+  <div class="admin-card chart-box">
+    <canvas id="kelasChart"></canvas>
+  </div>
+
+  <div class="admin-card chart-box">
+    <canvas id="trenChart"></canvas>
+  </div>
+
 </div>
 
 <hr>
 
 {{ block.super }}
 
+<style>
+.admin-card{
+    background:white;
+    padding:15px 20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    font-size:15px;
+}
+
+.chart-box{
+    height:300px;
+}
+</style>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-new Chart(document.getElementById("statusChart"), {
-  type: 'pie',
-  data: {
-    labels: [{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
-    datasets: [{ data: [{% for i in grafik_status %}{{ i.total }},{% endfor %}] }]
-  }
-});
+function createChart(id, type, labels, data){
+
+    new Chart(document.getElementById(id), {
+        type: type,
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data
+            }]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:false
+        }
+    });
+}
 </script>
 
 <script>
-new Chart(document.getElementById("jenisChart"), {
-  type: 'bar',
-  data: {
-    labels: [{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
-    datasets: [{ data: [{% for i in grafik_jenis %}{{ i.total }},{% endfor %}] }]
-  }
-});
+createChart(
+    "statusChart",
+    "pie",
+    [{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
+    [{% for i in grafik_status %}{{ i.total }},{% endfor %}]
+);
 </script>
 
 <script>
-new Chart(document.getElementById("kelasChart"), {
-  type: 'bar',
-  data: {
-    labels: [{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
-    datasets: [{ data: [{% for i in grafik_kelas %}{{ i.total }},{% endfor %}] }]
-  }
-});
+createChart(
+    "jenisChart",
+    "bar",
+    [{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
+    [{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
+);
 </script>
 
 <script>
-new Chart(document.getElementById("trenChart"), {
-  type: 'line',
-  data: {
-    labels: [{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
-    datasets: [{ data: [{% for i in grafik_tren %}{{ i.total }},{% endfor %}] }]
-  }
-});
+createChart(
+    "kelasChart",
+    "bar",
+    [{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
+    [{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
+);
+</script>
+
+<script>
+createChart(
+    "trenChart",
+    "line",
+    [{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
+    [{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
+);
 </script>
 
 {% endblock %}

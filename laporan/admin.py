@@ -6,14 +6,9 @@ from .models import Laporan
 
 @admin.register(Laporan)
 class LaporanAdmin(admin.ModelAdmin):
-    """
-    Konfigurasi Admin untuk Laporan Bullying.
-    """
 
-    # ================= TEMPLATE DASHBOARD =================
     change_list_template = "admin/laporan/laporan_change_list.html"
 
-    # ================= LIST DATA =================
     list_display = (
         "kode_laporan",
         "get_pelapor_admin",
@@ -41,79 +36,40 @@ class LaporanAdmin(admin.ModelAdmin):
         "lokasi_kejadian",
     )
 
-    # ================= FORM ADMIN =================
     fieldsets = (
         ("🔒 Identitas Pelapor (Internal)", {
-            "fields": (
-                "pelapor",
-                "is_anonymous",
-            )
+            "fields": ("pelapor", "is_anonymous")
         }),
         ("🕒 Waktu & Tempat Kejadian", {
-            "fields": (
-                "tanggal_kejadian",
-                "perkiraan_waktu",
-                "lokasi_kejadian",
-            )
+            "fields": ("tanggal_kejadian", "perkiraan_waktu", "lokasi_kejadian")
         }),
         ("👤 Korban & Terlapor", {
-            "fields": (
-                "nama_korban",
-                "kelas_korban",
-                "nama_terlapor",
-                "kelas_terlapor",
-            )
+            "fields": ("nama_korban", "kelas_korban", "nama_terlapor", "kelas_terlapor")
         }),
         ("🚨 Detail Perundungan", {
-            "fields": (
-                "jenis_bullying",
-                "isi_laporan",
-                "bukti",
-            )
+            "fields": ("jenis_bullying", "isi_laporan", "bukti")
         }),
         ("💔 Dampak & Harapan", {
-            "fields": (
-                "dampak_korban",
-                "dampak_lainnya",
-                "harapan_pelapor",
-            )
+            "fields": ("dampak_korban", "dampak_lainnya", "harapan_pelapor")
         }),
         ("🧾 Tindak Lanjut Guru BK", {
-            "fields": (
-                "status",
-                "catatan_bk",
-                "bukti_tindak_lanjut",
-            )
+            "fields": ("status", "catatan_bk", "bukti_tindak_lanjut")
         }),
         ("🔑 Meta Data", {
-            "fields": (
-                "kode_laporan",
-                "tanggal",
-            )
+            "fields": ("kode_laporan", "tanggal")
         }),
     )
 
-    readonly_fields = (
-        "kode_laporan",
-        "tanggal",
-    )
+    readonly_fields = ("kode_laporan", "tanggal")
 
-    # ================= DATA GRAFIK DASHBOARD =================
+    # ================= DASHBOARD DATA =================
     def changelist_view(self, request, extra_context=None):
 
         qs = Laporan.objects.all()
 
-        grafik_status = list(
-            qs.values("status").annotate(total=Count("id"))
-        )
-
-        grafik_jenis = list(
-            qs.values("jenis_bullying").annotate(total=Count("id"))
-        )
-
-        grafik_kelas = list(
-            qs.values("kelas_korban").annotate(total=Count("id"))
-        )
+        grafik_status = list(qs.values("status").annotate(total=Count("id")))
+        grafik_jenis = list(qs.values("jenis_bullying").annotate(total=Count("id")))
+        grafik_kelas = list(qs.values("kelas_korban").annotate(total=Count("id")))
 
         grafik_tren = list(
             qs.annotate(waktu=TruncMonth("tanggal"))
@@ -137,7 +93,6 @@ class LaporanAdmin(admin.ModelAdmin):
 
         return super().changelist_view(request, extra_context=extra_context)
 
-    # ================= TAMPIL PELAPOR =================
     @admin.display(description="Pelapor")
     def get_pelapor_admin(self, obj):
         return obj.pelapor.get_full_name() or obj.pelapor.username
