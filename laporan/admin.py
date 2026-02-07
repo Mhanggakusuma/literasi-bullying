@@ -25,7 +25,7 @@ class LaporanAdmin(admin.ModelAdmin):
         "kelas_korban",
     )
 
-    # ===== URL DASHBOARD =====
+    # ================= URL DASHBOARD =================
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
@@ -37,12 +37,11 @@ class LaporanAdmin(admin.ModelAdmin):
         ]
         return custom_urls + urls
 
-    # ===== DASHBOARD VIEW =====
+    # ================= DASHBOARD VIEW =================
     def dashboard_view(self, request):
 
         qs = Laporan.objects.all()
 
-        # ===== FILTER DASAR =====
         jenis = request.GET.get("jenis")
         kelas = request.GET.get("kelas")
         status = request.GET.get("status")
@@ -61,7 +60,7 @@ class LaporanAdmin(admin.ModelAdmin):
         if status:
             qs = qs.filter(status=status)
 
-        # ===== FILTER PERIODE =====
+        # ================= FILTER PERIODE =================
         if periode == "hari" and tanggal:
             qs = qs.filter(tanggal__date=tanggal)
 
@@ -74,19 +73,28 @@ class LaporanAdmin(admin.ModelAdmin):
         elif periode == "tahun" and tahun:
             qs = qs.filter(tanggal__year=tahun)
 
-        # ===== GRAFIK =====
+        # ================= GRAFIK =================
         grafik_status = qs.values("status").annotate(total=Count("id"))
         grafik_jenis = qs.values("jenis_bullying").annotate(total=Count("id"))
         grafik_kelas = qs.values("kelas_korban").annotate(total=Count("id"))
 
-        # ===== GRAFIK TREN =====
-        if periode == "hari":
+        # ================= GRAFIK TREN =================
+        if periode == "bulan" and bulan and tahun:
             grafik_tren = (
                 qs.annotate(waktu=TruncDay("tanggal"))
                 .values("waktu")
                 .annotate(total=Count("id"))
                 .order_by("waktu")
             )
+
+        elif periode == "tahun" and tahun:
+            grafik_tren = (
+                qs.annotate(waktu=TruncMonth("tanggal"))
+                .values("waktu")
+                .annotate(total=Count("id"))
+                .order_by("waktu")
+            )
+
         else:
             grafik_tren = (
                 qs.annotate(waktu=TruncMonth("tanggal"))
