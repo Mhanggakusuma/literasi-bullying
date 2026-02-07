@@ -17,7 +17,6 @@
 
         <div class="bk-tl-info text-start">
 
-          <!-- ================= DATA UMUM ================= -->
           <p><strong>Kode Laporan :</strong> {{ laporan.kode_laporan }}</p>
 
           <p>
@@ -37,7 +36,6 @@
 
           <hr>
 
-          <!-- ================= WAKTU & TEMPAT ================= -->
           <p>
             <strong>Waktu Kejadian :</strong>
             {{ laporan.tanggal_kejadian|date:"d M Y" }}
@@ -53,14 +51,13 @@
 
           <hr>
 
-          <!-- ================= KORBAN ================= -->
+          <!-- ✅ FIX DISINI -->
           <p>
             <strong>Korban :</strong>
-            {{ laporan.tampilkan_korban(request.user) }}
+            {{ laporan.tampilkan_korban }}
             ({{ laporan.kelas_korban }})
           </p>
 
-          <!-- ================= TERLAPOR ================= -->
           {% if laporan.nama_terlapor %}
           <p>
             <strong>Terlapor :</strong>
@@ -78,13 +75,11 @@
 
           <hr>
 
-          <!-- ================= KRONOLOGI ================= -->
           <p>
             <strong>Kronologi :</strong><br>
             {{ laporan.isi_laporan|linebreaksbr }}
           </p>
 
-          <!-- ================= DAMPAK ================= -->
           {% if laporan.dampak_korban %}
           <hr>
           <p><strong>Dampak :</strong></p>
@@ -102,7 +97,6 @@
           </p>
           {% endif %}
 
-          <!-- ================= HARAPAN ================= -->
           {% if laporan.harapan_pelapor %}
           <hr>
           <p>
@@ -111,7 +105,6 @@
           </p>
           {% endif %}
 
-          <!-- ================= BUKTI ================= -->
           {% if laporan.bukti %}
           <a href="{{ laporan.bukti.url }}"
              target="_blank"
@@ -120,8 +113,8 @@
           </a>
           {% endif %}
 
-          <!-- ================= IDENTITAS INTERNAL BK ================= -->
           <hr>
+
           <details class="mt-4">
             <summary style="cursor:pointer; font-weight:700;">
               🔐 Identitas Pelapor (Internal BK)
@@ -151,8 +144,8 @@
             </div>
           </details>
 
-          <!-- ================= FORM BK ================= -->
           <hr>
+
           <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
