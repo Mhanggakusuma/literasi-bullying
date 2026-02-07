@@ -30,8 +30,7 @@ class LaporanAdmin(admin.ModelAdmin):
         return "Anonim 🔒" if obj.is_korban_anonim else obj.nama_korban
 
     # ================= FILTER QUERY =================
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
+    def filter_queryset(self, request, qs):
 
         jenis = request.GET.get("jenis")
         kelas = request.GET.get("kelas")
@@ -43,7 +42,7 @@ class LaporanAdmin(admin.ModelAdmin):
         bulan = request.GET.get("bulan")
         hari = request.GET.get("hari")
 
-        # FILTER UMUM
+        # FILTER DASAR
         if jenis:
             qs = qs.filter(jenis_bullying=jenis)
 
@@ -54,27 +53,33 @@ class LaporanAdmin(admin.ModelAdmin):
             qs = qs.filter(status=status)
 
         # FILTER WAKTU
-        if periode == "tahun":
-            if tahun:
-                qs = qs.filter(tanggal__year=tahun)
+        if periode == "tahun" and tahun:
+            qs = qs.filter(tanggal__year=tahun)
 
-        elif periode == "bulan":
-            if tahun:
-                qs = qs.filter(tanggal__year=tahun)
+        elif periode == "bulan" and bulan and tahun:
+            qs = qs.filter(
+                tanggal__month=bulan,
+                tanggal__year=tahun
+            )
 
-            if bulan:
-                qs = qs.filter(tanggal__month=bulan)
-
-        elif periode == "hari":
-            if hari:
-                qs = qs.filter(tanggal=hari)
+        elif periode == "hari" and hari:
+            qs = qs.filter(tanggal__date=hari)
 
         return qs
+
+    # ================= QUERYSET ADMIN =================
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return self.filter_queryset(request, qs)
 
     # ================= DASHBOARD =================
     def changelist_view(self, request, extra_context=None):
 
-        qs = self.get_queryset(request)
+        qs = self.filter_queryset(
+            request,
+            super().get_queryset(request)
+        )
+
         periode = request.GET.get("periode", "all")
 
         # ===== SUMMARY =====
