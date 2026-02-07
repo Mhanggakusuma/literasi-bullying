@@ -7,7 +7,6 @@ from .models import Laporan
 @admin.register(Laporan)
 class LaporanAdmin(admin.ModelAdmin):
 
-    # Template dashboard custom
     change_list_template = "admin/laporan_change_list.html"
 
     list_display = (
@@ -34,22 +33,18 @@ class LaporanAdmin(admin.ModelAdmin):
         "nama_terlapor",
     )
 
-    readonly_fields = ("kode_laporan", "tanggal")
-
-    # =================================================
-    # DASHBOARD ANALITIK ADMIN
     # =================================================
     def changelist_view(self, request, extra_context=None):
 
         queryset = self.get_queryset(request)
 
-        # ===== SUMMARY =====
-        total_laporan = queryset.count()
-        laporan_baru = queryset.filter(status="baru").count()
-        sedang_diproses = queryset.filter(status="diproses").count()
+        # SUMMARY
+        total = queryset.count()
+        baru = queryset.filter(status="baru").count()
+        diproses = queryset.filter(status="diproses").count()
         selesai = queryset.filter(status="selesai").count()
 
-        # ===== GRAFIK =====
+        # GRAFIK
         grafik_status = queryset.values("status").annotate(total=Count("id"))
         grafik_jenis = queryset.values("jenis_bullying").annotate(total=Count("id"))
         grafik_kelas = queryset.values("kelas_korban").annotate(total=Count("id"))
@@ -64,12 +59,10 @@ class LaporanAdmin(admin.ModelAdmin):
 
         extra_context = extra_context or {}
         extra_context.update({
-
-            "total_laporan": total_laporan,
-            "laporan_baru": laporan_baru,
-            "sedang_diproses": sedang_diproses,
+            "total_laporan": total,
+            "laporan_baru": baru,
+            "sedang_diproses": diproses,
             "selesai": selesai,
-
             "grafik_status": list(grafik_status),
             "grafik_jenis": list(grafik_jenis),
             "grafik_kelas": list(grafik_kelas),
