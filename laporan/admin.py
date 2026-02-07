@@ -3,6 +3,7 @@ from django.db.models import Count
 from django.db.models.functions import (
     TruncDay, TruncMonth, TruncYear, ExtractYear
 )
+from datetime import datetime
 
 from .models import Laporan
 
@@ -40,16 +41,14 @@ class LaporanAdmin(admin.ModelAdmin):
 
         qs = Laporan.objects.all()
 
-        # ================= FILTER DATA =================
         jenis = request.GET.get("jenis")
         kelas = request.GET.get("kelas")
         status = request.GET.get("status")
 
         periode = request.GET.get("periode", "all")
-        tahun = request.GET.get("tahun")
-        bulan = request.GET.get("bulan")
-        hari = request.GET.get("hari")
+        tanggal_full = request.GET.get("tanggal_full")
 
+        # ===== FILTER DASAR =====
         if jenis:
             qs = qs.filter(jenis_bullying=jenis)
 
@@ -59,42 +58,40 @@ class LaporanAdmin(admin.ModelAdmin):
         if status:
             qs = qs.filter(status=status)
 
-        # ================= FILTER WAKTU (FIX LOGIKA) =================
-        if periode == "tahun":
-            if tahun:
-                qs = qs.filter(tanggal__year=tahun)
+        # ===== FILTER TANGGAL DARI DATEPICKER =====
+        if tanggal_full:
+            try:
+                dt = datetime.strptime(tanggal_full, "%Y-%m-%d")
 
-        elif periode == "bulan":
-            if tahun:
-                qs = qs.filter(tanggal__year=tahun)
-            if bulan:
-                qs = qs.filter(tanggal__month=bulan)
+                qs = qs.filter(
+                    tanggal__year=dt.year,
+                    tanggal__month=dt.month,
+                    tanggal__day=dt.day
+                )
 
-        elif periode == "hari":
-            if tahun:
-                qs = qs.filter(tanggal__year=tahun)
-            if bulan:
-                qs = qs.filter(tanggal__month=bulan)
-            if hari:
-                qs = qs.filter(tanggal__day=hari)
+            except:
+                pass
 
-        # periode == "all" → tidak filter waktu
-
-        # ================= SUMMARY =================
+        # ===== SUMMARY =====
         total = qs.count()
         baru = qs.filter(status="baru").count()
         diproses = qs.filter(status="diproses").count()
         selesai = qs.filter(status="selesai").count()
 
-        # ================= GRAFIK =================
+        # ===== GRAFIK =====
         grafik_status = qs.values("status").annotate(total=Count("id"))
         grafik_jenis = qs.values("jenis_bullying").annotate(total=Count("id"))
         grafik_kelas = qs.values("kelas_korban").annotate(total=Count("id"))
 
-        # ================= GRAFIK TREN =================
+        # ===== TREN =====
         if periode == "hari":
             grafik_tren = qs.annotate(
                 waktu=TruncDay("tanggal")
+            ).values("waktu").annotate(total=Count("id")).order_by("waktu")
+
+        elif periode == "bulan":
+            grafik_tren = qs.annotate(
+                waktu=TruncMonth("tanggal")
             ).values("waktu").annotate(total=Count("id")).order_by("waktu")
 
         elif periode == "tahun":
@@ -107,7 +104,7 @@ class LaporanAdmin(admin.ModelAdmin):
                 waktu=TruncMonth("tanggal")
             ).values("waktu").annotate(total=Count("id")).order_by("waktu")
 
-        # ================= AMBIL TAHUN DINAMIS =================
+        # ===== LIST TAHUN DINAMIS =====
         tahun_list = (
             Laporan.objects
             .annotate(tahun=ExtractYear("tanggal"))
@@ -133,10 +130,8 @@ class LaporanAdmin(admin.ModelAdmin):
             "kelas_choices": Laporan.KELAS_CHOICES,
 
             "periode": periode,
+            "tanggal_full": tanggal_full,
             "tahun_list": tahun_list,
-            "selected_tahun": tahun,
-            "selected_bulan": bulan,
-            "selected_hari": hari,
         })
 
         return super().changelist_view(request, extra_context=extra_context)
