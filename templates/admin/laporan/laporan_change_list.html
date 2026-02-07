@@ -4,8 +4,8 @@
 
 <h2>Dashboard Statistik Laporan Bullying</h2>
 
-<!-- ================= FILTER ================= -->
-<form method="get" style="margin-bottom:20px;">
+<!-- ================= FILTER UTAMA ================= -->
+<form method="get" style="margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap;">
 
 <select name="jenis">
 <option value="">Semua Jenis</option>
@@ -33,38 +33,41 @@
 </select>
 
 <select name="periode" id="periodeSelect">
-<option value="semua">Semua Waktu</option>
-<option value="hari">Per Hari</option>
-<option value="bulan">Per Bulan</option>
-<option value="tahun">Per Tahun</option>
+<option value="">Semua Waktu</option>
+<option value="hari" {% if request.GET.periode == "hari" %}selected{% endif %}>Per Hari</option>
+<option value="bulan" {% if request.GET.periode == "bulan" %}selected{% endif %}>Per Bulan</option>
+<option value="tahun" {% if request.GET.periode == "tahun" %}selected{% endif %}>Per Tahun</option>
 </select>
 
-<input type="date" name="tanggal" id="filterTanggal">
+<input type="date" name="tanggal" id="filterTanggal"
+       value="{{ request.GET.tanggal }}">
 
 <select name="bulan" id="filterBulan">
 <option value="">Pilih Bulan</option>
-<option value="1">Januari</option>
-<option value="2">Februari</option>
-<option value="3">Maret</option>
-<option value="4">April</option>
-<option value="5">Mei</option>
-<option value="6">Juni</option>
-<option value="7">Juli</option>
-<option value="8">Agustus</option>
-<option value="9">September</option>
-<option value="10">Oktober</option>
-<option value="11">November</option>
-<option value="12">Desember</option>
+<option value="1" {% if request.GET.bulan == "1" %}selected{% endif %}>Januari</option>
+<option value="2" {% if request.GET.bulan == "2" %}selected{% endif %}>Februari</option>
+<option value="3" {% if request.GET.bulan == "3" %}selected{% endif %}>Maret</option>
+<option value="4" {% if request.GET.bulan == "4" %}selected{% endif %}>April</option>
+<option value="5" {% if request.GET.bulan == "5" %}selected{% endif %}>Mei</option>
+<option value="6" {% if request.GET.bulan == "6" %}selected{% endif %}>Juni</option>
+<option value="7" {% if request.GET.bulan == "7" %}selected{% endif %}>Juli</option>
+<option value="8" {% if request.GET.bulan == "8" %}selected{% endif %}>Agustus</option>
+<option value="9" {% if request.GET.bulan == "9" %}selected{% endif %}>September</option>
+<option value="10" {% if request.GET.bulan == "10" %}selected{% endif %}>Oktober</option>
+<option value="11" {% if request.GET.bulan == "11" %}selected{% endif %}>November</option>
+<option value="12" {% if request.GET.bulan == "12" %}selected{% endif %}>Desember</option>
 </select>
 
 <select name="tahun" id="filterTahun">
 <option value="">Pilih Tahun</option>
 {% for t in daftar_tahun %}
-<option value="{{ t.year }}">{{ t.year }}</option>
+<option value="{{ t.year }}" {% if request.GET.tahun == t.year|stringformat:"s" %}selected{% endif %}>
+{{ t.year }}
+</option>
 {% endfor %}
 </select>
 
-<button type="submit">Filter</button>
+<button type="submit" class="button">Filter</button>
 
 </form>
 
@@ -102,7 +105,7 @@
 </div>
 
 
-<!-- ================= TABEL ADMIN ================= -->
+<!-- ================= TABEL LAPORAN ================= -->
 {{ block.super }}
 
 
@@ -155,6 +158,7 @@ createChart("trenChart","line",
 </script>
 
 
+<!-- ================= TOGGLE INPUT PERIODE ================= -->
 <script>
 const periode=document.getElementById("periodeSelect");
 const tanggal=document.getElementById("filterTanggal");

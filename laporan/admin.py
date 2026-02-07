@@ -19,23 +19,18 @@ class LaporanAdmin(admin.ModelAdmin):
         "tanggal",
     )
 
-    # HAPUS tanggal dari filter sidebar
-    list_filter = (
-        "status",
-        "jenis_bullying",
-        "kelas_korban",
-    )
+    # ❌ MATIKAN FILTER DJANGO ADMIN
+    list_filter = ()
 
     search_fields = (
         "kode_laporan",
         "pelapor__username",
         "nama_korban",
-        "nama_terlapor",
     )
 
     readonly_fields = ("kode_laporan", "tanggal")
 
-    # ================= FILTER MANUAL =================
+    # ================= QUERYSET FILTER =================
     def get_queryset(self, request):
 
         qs = super().get_queryset(request)
@@ -73,7 +68,7 @@ class LaporanAdmin(admin.ModelAdmin):
         return qs
 
 
-    # ================= DASHBOARD =================
+    # ================= DASHBOARD DATA =================
     def changelist_view(self, request, extra_context=None):
 
         qs = self.get_queryset(request)
@@ -112,7 +107,6 @@ class LaporanAdmin(admin.ModelAdmin):
 
         extra_context = extra_context or {}
         extra_context.update({
-            "laporan": qs,
             "total_laporan": qs.count(),
             "laporan_baru": qs.filter(status="baru").count(),
             "diproses": qs.filter(status="diproses").count(),
