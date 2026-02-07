@@ -3,13 +3,14 @@ from django.db.models import Count
 from django.db.models.functions import (
     TruncDay, TruncMonth, TruncYear, ExtractYear
 )
-from datetime import datetime
 
 from .models import Laporan
 
 
 @admin.register(Laporan)
 class LaporanAdmin(admin.ModelAdmin):
+
+    change_list_template = "admin/laporan_dashboard.html"
 
     list_display = (
         "kode_laporan",
@@ -21,34 +22,25 @@ class LaporanAdmin(admin.ModelAdmin):
         "tanggal",
     )
 
-    change_list_template = "admin/laporan_dashboard.html"
-
     # ================= DISPLAY =================
-    @admin.display(description="Pelapor")
     def pelapor_display(self, obj):
-        if obj.is_anonymous:
-            return "Anonim 🔒"
-        return obj.pelapor.get_full_name() or obj.pelapor.username
+        return "Anonim 🔒" if obj.is_anonymous else obj.pelapor
 
-    @admin.display(description="Korban")
     def korban_display(self, obj):
-        if obj.is_korban_anonim:
-            return "Anonim 🔒"
-        return obj.nama_korban
+        return "Anonim 🔒" if obj.is_korban_anonim else obj.nama_korban
 
-    # ================= DASHBOARD =================
-    def changelist_view(self, request, extra_context=None):
-
-        qs = Laporan.objects.all()
+    # ================= FILTER UTAMA =================
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
 
         jenis = request.GET.get("jenis")
         kelas = request.GET.get("kelas")
         status = request.GET.get("status")
 
-        periode = request.GET.get("periode", "all")
-        tanggal_full = request.GET.get("tanggal_full")
+        tahun = request.GET.get("tahun")
+        bulan = request.GET.get("bulan")
+        hari = request.GET.get("hari")
 
-        # ===== FILTER DASAR =====
         if jenis:
             qs = qs.filter(jenis_bullying=jenis)
 
@@ -58,19 +50,23 @@ class LaporanAdmin(admin.ModelAdmin):
         if status:
             qs = qs.filter(status=status)
 
-        # ===== FILTER TANGGAL DARI DATEPICKER =====
-        if tanggal_full:
-            try:
-                dt = datetime.strptime(tanggal_full, "%Y-%m-%d")
+        if tahun:
+            qs = qs.filter(tanggal__year=tahun)
 
-                qs = qs.filter(
-                    tanggal__year=dt.year,
-                    tanggal__month=dt.month,
-                    tanggal__day=dt.day
-                )
+        if bulan:
+            qs = qs.filter(tanggal__month=bulan)
 
-            except:
-                pass
+        if hari:
+            qs = qs.filter(tanggal__day=hari)
+
+        return qs
+
+    # ================= DASHBOARD =================
+    def changelist_view(self, request, extra_context=None):
+
+        qs = self.get_queryset(request)
+
+        periode = request.GET.get("periode", "all")
 
         # ===== SUMMARY =====
         total = qs.count()
@@ -87,24 +83,18 @@ class LaporanAdmin(admin.ModelAdmin):
         if periode == "hari":
             grafik_tren = qs.annotate(
                 waktu=TruncDay("tanggal")
-            ).values("waktu").annotate(total=Count("id")).order_by("waktu")
-
-        elif periode == "bulan":
-            grafik_tren = qs.annotate(
-                waktu=TruncMonth("tanggal")
-            ).values("waktu").annotate(total=Count("id")).order_by("waktu")
+            ).values("waktu").annotate(total=Count("id"))
 
         elif periode == "tahun":
             grafik_tren = qs.annotate(
                 waktu=TruncYear("tanggal")
-            ).values("waktu").annotate(total=Count("id")).order_by("waktu")
+            ).values("waktu").annotate(total=Count("id"))
 
         else:
             grafik_tren = qs.annotate(
                 waktu=TruncMonth("tanggal")
-            ).values("waktu").annotate(total=Count("id")).order_by("waktu")
+            ).values("waktu").annotate(total=Count("id"))
 
-        # ===== LIST TAHUN DINAMIS =====
         tahun_list = (
             Laporan.objects
             .annotate(tahun=ExtractYear("tanggal"))
@@ -129,9 +119,8 @@ class LaporanAdmin(admin.ModelAdmin):
             "jenis_choices": Laporan.JENIS_BULLYING_CHOICES,
             "kelas_choices": Laporan.KELAS_CHOICES,
 
-            "periode": periode,
-            "tanggal_full": tanggal_full,
             "tahun_list": tahun_list,
+            "periode": periode,
         })
 
         return super().changelist_view(request, extra_context=extra_context)
