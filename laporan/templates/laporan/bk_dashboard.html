@@ -4,7 +4,6 @@
 
 {% block content %}
 <div class="bk-dashboard-page">
-
 <div class="bk-dashboard">
 
 <!-- ================= HEADER ================= -->
@@ -12,7 +11,7 @@
   <div>
     <span class="bk-badge">Akses Khusus Guru BK</span>
     <h1>Dashboard Guru BK</h1>
-    <p>Monitoring dan analisis kasus bullying</p>
+    <p>Monitoring dan analisis tren kasus bullying</p>
   </div>
 
   <a href="{% url 'bk_download_laporan' %}" class="btn-download">
@@ -20,9 +19,9 @@
   </a>
 </header>
 
+
 <!-- ================= SUMMARY ================= -->
 <section class="dashboard-cards">
-
   <div class="summary-card">
     <p>Total Laporan</p>
     <h2>{{ total_laporan }}</h2>
@@ -42,7 +41,6 @@
     <p>Selesai</p>
     <h2>{{ selesai }}</h2>
   </div>
-
 </section>
 
 
@@ -58,6 +56,7 @@
 {% endfor %}
 </select>
 
+
 <select name="kelas">
 <option value="">Semua Kelas</option>
 {% for val,label in kelas_choices %}
@@ -67,12 +66,14 @@
 {% endfor %}
 </select>
 
+
 <select name="status">
 <option value="">Semua Status</option>
 <option value="baru" {% if selected_status == "baru" %}selected{% endif %}>Baru</option>
 <option value="diproses" {% if selected_status == "diproses" %}selected{% endif %}>Diproses</option>
 <option value="selesai" {% if selected_status == "selesai" %}selected{% endif %}>Selesai</option>
 </select>
+
 
 <select name="periode" id="periodeSelect">
 <option value="semua" {% if periode == "semua" %}selected{% endif %}>Semua Waktu</option>
@@ -81,14 +82,26 @@
 <option value="tahun" {% if periode == "tahun" %}selected{% endif %}>Per Tahun</option>
 </select>
 
+
 <input type="date" name="tanggal" id="filterTanggal">
+
 
 <select name="bulan" id="filterBulan">
 <option value="">Pilih Bulan</option>
-{% for i in "123456789101112"|make_list %}
-<option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
-{% endfor %}
+<option value="1" {% if request.GET.bulan == "1" %}selected{% endif %}>Januari</option>
+<option value="2" {% if request.GET.bulan == "2" %}selected{% endif %}>Februari</option>
+<option value="3" {% if request.GET.bulan == "3" %}selected{% endif %}>Maret</option>
+<option value="4" {% if request.GET.bulan == "4" %}selected{% endif %}>April</option>
+<option value="5" {% if request.GET.bulan == "5" %}selected{% endif %}>Mei</option>
+<option value="6" {% if request.GET.bulan == "6" %}selected{% endif %}>Juni</option>
+<option value="7" {% if request.GET.bulan == "7" %}selected{% endif %}>Juli</option>
+<option value="8" {% if request.GET.bulan == "8" %}selected{% endif %}>Agustus</option>
+<option value="9" {% if request.GET.bulan == "9" %}selected{% endif %}>September</option>
+<option value="10" {% if request.GET.bulan == "10" %}selected{% endif %}>Oktober</option>
+<option value="11" {% if request.GET.bulan == "11" %}selected{% endif %}>November</option>
+<option value="12" {% if request.GET.bulan == "12" %}selected{% endif %}>Desember</option>
 </select>
+
 
 <select name="tahun" id="filterTahun">
 <option value="">Pilih Tahun</option>
@@ -97,8 +110,13 @@
 {% endfor %}
 </select>
 
-<button type="submit" class="btn btn-primary">Filter</button>
+
+<button type="submit" class="btn btn-primary">
+Filter
+</button>
+
 </form>
+
 
 
 <!-- ================= CHART ================= -->
@@ -120,11 +138,12 @@
 </div>
 
 <div class="chart-card">
-<h4>Grafik Tren Periode</h4>
+<h4>Grafik Tren Periode (Naik Turun Laporan)</h4>
 <canvas id="trenChart"></canvas>
 </div>
 
 </div>
+
 
 
 <!-- ================= LIST LAPORAN ================= -->
@@ -148,8 +167,7 @@
 
 <p class="laporan-meta">
 <strong>Korban:</strong>
-{{ lap.tampilkan_korban }}
-({{ lap.kelas_korban }})
+{{ lap.tampilkan_korban }} ({{ lap.kelas_korban }})
 </p>
 
 <a href="{% url 'bk_tindak_lanjut' lap.id %}" class="btn-detail">
@@ -162,8 +180,10 @@ Lihat Detail
 {% endfor %}
 </div>
 
+
 </div>
 </div>
+
 
 
 <!-- ================= CHART JS ================= -->
@@ -171,30 +191,12 @@ Lihat Detail
 
 <script>
 
-const defaultOptions = {
-scales:{
-y:{
-beginAtZero:true,
-ticks:{
-precision:0,
-stepSize:1
-}
-}
-},
-plugins:{
-legend:{ position:'top' }
-}
-};
-
-
 /* STATUS */
 new Chart(document.getElementById("statusChart"),{
 type:'pie',
 data:{
 labels:[{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
-datasets:[{
-data:[{% for i in grafik_status %}{{ i.total }},{% endfor %}]
-}]
+datasets:[{ data:[{% for i in grafik_status %}{{ i.total }},{% endfor %}] }]
 }
 });
 
@@ -209,7 +211,11 @@ label:"Jumlah Kasus",
 data:[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
 }]
 },
-options: defaultOptions
+options:{
+scales:{
+y:{ beginAtZero:true, ticks:{ precision:0, stepSize:1 }}
+}
+}
 });
 
 
@@ -223,11 +229,15 @@ label:"Jumlah Kasus",
 data:[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
 }]
 },
-options: defaultOptions
+options:{
+scales:{
+y:{ beginAtZero:true, ticks:{ precision:0, stepSize:1 }}
+}
+}
 });
 
 
-/* TREN */
+/* TREN NAIK TURUN */
 new Chart(document.getElementById("trenChart"),{
 type:'line',
 data:{
@@ -235,14 +245,22 @@ labels:[{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
 datasets:[{
 label:"Tren Laporan",
 data:[{% for i in grafik_tren %}{{ i.total }},{% endfor %}],
-tension:0.3,
+borderWidth:3,
+pointRadius:6,
+pointHoverRadius:8,
+tension:0,
 fill:false
 }]
 },
-options: defaultOptions
+options:{
+scales:{
+y:{ beginAtZero:true, ticks:{ precision:0, stepSize:1 }}
+}
+}
 });
 
 </script>
+
 
 
 <!-- ================= FILTER SCRIPT ================= -->
@@ -254,13 +272,18 @@ const bulan = document.getElementById("filterBulan");
 const tahun = document.getElementById("filterTahun");
 
 function updateFilter(){
+
 tanggal.style.display="none";
 bulan.style.display="none";
 tahun.style.display="none";
 
 if(periode.value==="hari"){ tanggal.style.display="inline-block"; }
-if(periode.value==="bulan"){ bulan.style.display="inline-block"; tahun.style.display="inline-block"; }
+if(periode.value==="bulan"){
+bulan.style.display="inline-block";
+tahun.style.display="inline-block";
+}
 if(periode.value==="tahun"){ tahun.style.display="inline-block"; }
+
 }
 
 periode.addEventListener("change",updateFilter);
