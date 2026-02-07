@@ -7,8 +7,14 @@ from .models import Laporan
 @admin.register(Laporan)
 class LaporanAdmin(admin.ModelAdmin):
 
-    change_list_template = "admin/laporan_change_list.html"
+    # ===============================
+    # TEMPLATE ADMIN CUSTOM
+    # ===============================
+    change_list_template = "admin/laporan/laporan/change_list.html"
 
+    # ===============================
+    # TAMPILAN LIST
+    # ===============================
     list_display = (
         "kode_laporan",
         "get_pelapor_admin",
@@ -29,39 +35,52 @@ class LaporanAdmin(admin.ModelAdmin):
     search_fields = (
         "kode_laporan",
         "pelapor__username",
+        "pelapor__first_name",
+        "pelapor__last_name",
         "nama_korban",
         "nama_terlapor",
+        "lokasi_kejadian",
     )
 
-    # =================================================
+    readonly_fields = (
+        "kode_laporan",
+        "tanggal",
+    )
+
+    # ===============================
+    # DASHBOARD ANALITIK ADMIN
+    # ===============================
     def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context)
 
-        queryset = self.get_queryset(request)
+        try:
+            qs = response.context_data["cl"].queryset
+        except (AttributeError, KeyError):
+            return response
 
-        # SUMMARY
-        total = queryset.count()
-        baru = queryset.filter(status="baru").count()
-        diproses = queryset.filter(status="diproses").count()
-        selesai = queryset.filter(status="selesai").count()
+        # ===== STATISTIK =====
+        total_laporan = qs.count()
+        laporan_baru = qs.filter(status="baru").count()
+        sedang_diproses = qs.filter(status="diproses").count()
+        selesai = qs.filter(status="selesai").count()
 
-        # GRAFIK
-        grafik_status = queryset.values("status").annotate(total=Count("id"))
-        grafik_jenis = queryset.values("jenis_bullying").annotate(total=Count("id"))
-        grafik_kelas = queryset.values("kelas_korban").annotate(total=Count("id"))
+        # ===== GRAFIK =====
+        grafik_status = qs.values("status").annotate(total=Count("id"))
+        grafik_jenis = qs.values("jenis_bullying").annotate(total=Count("id"))
+        grafik_kelas = qs.values("kelas_korban").annotate(total=Count("id"))
 
         grafik_tren = (
-            queryset
-            .annotate(bulan=TruncMonth("tanggal"))
-            .values("bulan")
+            qs.annotate(waktu=TruncMonth("tanggal"))
+            .values("waktu")
             .annotate(total=Count("id"))
-            .order_by("bulan")
+            .order_by("waktu")
         )
 
         extra_context = extra_context or {}
         extra_context.update({
-            "total_laporan": total,
-            "laporan_baru": baru,
-            "sedang_diproses": diproses,
+            "total_laporan": total_laporan,
+            "laporan_baru": laporan_baru,
+            "sedang_diproses": sedang_diproses,
             "selesai": selesai,
             "grafik_status": list(grafik_status),
             "grafik_jenis": list(grafik_jenis),
@@ -69,9 +88,12 @@ class LaporanAdmin(admin.ModelAdmin):
             "grafik_tren": list(grafik_tren),
         })
 
-        return super().changelist_view(request, extra_context=extra_context)
+        response.context_data.update(extra_context)
+        return response
 
-    # =================================================
+    # ===============================
+    # PELAPOR SELALU TERLIHAT DI ADMIN
+    # ===============================
     @admin.display(description="Pelapor")
     def get_pelapor_admin(self, obj):
         return obj.pelapor.get_full_name() or obj.pelapor.username
