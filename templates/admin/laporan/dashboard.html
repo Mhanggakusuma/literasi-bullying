@@ -4,44 +4,74 @@
 
 <h2>Dashboard Statistik Laporan Bullying</h2>
 
+<!-- FILTER -->
+<form method="get" style="margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap;">
+
+<select name="jenis">
+<option value="">Semua Jenis</option>
+{% for val,label in jenis_choices %}
+<option value="{{ val }}">{{ label }}</option>
+{% endfor %}
+</select>
+
+<select name="kelas">
+<option value="">Semua Kelas</option>
+{% for val,label in kelas_choices %}
+<option value="{{ val }}">{{ label }}</option>
+{% endfor %}
+</select>
+
+<select name="status">
+<option value="">Semua Status</option>
+<option value="baru">Baru</option>
+<option value="diproses">Diproses</option>
+<option value="selesai">Selesai</option>
+</select>
+
+<select name="periode">
+<option value="">Semua Waktu</option>
+<option value="hari">Per Hari</option>
+<option value="bulan">Per Bulan</option>
+<option value="tahun">Per Tahun</option>
+</select>
+
+<input type="date" name="tanggal">
+
+<select name="bulan">
+<option value="">Bulan</option>
+{% for i in "123456789101112"|make_list %}
+<option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+{% endfor %}
+</select>
+
+<select name="tahun">
+<option value="">Tahun</option>
+{% for t in daftar_tahun %}
+<option value="{{ t.year }}">{{ t.year }}</option>
+{% endfor %}
+</select>
+
+<button type="submit">Filter</button>
+
+</form>
+
+<!-- SUMMARY -->
 <div style="display:flex; gap:20px; margin-bottom:20px; flex-wrap:wrap;">
-
-<div class="admin-card">Total Laporan <b>{{ total_laporan }}</b></div>
-<div class="admin-card">Baru <b>{{ laporan_baru }}</b></div>
-<div class="admin-card">Diproses <b>{{ diproses }}</b></div>
-<div class="admin-card">Selesai <b>{{ selesai }}</b></div>
-
+<div>Total: <b>{{ total_laporan }}</b></div>
+<div>Baru: <b>{{ laporan_baru }}</b></div>
+<div>Diproses: <b>{{ diproses }}</b></div>
+<div>Selesai: <b>{{ selesai }}</b></div>
 </div>
 
+<!-- GRAFIK -->
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:25px;">
 
-<div class="admin-card chart-box">
 <canvas id="statusChart"></canvas>
-</div>
-
-<div class="admin-card chart-box">
 <canvas id="jenisChart"></canvas>
-</div>
-
-<div class="admin-card chart-box">
 <canvas id="kelasChart"></canvas>
-</div>
-
-<div class="admin-card chart-box">
 <canvas id="trenChart"></canvas>
-</div>
 
 </div>
-
-<style>
-.admin-card{
-background:white;
-padding:15px 20px;
-border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
-.chart-box{ height:300px; }
-</style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -49,8 +79,7 @@ box-shadow:0 2px 8px rgba(0,0,0,0.1);
 function chart(id,type,labels,data){
 new Chart(document.getElementById(id),{
 type:type,
-data:{labels:labels,datasets:[{data:data}]},
-options:{responsive:true,maintainAspectRatio:false}
+data:{labels:labels,datasets:[{data:data}]}
 });
 }
 
