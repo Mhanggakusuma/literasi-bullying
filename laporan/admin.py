@@ -1,12 +1,13 @@
 from django.contrib import admin
 from django.db.models import Count
-from django.db.models.functions import TruncDay, TruncMonth
+from django.db.models.functions import TruncMonth
 from .models import Laporan
 
 
 @admin.register(Laporan)
 class LaporanAdmin(admin.ModelAdmin):
 
+    # Template dashboard custom
     change_list_template = "admin/laporan_change_list.html"
 
     list_display = (
@@ -26,95 +27,58 @@ class LaporanAdmin(admin.ModelAdmin):
         "tanggal",
     )
 
+    search_fields = (
+        "kode_laporan",
+        "pelapor__username",
+        "nama_korban",
+        "nama_terlapor",
+    )
+
+    readonly_fields = ("kode_laporan", "tanggal")
+
     # =================================================
     # DASHBOARD ANALITIK ADMIN
     # =================================================
     def changelist_view(self, request, extra_context=None):
 
-        laporan_qs = Laporan.objects.all()
+        queryset = self.get_queryset(request)
 
-        # ===== FILTER =====
-        jenis_filter = request.GET.get("jenis")
-        kelas_filter = request.GET.get("kelas")
-        status_filter = request.GET.get("status")
-
-        periode = request.GET.get("periode", "semua")
-        tanggal = request.GET.get("tanggal")
-        bulan = request.GET.get("bulan")
-        tahun = request.GET.get("tahun")
-
-        if jenis_filter:
-            laporan_qs = laporan_qs.filter(jenis_bullying=jenis_filter)
-
-        if kelas_filter:
-            laporan_qs = laporan_qs.filter(kelas_korban=kelas_filter)
-
-        if status_filter:
-            laporan_qs = laporan_qs.filter(status=status_filter)
-
-        if periode == "hari" and tanggal:
-            laporan_qs = laporan_qs.filter(tanggal__date=tanggal)
-
-        elif periode == "bulan" and bulan and tahun:
-            laporan_qs = laporan_qs.filter(
-                tanggal__month=bulan,
-                tanggal__year=tahun
-            )
-
-        elif periode == "tahun" and tahun:
-            laporan_qs = laporan_qs.filter(
-                tanggal__year=tahun
-            )
+        # ===== SUMMARY =====
+        total_laporan = queryset.count()
+        laporan_baru = queryset.filter(status="baru").count()
+        sedang_diproses = queryset.filter(status="diproses").count()
+        selesai = queryset.filter(status="selesai").count()
 
         # ===== GRAFIK =====
-        grafik_status = laporan_qs.values("status").annotate(total=Count("id"))
-        grafik_jenis = laporan_qs.values("jenis_bullying").annotate(total=Count("id"))
-        grafik_kelas = laporan_qs.values("kelas_korban").annotate(total=Count("id"))
+        grafik_status = queryset.values("status").annotate(total=Count("id"))
+        grafik_jenis = queryset.values("jenis_bullying").annotate(total=Count("id"))
+        grafik_kelas = queryset.values("kelas_korban").annotate(total=Count("id"))
 
-        # ===== TREN =====
-        if periode == "bulan" and bulan and tahun:
-            grafik_tren = (
-                laporan_qs
-                .annotate(waktu=TruncDay("tanggal"))
-                .values("waktu")
-                .annotate(total=Count("id"))
-                .order_by("waktu")
-            )
-
-        else:
-            grafik_tren = (
-                laporan_qs
-                .annotate(waktu=TruncMonth("tanggal"))
-                .values("waktu")
-                .annotate(total=Count("id"))
-                .order_by("waktu")
-            )
-
-        daftar_tahun = Laporan.objects.dates("tanggal", "year")
+        grafik_tren = (
+            queryset
+            .annotate(bulan=TruncMonth("tanggal"))
+            .values("bulan")
+            .annotate(total=Count("id"))
+            .order_by("bulan")
+        )
 
         extra_context = extra_context or {}
         extra_context.update({
 
-            "total_laporan": laporan_qs.count(),
-            "laporan_baru": laporan_qs.filter(status="baru").count(),
-            "sedang_diproses": laporan_qs.filter(status="diproses").count(),
-            "selesai": laporan_qs.filter(status="selesai").count(),
+            "total_laporan": total_laporan,
+            "laporan_baru": laporan_baru,
+            "sedang_diproses": sedang_diproses,
+            "selesai": selesai,
 
             "grafik_status": list(grafik_status),
             "grafik_jenis": list(grafik_jenis),
             "grafik_kelas": list(grafik_kelas),
             "grafik_tren": list(grafik_tren),
-
-            "periode": periode,
-            "jenis_choices": Laporan.JENIS_BULLYING_CHOICES,
-            "kelas_choices": Laporan.KELAS_CHOICES,
-            "daftar_tahun": daftar_tahun,
         })
 
         return super().changelist_view(request, extra_context=extra_context)
 
     # =================================================
+    @admin.display(description="Pelapor")
     def get_pelapor_admin(self, obj):
         return obj.pelapor.get_full_name() or obj.pelapor.username
-
-    get_pelapor_admin.short_description = "Pelapor"
