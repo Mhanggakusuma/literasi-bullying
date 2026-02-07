@@ -1,66 +1,76 @@
 {% extends "admin/change_list.html" %}
-{% load static %}
 
 {% block content %}
 
-<h2>Dashboard Analitik Bullying</h2>
+<div style="margin-bottom:30px">
 
-<div style="display:flex; gap:20px; margin-bottom:20px;">
+  <!-- SUMMARY -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+    <div class="module">Total<br><strong>{{ total_laporan }}</strong></div>
+    <div class="module">Baru<br><strong>{{ laporan_baru }}</strong></div>
+    <div class="module">Diproses<br><strong>{{ sedang_diproses }}</strong></div>
+    <div class="module">Selesai<br><strong>{{ selesai }}</strong></div>
+  </div>
 
-<div>Total: {{ total_laporan }}</div>
-<div>Baru: {{ laporan_baru }}</div>
-<div>Diproses: {{ sedang_diproses }}</div>
-<div>Selesai: {{ selesai }}</div>
+  <!-- GRAFIK -->
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+    <canvas id="statusChart" height="120"></canvas>
+    <canvas id="jenisChart" height="120"></canvas>
+    <canvas id="kelasChart" height="120"></canvas>
+    <canvas id="trenChart" height="120"></canvas>
+  </div>
 
 </div>
 
-<form method="get">
-
-<select name="jenis">
-<option value="">Semua Jenis</option>
-{% for val,label in jenis_choices %}
-<option value="{{ val }}">{{ label }}</option>
-{% endfor %}
-</select>
-
-<select name="kelas">
-<option value="">Semua Kelas</option>
-{% for val,label in kelas_choices %}
-<option value="{{ val }}">{{ label }}</option>
-{% endfor %}
-</select>
-
-<select name="status">
-<option value="">Semua Status</option>
-<option value="baru">Baru</option>
-<option value="diproses">Diproses</option>
-<option value="selesai">Selesai</option>
-</select>
-
-<button type="submit">Filter</button>
-</form>
-
-<hr>
-
-<canvas id="statusChart" height="120"></canvas>
-<canvas id="jenisChart" height="120"></canvas>
-<canvas id="kelasChart" height="120"></canvas>
-<canvas id="trenChart" height="120"></canvas>
+<!-- 🔑 INI PENTING: ADMIN ASLI TETAP ADA -->
+{{ block.super }}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+document.addEventListener("DOMContentLoaded", function () {
 
-new Chart(document.getElementById("statusChart"), {
-type:'pie',
-data:{
-labels:[{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
-datasets:[{
-data:[{% for i in grafik_status %}{{ i.total }},{% endfor %}]
-}]
-}
+  const makeChart = (id, type, labels, data) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    new Chart(el, {
+      type: type,
+      data: {
+        labels: labels,
+        datasets: [{ data: data }]
+      }
+    });
+  };
+
+  makeChart(
+    "statusChart",
+    "pie",
+    [{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
+    [{% for i in grafik_status %}{{ i.total }},{% endfor %}]
+  );
+
+  makeChart(
+    "jenisChart",
+    "bar",
+    [{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
+    [{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
+  );
+
+  makeChart(
+    "kelasChart",
+    "bar",
+    [{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
+    [{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
+  );
+
+  makeChart(
+    "trenChart",
+    "line",
+    [{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
+    [{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
+  );
+
 });
-
 </script>
 
 {% endblock %}
