@@ -19,21 +19,16 @@ class LaporanAdmin(admin.ModelAdmin):
         "tanggal",
     )
 
-    list_filter = (
-        "status",
-        "jenis_bullying",
-        "kelas_korban",
-        "tanggal",
-    )
+    # ❗ HAPUS FILTER DEFAULT ADMIN
+    list_filter = ()
 
     # =================================================
-    # ANALITIK ADMIN
+    # QUERYSET ADMIN → SUMBER SEMUA DATA
     # =================================================
-    def changelist_view(self, request, extra_context=None):
+    def get_queryset(self, request):
 
-        qs = Laporan.objects.all()
+        qs = super().get_queryset(request)
 
-        # FILTER
         jenis = request.GET.get("jenis")
         kelas = request.GET.get("kelas")
         status = request.GET.get("status")
@@ -52,7 +47,6 @@ class LaporanAdmin(admin.ModelAdmin):
         if status:
             qs = qs.filter(status=status)
 
-        # FILTER PERIODE
         if periode == "hari" and tanggal:
             qs = qs.filter(tanggal__date=tanggal)
 
@@ -65,6 +59,20 @@ class LaporanAdmin(admin.ModelAdmin):
         elif periode == "tahun" and tahun:
             qs = qs.filter(tanggal__year=tahun)
 
+        return qs
+
+    # =================================================
+    # ANALITIK DASHBOARD
+    # =================================================
+    def changelist_view(self, request, extra_context=None):
+
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        try:
+            qs = response.context_data["cl"].queryset
+        except:
+            return response
+
         # SUMMARY
         total_laporan = qs.count()
         laporan_baru = qs.filter(status="baru").count()
@@ -76,7 +84,10 @@ class LaporanAdmin(admin.ModelAdmin):
         grafik_jenis = qs.values("jenis_bullying").annotate(total=Count("id"))
         grafik_kelas = qs.values("kelas_korban").annotate(total=Count("id"))
 
-        # TREN
+        periode = request.GET.get("periode", "semua")
+        bulan = request.GET.get("bulan")
+        tahun = request.GET.get("tahun")
+
         if periode == "bulan" and bulan and tahun:
             grafik_tren = (
                 qs.annotate(waktu=TruncDay("tanggal"))
@@ -84,7 +95,6 @@ class LaporanAdmin(admin.ModelAdmin):
                 .annotate(total=Count("id"))
                 .order_by("waktu")
             )
-
         else:
             grafik_tren = (
                 qs.annotate(waktu=TruncMonth("tanggal"))
@@ -95,8 +105,7 @@ class LaporanAdmin(admin.ModelAdmin):
 
         daftar_tahun = Laporan.objects.dates("tanggal", "year")
 
-        extra_context = extra_context or {}
-        extra_context.update({
+        response.context_data.update({
             "total_laporan": total_laporan,
             "laporan_baru": laporan_baru,
             "diproses": diproses,
@@ -111,7 +120,7 @@ class LaporanAdmin(admin.ModelAdmin):
             "daftar_tahun": daftar_tahun,
         })
 
-        return super().changelist_view(request, extra_context=extra_context)
+        return response
 
 
     @admin.display(description="Pelapor")
