@@ -67,12 +67,14 @@
 
 </form>
 
+
 <div style="display:flex; gap:15px; margin-bottom:20px;">
 <div>Total : {{ total_laporan }}</div>
 <div>Baru : {{ laporan_baru }}</div>
 <div>Diproses : {{ laporan_diproses }}</div>
 <div>Selesai : {{ laporan_selesai }}</div>
 </div>
+
 
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:30px;">
 <canvas id="statusChart"></canvas>
@@ -81,19 +83,50 @@
 <canvas id="trenChart"></canvas>
 </div>
 
-<!-- ⭐ TABEL ADMIN DI SINI -->
+
+<!-- ⭐ PENTING: ADMIN TABLE -->
 {{ block.super }}
 
+
+<!-- ⭐ SCRIPT HARUS PALING BAWAH -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+window.onload = function() {
+
 new Chart(document.getElementById("statusChart"), {
 type:'pie',
 data:{
 labels:[{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
 datasets:[{data:[{% for i in grafik_status %}{{ i.total }},{% endfor %}]}]
 }
-})
+});
+
+new Chart(document.getElementById("jenisChart"), {
+type:'bar',
+data:{
+labels:[{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
+datasets:[{data:[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]}]
+}
+});
+
+new Chart(document.getElementById("kelasChart"), {
+type:'bar',
+data:{
+labels:[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
+datasets:[{data:[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]}]
+}
+});
+
+new Chart(document.getElementById("trenChart"), {
+type:'line',
+data:{
+labels:[{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
+datasets:[{data:[{% for i in grafik_tren %}{{ i.total }},{% endfor %}]}]
+}
+});
+
+}
 </script>
 
 {% endblock %}
