@@ -9,4 +9,5 @@ urlpatterns = [
     path("bk/dashboard/", views.bk_dashboard, name="bk_dashboard"),
     path("bk/laporan/<int:pk>/", views.bk_tindak_lanjut, name="bk_tindak_lanjut"),
     path("bk/download/", views.bk_download_laporan, name="bk_download_laporan"),
+    path("admin/dashboard/", views.admin_dashboard, name="admin_dashboard"),
 ]
