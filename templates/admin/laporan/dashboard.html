@@ -17,56 +17,64 @@
 
 <script>
 
-const jenisData = JSON.parse('{{ jenis_json|escapejs }}');
-const kelasData = JSON.parse('{{ kelas_json|escapejs }}');
-const statusData = JSON.parse('{{ status_json|escapejs }}');
-const waktuData = JSON.parse('{{ waktu_json|escapejs }}');
+document.addEventListener("DOMContentLoaded", function () {
 
-function chart(id, labels, data, label){
-    new Chart(document.getElementById(id), {
-        type:'bar',
-        data:{
-            labels:labels,
-            datasets:[{
-                label:label,
-                data:data
-            }]
-        }
-    });
-}
+    const jenisData = JSON.parse('{{ jenis_json|escapejs }}');
+    const kelasData = JSON.parse('{{ kelas_json|escapejs }}');
+    const statusData = JSON.parse('{{ status_json|escapejs }}');
+    const waktuData = JSON.parse('{{ waktu_json|escapejs }}');
 
-// Jenis Bullying
-chart(
-    "jenisChart",
-    jenisData.map(x=>x.jenis_bullying),
-    jenisData.map(x=>x.total),
-    "Jenis Bullying"
-);
+    function chart(id, labels, data, label){
 
-// Kelas Korban
-chart(
-    "kelasChart",
-    kelasData.map(x=>x.kelas_korban),
-    kelasData.map(x=>x.total),
-    "Kelas Korban"
-);
+        const ctx = document.getElementById(id);
 
-// Status
-chart(
-    "statusChart",
-    statusData.map(x=>x.status),
-    statusData.map(x=>x.total),
-    "Status Laporan"
-);
+        if (!ctx) return;
 
-// Tren Waktu
-chart(
-    "waktuChart",
-    waktuData.map(x=>new Date(x.bulan).toLocaleDateString("id-ID",{month:'short',year:'numeric'})),
-    waktuData.map(x=>x.total),
-    "Tren Laporan"
-);
+        new Chart(ctx, {
+            type:'bar',
+            data:{
+                labels:labels,
+                datasets:[{
+                    label:label,
+                    data:data
+                }]
+            },
+            options:{
+                responsive:true,
+                maintainAspectRatio:false
+            }
+        });
+    }
 
+    chart(
+        "jenisChart",
+        jenisData.map(x=>x.jenis_bullying),
+        jenisData.map(x=>x.total),
+        "Jenis Bullying"
+    );
+
+    chart(
+        "kelasChart",
+        kelasData.map(x=>x.kelas_korban),
+        kelasData.map(x=>x.total),
+        "Kelas Korban"
+    );
+
+    chart(
+        "statusChart",
+        statusData.map(x=>x.status),
+        statusData.map(x=>x.total),
+        "Status Laporan"
+    );
+
+    chart(
+        "waktuChart",
+        waktuData.map(x=>new Date(x.bulan).toLocaleDateString("id-ID",{month:'short',year:'numeric'})),
+        waktuData.map(x=>x.total),
+        "Tren Waktu"
+    );
+
+});
 </script>
 
 {% endblock %}
