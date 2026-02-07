@@ -96,134 +96,187 @@
       <button type="submit" class="btn btn-primary">Filter</button>
     </form>
 
-    <!-- ================= GRAFIK ================= -->
-    <div class="chart-container">
-      <canvas id="statusChart"></canvas>
-      <canvas id="jenisChart"></canvas>
-      <canvas id="kelasChart"></canvas>
-      <canvas id="trenChart"></canvas>
-    </div>
+    <!-- ================= MAIN DASHBOARD ================= -->
+    <div class="dashboard-main">
 
-    <!-- ================= LIST LAPORAN ================= -->
-    <div class="laporan-card mt-5">
-      <h3>Daftar Laporan</h3>
+      <!-- ================= LAPORAN KIRI ================= -->
+      <div class="laporan-area">
 
-      {% for lap in laporan %}
-      <div class="laporan-item">
+        <h3>Daftar Laporan</h3>
 
-        <div class="laporan-top d-flex justify-content-between">
-          <strong>{{ lap.kode_laporan }}</strong>
-          <span class="status {{ lap.status }}">
-            {{ lap.get_status_display }}
-          </span>
+        {% for lap in laporan %}
+        <div class="laporan-item">
+
+          <div class="laporan-top d-flex justify-content-between">
+            <strong>{{ lap.kode_laporan }}</strong>
+            <span class="status {{ lap.status }}">
+              {{ lap.get_status_display }}
+            </span>
+          </div>
+
+          <p class="laporan-meta">
+            <strong>Pelapor:</strong>
+            {{ lap.tampilkan_pelapor }}
+            • {{ lap.get_jenis_bullying_display }}
+            • {{ lap.tanggal|date:"d M Y" }}
+          </p>
+
+          <p class="laporan-meta">
+            <strong>Korban:</strong>
+            {{ lap.tampilkan_korban }}
+            ({{ lap.kelas_korban }})
+          </p>
+
+          <a href="{% url 'bk_tindak_lanjut' lap.id %}" class="btn-detail">
+            Lihat Detail
+          </a>
+
         </div>
-
-        <p class="laporan-meta">
-          <strong>Pelapor:</strong>
-          {{ lap.tampilkan_pelapor }}
-          • {{ lap.get_jenis_bullying_display }}
-          • {{ lap.tanggal|date:"d M Y" }}
-        </p>
-
-        <p class="laporan-meta">
-          <strong>Korban:</strong>
-          {{ lap.tampilkan_korban }}
-          ({{ lap.kelas_korban }})
-        </p>
-
-        <a href="{% url 'bk_tindak_lanjut' lap.id %}" class="btn-detail">
-          Lihat Detail
-        </a>
+        {% empty %}
+        <p>Tidak ada laporan</p>
+        {% endfor %}
 
       </div>
-      {% empty %}
-      <p>Tidak ada laporan</p>
-      {% endfor %}
+
+
+      <!-- ================= CHART KANAN ================= -->
+      <div class="chart-area">
+
+        <div class="chart-card">
+          <canvas id="statusChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+          <canvas id="jenisChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+          <canvas id="kelasChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+          <canvas id="trenChart"></canvas>
+        </div>
+
+      </div>
+
     </div>
 
   </div>
 </div>
 
-
 <style>
-.chart-container canvas{
-    height:320px !important;
-    margin-bottom:40px;
+
+/* ===== MAIN GRID ===== */
+.dashboard-main {
+  display: grid;
+  grid-template-columns: 1.2fr 1.8fr;
+  gap: 30px;
+  margin-top: 25px;
 }
+
+/* ===== LAPORAN ===== */
+.laporan-area {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,.12);
+}
+
+/* ===== CHART ===== */
+.chart-area {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 20px;
+}
+
+.chart-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 8px 25px rgba(0,0,0,.12);
+}
+
+.chart-card canvas {
+  width: 100% !important;
+  height: 260px !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+  .dashboard-main {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-area {
+    grid-template-columns: 1fr;
+  }
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 const chartOptions = {
-    responsive:true,
-    scales:{
-        y:{
-            beginAtZero:true,
-            ticks:{
-                precision:0,
-                stepSize:1
-            }
-        }
+  responsive:true,
+  scales:{
+    y:{
+      beginAtZero:true,
+      ticks:{
+        precision:0,
+        stepSize:1
+      }
     }
+  }
 };
 
 new Chart(document.getElementById("statusChart"), {
-    type:'pie',
-    data:{
-        labels:[{% for i in grafik_status %}"{{ i.status|title }}",{% endfor %}],
-        datasets:[{
-            label:"Jumlah Laporan",
-            data:[{% for i in grafik_status %}{{ i.total }},{% endfor %}]
-        }]
-    },
-    options:{ responsive:true }
+  type:'pie',
+  data:{
+    labels:[{% for i in grafik_status %}"{{ i.status|title }}",{% endfor %}],
+    datasets:[{
+      data:[{% for i in grafik_status %}{{ i.total }},{% endfor %}]
+    }]
+  }
 });
 
 new Chart(document.getElementById("jenisChart"), {
-    type:'bar',
-    data:{
-        labels:[{% for i in grafik_jenis %}"{{ i.jenis_bullying|title }}",{% endfor %}],
-        datasets:[{
-            label:"Jumlah Kasus",
-            data:[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
-        }]
-    },
-    options:chartOptions
+  type:'bar',
+  data:{
+    labels:[{% for i in grafik_jenis %}"{{ i.jenis_bullying|title }}",{% endfor %}],
+    datasets:[{
+      data:[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
+    }]
+  },
+  options:chartOptions
 });
 
 new Chart(document.getElementById("kelasChart"), {
-    type:'bar',
-    data:{
-        labels:[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
-        datasets:[{
-            label:"Jumlah Korban",
-            data:[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
-        }]
-    },
-    options:chartOptions
+  type:'bar',
+  data:{
+    labels:[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
+    datasets:[{
+      data:[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
+    }]
+  },
+  options:chartOptions
 });
 
 new Chart(document.getElementById("trenChart"), {
-    type:'line',
-    data:{
-        labels:[
-            {% if periode == "hari" %}
-                {% for i in grafik_tren %}"{{ i.waktu|date:'d M Y' }}",{% endfor %}
-            {% elif periode == "tahun" %}
-                {% for i in grafik_tren %}"{{ i.waktu|date:'Y' }}",{% endfor %}
-            {% else %}
-                {% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}
-            {% endif %}
-        ],
-        datasets:[{
-            label:"Tren Laporan",
-            data:[{% for i in grafik_tren %}{{ i.total }},{% endfor %}],
-            tension:0.3,
-            fill:false
-        }]
-    },
-    options:chartOptions
+  type:'line',
+  data:{
+    labels:[
+      {% for i in grafik_tren %}
+      "{{ i.waktu|date:'d M Y' }}",
+      {% endfor %}
+    ],
+    datasets:[{
+      data:[{% for i in grafik_tren %}{{ i.total }},{% endfor %}],
+      tension:0.3
+    }]
+  },
+  options:chartOptions
 });
 </script>
 
@@ -234,20 +287,22 @@ const bulan = document.getElementById("filterBulan");
 const tahun = document.getElementById("filterTahun");
 
 function updateFilter(){
-    tanggal.style.display="none";
-    bulan.style.display="none";
-    tahun.style.display="none";
+  tanggal.style.display="none";
+  bulan.style.display="none";
+  tahun.style.display="none";
 
-    if(periode.value==="hari"){
-        tanggal.style.display="inline-block";
-    }
-    if(periode.value==="bulan"){
-        bulan.style.display="inline-block";
-        tahun.style.display="inline-block";
-    }
-    if(periode.value==="tahun"){
-        tahun.style.display="inline-block";
-    }
+  if(periode.value==="hari"){
+    tanggal.style.display="inline-block";
+  }
+
+  if(periode.value==="bulan"){
+    bulan.style.display="inline-block";
+    tahun.style.display="inline-block";
+  }
+
+  if(periode.value==="tahun"){
+    tahun.style.display="inline-block";
+  }
 }
 
 periode.addEventListener("change", updateFilter);

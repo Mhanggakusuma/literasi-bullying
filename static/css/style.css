@@ -1499,6 +1499,10 @@ select {
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 28px;
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.08);
 }
 
 .filter-bar select,
@@ -1506,45 +1510,38 @@ select {
   padding: 10px 12px;
   border-radius: 10px;
   border: 1px solid #ced4da;
-  min-width: 140px;
+  min-width: 150px;
 }
 
 .filter-bar button {
-  padding: 10px 20px;
+  padding: 10px 22px;
   border-radius: 10px;
   font-weight: 700;
 }
 
-/* ================= CHART ================= */
-.chart-container {
+/* ================= MAIN DASHBOARD GRID ================= */
+.dashboard-main {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 25px;
-  margin-top: 20px;
+  grid-template-columns: 1.2fr 1.8fr;
+  gap: 30px;
+  margin-top: 25px;
 }
 
-/* Chart Card Style */
-.chart-container canvas {
-  width: 100% !important;
-  height: 280px !important;
+/* ================= LAPORAN AREA ================= */
+.laporan-area {
   background: #ffffff;
-  padding: 18px;
+  padding: 20px;
   border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0,0,0,.12);
+  box-shadow: 0 8px 25px rgba(0,0,0,.12);
+  height: fit-content;
 }
 
-/* Tren Chart Lebih Lebar */
-#trenChart {
-  grid-column: span 2;
-  height: 320px !important;
-}
-
-/* ================= LAPORAN ================= */
+/* ================= ITEM LAPORAN ================= */
 .laporan-item {
   background: #ffffff;
   padding: 18px;
   border-radius: 14px;
-  box-shadow: 0 8px 20px rgba(0,0,0,.12);
+  box-shadow: 0 6px 18px rgba(0,0,0,.10);
   margin-bottom: 14px;
 }
 
@@ -1553,6 +1550,7 @@ select {
   color: #495057;
 }
 
+/* ================= STATUS BADGE ================= */
 .status {
   padding: 6px 14px;
   border-radius: 999px;
@@ -1565,6 +1563,7 @@ select {
 .status.diproses { background: #ff9800; }
 .status.selesai { background: #198754; }
 
+/* ================= DETAIL BUTTON ================= */
 .btn-detail {
   display: inline-flex;
   align-items: center;
@@ -1582,6 +1581,27 @@ select {
   background: #084298;
 }
 
+/* ================= CHART AREA ================= */
+.chart-area {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 20px;
+}
+
+/* Chart Card */
+.chart-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 8px 25px rgba(0,0,0,.12);
+}
+
+/* Ukuran Chart Seragam */
+.chart-card canvas {
+  width: 100% !important;
+  height: 260px !important;
+}
+
 /* ================= RESPONSIVE ================= */
 
 /* Tablet */
@@ -1595,12 +1615,12 @@ select {
     grid-template-columns: repeat(2,1fr);
   }
 
-  .chart-container {
+  .dashboard-main {
     grid-template-columns: 1fr;
   }
 
-  #trenChart {
-    grid-column: span 1;
+  .chart-area {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1624,8 +1644,8 @@ select {
     flex-direction: column;
   }
 
-  .chart-container canvas {
-    height: 250px !important;
+  .chart-card canvas {
+    height: 240px !important;
   }
 }
 
