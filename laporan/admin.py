@@ -23,93 +23,99 @@ class LaporanAdmin(admin.ModelAdmin):
 
 
     # ================= DASHBOARD ADMIN =================
-    def changelist_view(self, request, extra_context=None):
+def changelist_view(self, request, extra_context=None):
 
-        response = super().changelist_view(request, extra_context)
+    response = super().changelist_view(request, extra_context)
 
-        if hasattr(response, "context_data"):
+    if hasattr(response, "context_data"):
 
-            cl = response.context_data["cl"]
-            qs = cl.queryset
+        cl = response.context_data["cl"]
 
-            # ================= FILTER MANUAL =================
-            jenis = request.GET.get("jenis")
-            kelas = request.GET.get("kelas")
-            status = request.GET.get("status")
-            periode = request.GET.get("periode", "semua")
-            tanggal = request.GET.get("tanggal")
-            bulan = request.GET.get("bulan")
-            tahun = request.GET.get("tahun")
+        qs = cl.queryset
 
-            if jenis:
-                qs = qs.filter(jenis_bullying=jenis)
+        # ===== FILTER MANUAL =====
+        jenis = request.GET.get("jenis")
+        kelas = request.GET.get("kelas")
+        status = request.GET.get("status")
+        periode = request.GET.get("periode", "semua")
+        tanggal = request.GET.get("tanggal")
+        bulan = request.GET.get("bulan")
+        tahun = request.GET.get("tahun")
 
-            if kelas:
-                qs = qs.filter(kelas_korban=kelas)
+        if jenis:
+            qs = qs.filter(jenis_bullying=jenis)
 
-            if status:
-                qs = qs.filter(status=status)
+        if kelas:
+            qs = qs.filter(kelas_korban=kelas)
 
-            if periode == "hari" and tanggal:
-                qs = qs.filter(tanggal__date=tanggal)
+        if status:
+            qs = qs.filter(status=status)
 
-            elif periode == "bulan" and bulan and tahun:
-                qs = qs.filter(
-                    tanggal__month=bulan,
-                    tanggal__year=tahun
-                )
+        if periode == "hari" and tanggal:
+            qs = qs.filter(tanggal__date=tanggal)
 
-            elif periode == "tahun" and tahun:
-                qs = qs.filter(tanggal__year=tahun)
+        elif periode == "bulan" and bulan and tahun:
+            qs = qs.filter(
+                tanggal__month=bulan,
+                tanggal__year=tahun
+            )
 
-            # ================= GRAFIK =================
-            grafik_status = list(qs.values("status").annotate(total=Count("id")))
-            grafik_jenis = list(qs.values("jenis_bullying").annotate(total=Count("id")))
-            grafik_kelas = list(qs.values("kelas_korban").annotate(total=Count("id")))
+        elif periode == "tahun" and tahun:
+            qs = qs.filter(tanggal__year=tahun)
 
-            if periode == "hari":
-                grafik_tren = list(
-                    qs.annotate(waktu=TruncDay("tanggal"))
-                    .values("waktu")
-                    .annotate(total=Count("id"))
-                    .order_by("waktu")
-                )
+        # ⭐ PENTING BANGET
+        cl.queryset = qs
+        cl.result_list = qs
 
-            elif periode == "tahun":
-                grafik_tren = list(
-                    qs.annotate(waktu=TruncYear("tanggal"))
-                    .values("waktu")
-                    .annotate(total=Count("id"))
-                    .order_by("waktu")
-                )
+        # ===== DASHBOARD =====
+        grafik_status = list(qs.values("status").annotate(total=Count("id")))
+        grafik_jenis = list(qs.values("jenis_bullying").annotate(total=Count("id")))
+        grafik_kelas = list(qs.values("kelas_korban").annotate(total=Count("id")))
 
-            else:
-                grafik_tren = list(
-                    qs.annotate(waktu=TruncMonth("tanggal"))
-                    .values("waktu")
-                    .annotate(total=Count("id"))
-                    .order_by("waktu")
-                )
+        if periode == "hari":
+            grafik_tren = list(
+                qs.annotate(waktu=TruncDay("tanggal"))
+                .values("waktu")
+                .annotate(total=Count("id"))
+                .order_by("waktu")
+            )
 
-            daftar_tahun = Laporan.objects.dates("tanggal", "year")
+        elif periode == "tahun":
+            grafik_tren = list(
+                qs.annotate(waktu=TruncYear("tanggal"))
+                .values("waktu")
+                .annotate(total=Count("id"))
+                .order_by("waktu")
+            )
 
-            response.context_data.update({
-                "total_laporan": qs.count(),
-                "laporan_baru": qs.filter(status="baru").count(),
-                "diproses": qs.filter(status="diproses").count(),
-                "selesai": qs.filter(status="selesai").count(),
+        else:
+            grafik_tren = list(
+                qs.annotate(waktu=TruncMonth("tanggal"))
+                .values("waktu")
+                .annotate(total=Count("id"))
+                .order_by("waktu")
+            )
 
-                "grafik_status": grafik_status,
-                "grafik_jenis": grafik_jenis,
-                "grafik_kelas": grafik_kelas,
-                "grafik_tren": grafik_tren,
+        daftar_tahun = Laporan.objects.dates("tanggal", "year")
 
-                "jenis_choices": Laporan.JENIS_BULLYING_CHOICES,
-                "kelas_choices": Laporan.KELAS_CHOICES,
-                "daftar_tahun": daftar_tahun,
-            })
+        response.context_data.update({
+            "total_laporan": qs.count(),
+            "laporan_baru": qs.filter(status="baru").count(),
+            "diproses": qs.filter(status="diproses").count(),
+            "selesai": qs.filter(status="selesai").count(),
 
-        return response
+            "grafik_status": grafik_status,
+            "grafik_jenis": grafik_jenis,
+            "grafik_kelas": grafik_kelas,
+            "grafik_tren": grafik_tren,
+
+            "jenis_choices": Laporan.JENIS_BULLYING_CHOICES,
+            "kelas_choices": Laporan.KELAS_CHOICES,
+            "daftar_tahun": daftar_tahun,
+        })
+
+    return response
+
 
 
     @admin.display(description="Pelapor")
