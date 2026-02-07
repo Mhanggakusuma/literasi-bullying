@@ -147,8 +147,10 @@ Lihat Detail
 
 <div class="chart-card">
 <h4>Grafik Status Laporan</h4>
-<canvas id="statusChart"></canvas>
+<div class="status-chart-wrapper">
+   <canvas id="statusChart"></canvas>
 </div>
+
 
 <div class="chart-card">
 <h4>Grafik Jenis Bullying</h4>
@@ -197,7 +199,27 @@ new Chart(document.getElementById("statusChart"), {
 type:'pie',
 data:{
 labels:[{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
-datasets:[{ data:[{% for i in grafik_status %}{{ i.total }},{% endfor %}] }]
+datasets:[{
+data:[{% for i in grafik_status %}{{ i.total }},{% endfor %}],
+backgroundColor:[
+'rgba(13,110,253,0.85)',
+'rgba(255,99,132,0.85)',
+'rgba(25,135,84,0.85)'
+]
+}]
+},
+options:{
+responsive:true,
+maintainAspectRatio:true,
+plugins:{
+legend:{
+position:'bottom',
+labels:{
+padding:15,
+boxWidth:20
+}
+}
+}
 }
 });
 
