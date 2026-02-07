@@ -4,7 +4,48 @@
 
 <h2 style="margin-bottom:15px;">Dashboard Statistik Laporan Bullying</h2>
 
-<!-- SUMMARY -->
+<!-- ================= FILTER PERIODE ================= -->
+<form method="get" style="margin-bottom:20px;">
+
+    <select name="periode" id="periodeSelect">
+        <option value="">Semua Waktu</option>
+        <option value="hari" {% if request.GET.periode == "hari" %}selected{% endif %}>Per Hari</option>
+        <option value="bulan" {% if request.GET.periode == "bulan" %}selected{% endif %}>Per Bulan</option>
+        <option value="tahun" {% if request.GET.periode == "tahun" %}selected{% endif %}>Per Tahun</option>
+    </select>
+
+    <!-- INPUT TANGGAL -->
+    <input type="date" name="tanggal" id="inputTanggal"
+           value="{{ request.GET.tanggal }}">
+
+    <!-- INPUT BULAN -->
+    <select name="bulan" id="inputBulan">
+        <option value="">Pilih Bulan</option>
+        <option value="1">Januari</option>
+        <option value="2">Februari</option>
+        <option value="3">Maret</option>
+        <option value="4">April</option>
+        <option value="5">Mei</option>
+        <option value="6">Juni</option>
+        <option value="7">Juli</option>
+        <option value="8">Agustus</option>
+        <option value="9">September</option>
+        <option value="10">Oktober</option>
+        <option value="11">November</option>
+        <option value="12">Desember</option>
+    </select>
+
+    <!-- INPUT TAHUN -->
+    <input type="number" name="tahun" id="inputTahun"
+           placeholder="Tahun"
+           value="{{ request.GET.tahun }}">
+
+    <button type="submit" class="button">Filter</button>
+
+</form>
+
+
+<!-- ================= SUMMARY ================= -->
 <div style="display:flex; gap:20px; margin-bottom:20px; flex-wrap:wrap;">
 
   <div class="admin-card">Total Laporan <b>{{ total_laporan }}</b></div>
@@ -14,7 +55,8 @@
 
 </div>
 
-<!-- GRAFIK -->
+
+<!-- ================= GRAFIK ================= -->
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:25px;">
 
   <div class="admin-card chart-box">
@@ -108,6 +150,38 @@ createChart(
     [{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
     [{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
 );
+</script>
+
+
+<!-- ================= TOGGLE INPUT FILTER ================= -->
+<script>
+const periode = document.getElementById("periodeSelect");
+const tanggal = document.getElementById("inputTanggal");
+const bulan = document.getElementById("inputBulan");
+const tahun = document.getElementById("inputTahun");
+
+function updateFilter(){
+
+    tanggal.style.display = "none";
+    bulan.style.display = "none";
+    tahun.style.display = "none";
+
+    if(periode.value === "hari"){
+        tanggal.style.display = "inline-block";
+    }
+
+    if(periode.value === "bulan"){
+        bulan.style.display = "inline-block";
+        tahun.style.display = "inline-block";
+    }
+
+    if(periode.value === "tahun"){
+        tahun.style.display = "inline-block";
+    }
+}
+
+periode.addEventListener("change", updateFilter);
+updateFilter();
 </script>
 
 {% endblock %}
