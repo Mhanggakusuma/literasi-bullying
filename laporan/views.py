@@ -48,7 +48,6 @@ def buat_laporan(request):
 
             laporan.pelapor = request.user
             laporan.kode_laporan = generate_kode()
-
             laporan.dampak_korban = form.cleaned_data.get("dampak_korban")
 
             laporan.save()
@@ -94,11 +93,15 @@ def bk_dashboard(request):
 
     laporan_qs = Laporan.objects.all()
 
-    # ================= FILTER =================
+    # ===== FILTER DASAR =====
     jenis_filter = request.GET.get("jenis")
     kelas_filter = request.GET.get("kelas")
     status_filter = request.GET.get("status")
-    periode = request.GET.get("periode", "bulan")
+
+    periode = request.GET.get("periode", "semua")
+    tanggal = request.GET.get("tanggal")
+    bulan = request.GET.get("bulan")
+    tahun = request.GET.get("tahun")
 
     if jenis_filter:
         laporan_qs = laporan_qs.filter(jenis_bullying=jenis_filter)
@@ -109,16 +112,27 @@ def bk_dashboard(request):
     if status_filter:
         laporan_qs = laporan_qs.filter(status=status_filter)
 
-    # ================= GRAFIK STATUS =================
+    # ===== FILTER PERIODE =====
+    if periode == "hari" and tanggal:
+        laporan_qs = laporan_qs.filter(tanggal__date=tanggal)
+
+    elif periode == "bulan" and bulan and tahun:
+        laporan_qs = laporan_qs.filter(
+            tanggal__month=bulan,
+            tanggal__year=tahun
+        )
+
+    elif periode == "tahun" and tahun:
+        laporan_qs = laporan_qs.filter(
+            tanggal__year=tahun
+        )
+
+    # ===== GRAFIK =====
     grafik_status = laporan_qs.values("status").annotate(total=Count("id"))
-
-    # ================= GRAFIK JENIS =================
     grafik_jenis = laporan_qs.values("jenis_bullying").annotate(total=Count("id"))
-
-    # ================= GRAFIK KELAS =================
     grafik_kelas = laporan_qs.values("kelas_korban").annotate(total=Count("id"))
 
-    # ================= GRAFIK TREN =================
+    # ===== GRAFIK TREN =====
     if periode == "hari":
         grafik_tren = laporan_qs.annotate(
             waktu=TruncDay("tanggal")
@@ -134,29 +148,30 @@ def bk_dashboard(request):
             waktu=TruncMonth("tanggal")
         ).values("waktu").annotate(total=Count("id")).order_by("waktu")
 
+    # ===== OPTION TAHUN DINAMIS =====
+    daftar_tahun = Laporan.objects.dates("tanggal", "year")
+
     context = {
-        # DATA LIST
         "laporan": laporan_qs.order_by("-tanggal"),
 
-        # SUMMARY
         "total_laporan": laporan_qs.count(),
         "laporan_baru": laporan_qs.filter(status="baru").count(),
         "sedang_diproses": laporan_qs.filter(status="diproses").count(),
         "selesai": laporan_qs.filter(status="selesai").count(),
 
-        # GRAFIK
         "grafik_status": list(grafik_status),
         "grafik_jenis": list(grafik_jenis),
         "grafik_kelas": list(grafik_kelas),
         "grafik_tren": list(grafik_tren),
 
-        # FILTER OPTION
         "periode": periode,
+        "jenis_choices": Laporan.JENIS_BULLYING_CHOICES,
+        "kelas_choices": Laporan.KELAS_CHOICES,
+        "daftar_tahun": daftar_tahun,
+
         "selected_jenis": jenis_filter,
         "selected_kelas": kelas_filter,
         "selected_status": status_filter,
-        "jenis_choices": Laporan.JENIS_BULLYING_CHOICES,
-        "kelas_choices": Laporan.KELAS_CHOICES,
     }
 
     return render(request, "laporan/bk_dashboard.html", context)
@@ -219,8 +234,8 @@ def bk_download_laporan(request):
     for lap in Laporan.objects.all().order_by("-tanggal"):
         writer.writerow([
             lap.kode_laporan,
-            lap.tampilkan_pelapor,
-            lap.tampilkan_korban,
+            lap.tampilkan_pelapor(),
+            lap.tampilkan_korban(),
             lap.kelas_korban,
             lap.get_jenis_bullying_display(),
             lap.get_status_display(),
