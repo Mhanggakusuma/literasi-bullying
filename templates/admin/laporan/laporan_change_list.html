@@ -4,7 +4,8 @@
 
 <h2>Dashboard Statistik Laporan Bullying</h2>
 
-<form method="get" class="filter-bar">
+<!-- ================= FILTER ================= -->
+<form method="get" style="margin-bottom:20px;">
 
 <select name="jenis">
 <option value="">Semua Jenis</option>
@@ -42,9 +43,18 @@
 
 <select name="bulan" id="filterBulan">
 <option value="">Pilih Bulan</option>
-{% for i in "123456789101112"|make_list %}
-<option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
-{% endfor %}
+<option value="1">Januari</option>
+<option value="2">Februari</option>
+<option value="3">Maret</option>
+<option value="4">April</option>
+<option value="5">Mei</option>
+<option value="6">Juni</option>
+<option value="7">Juli</option>
+<option value="8">Agustus</option>
+<option value="9">September</option>
+<option value="10">Oktober</option>
+<option value="11">November</option>
+<option value="12">Desember</option>
 </select>
 
 <select name="tahun" id="filterTahun">
@@ -58,36 +68,110 @@
 
 </form>
 
-<hr>
 
+<!-- ================= SUMMARY ================= -->
+<div style="display:flex; gap:20px; margin-bottom:20px; flex-wrap:wrap;">
+
+<div class="admin-card">Total Laporan <b>{{ total_laporan }}</b></div>
+<div class="admin-card">Baru <b>{{ laporan_baru }}</b></div>
+<div class="admin-card">Diproses <b>{{ diproses }}</b></div>
+<div class="admin-card">Selesai <b>{{ selesai }}</b></div>
+
+</div>
+
+
+<!-- ================= GRAFIK ================= -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:25px; margin-bottom:30px;">
+
+<div class="admin-card chart-box">
+<canvas id="statusChart"></canvas>
+</div>
+
+<div class="admin-card chart-box">
+<canvas id="jenisChart"></canvas>
+</div>
+
+<div class="admin-card chart-box">
+<canvas id="kelasChart"></canvas>
+</div>
+
+<div class="admin-card chart-box">
+<canvas id="trenChart"></canvas>
+</div>
+
+</div>
+
+
+<!-- ================= TABEL ADMIN ================= -->
 {{ block.super }}
 
+
+<style>
+.admin-card{
+background:white;
+padding:15px 20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.chart-box{
+height:300px;
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-const periode = document.getElementById("periodeSelect");
-const tanggal = document.getElementById("filterTanggal");
-const bulan = document.getElementById("filterBulan");
-const tahun = document.getElementById("filterTahun");
+function createChart(id,type,labels,data){
+new Chart(document.getElementById(id),{
+type:type,
+data:{labels:labels,datasets:[{data:data}]},
+options:{responsive:true,maintainAspectRatio:false}
+});
+}
+</script>
+
+<script>
+createChart("statusChart","pie",
+[{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
+[{% for i in grafik_status %}{{ i.total }},{% endfor %}]
+);
+
+createChart("jenisChart","bar",
+[{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
+[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
+);
+
+createChart("kelasChart","bar",
+[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
+[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
+);
+
+createChart("trenChart","line",
+[{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
+[{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
+);
+</script>
+
+
+<script>
+const periode=document.getElementById("periodeSelect");
+const tanggal=document.getElementById("filterTanggal");
+const bulan=document.getElementById("filterBulan");
+const tahun=document.getElementById("filterTahun");
 
 function updateFilter(){
-tanggal.style.display = "none";
-bulan.style.display = "none";
-tahun.style.display = "none";
+tanggal.style.display="none";
+bulan.style.display="none";
+tahun.style.display="none";
 
-if(periode.value === "hari"){
-tanggal.style.display = "inline-block";
+if(periode.value==="hari"){tanggal.style.display="inline-block";}
+if(periode.value==="bulan"){bulan.style.display="inline-block";tahun.style.display="inline-block";}
+if(periode.value==="tahun"){tahun.style.display="inline-block";}
 }
 
-if(periode.value === "bulan"){
-bulan.style.display = "inline-block";
-tahun.style.display = "inline-block";
-}
-
-if(periode.value === "tahun"){
-tahun.style.display = "inline-block";
-}
-}
-
-periode.addEventListener("change", updateFilter);
+periode.addEventListener("change",updateFilter);
 updateFilter();
 </script>
 
