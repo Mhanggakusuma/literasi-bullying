@@ -2,64 +2,93 @@
 
 {% block content %}
 
-<h2>Dashboard Analitik Bullying</h2>
+<h2 style="margin-bottom:20px;">Dashboard Statistik Laporan Bullying</h2>
 
-<p>
-Total : {{ total_laporan }} |
-Baru : {{ laporan_baru }} |
-Diproses : {{ diproses }} |
-Selesai : {{ selesai }}
-</p>
+<!-- ================= SUMMARY ================= -->
+<div style="display:flex; gap:20px; margin-bottom:20px; flex-wrap:wrap;">
 
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+<div class="admin-card">Total Laporan <b>{{ total_laporan }}</b></div>
+<div class="admin-card">Baru <b>{{ laporan_baru }}</b></div>
+<div class="admin-card">Diproses <b>{{ diproses }}</b></div>
+<div class="admin-card">Selesai <b>{{ selesai }}</b></div>
+
+</div>
+
+
+<!-- ================= CHART ================= -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:25px; margin-bottom:30px;">
+
+<div class="admin-card chart-box">
+<h4>Status</h4>
 <canvas id="statusChart"></canvas>
+</div>
+
+<div class="admin-card chart-box">
+<h4>Jenis Bullying</h4>
 <canvas id="jenisChart"></canvas>
+</div>
+
+<div class="admin-card chart-box">
+<h4>Kelas Korban</h4>
 <canvas id="kelasChart"></canvas>
+</div>
+
+<div class="admin-card chart-box">
+<h4>Tren Waktu</h4>
 <canvas id="trenChart"></canvas>
 </div>
+
+</div>
+
+{{ block.super }}
+
+<style>
+.admin-card{
+background:white;
+padding:15px 20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.chart-box{
+height:300px;
+}
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-
-document.addEventListener("DOMContentLoaded", function() {
-
-new Chart(document.getElementById("statusChart"), {
-type:'pie',
-data:{
-labels:[{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
-datasets:[{data:[{% for i in grafik_status %}{{ i.total }},{% endfor %}]}]
+function createChart(id,type,labels,data){
+new Chart(document.getElementById(id),{
+type:type,
+data:{labels:labels,datasets:[{data:data}]},
+options:{responsive:true,maintainAspectRatio:false}
+});
 }
-});
-
-new Chart(document.getElementById("jenisChart"), {
-type:'bar',
-data:{
-labels:[{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
-datasets:[{data:[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]}]
-}
-});
-
-new Chart(document.getElementById("kelasChart"), {
-type:'bar',
-data:{
-labels:[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
-datasets:[{data:[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]}]
-}
-});
-
-new Chart(document.getElementById("trenChart"), {
-type:'line',
-data:{
-labels:[{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
-datasets:[{data:[{% for i in grafik_tren %}{{ i.total }},{% endfor %}]}]
-}
-});
-
-});
-
 </script>
 
-{{ block.super }}
+<script>
+
+createChart("statusChart","pie",
+[{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
+[{% for i in grafik_status %}{{ i.total }},{% endfor %}]
+);
+
+createChart("jenisChart","bar",
+[{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
+[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
+);
+
+createChart("kelasChart","bar",
+[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
+[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
+);
+
+createChart("trenChart","line",
+[{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
+[{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
+);
+
+</script>
 
 {% endblock %}
