@@ -1,7 +1,5 @@
 {% extends "admin/change_list.html" %}
 
-
-<!-- ================= FILTER ================= -->
 {% block object-tools %}
 
 <form method="get" style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
@@ -38,18 +36,9 @@
 
 <select name="bulan">
 <option value="">Bulan</option>
-<option value="1">Jan</option>
-<option value="2">Feb</option>
-<option value="3">Mar</option>
-<option value="4">Apr</option>
-<option value="5">Mei</option>
-<option value="6">Jun</option>
-<option value="7">Jul</option>
-<option value="8">Ags</option>
-<option value="9">Sep</option>
-<option value="10">Okt</option>
-<option value="11">Nov</option>
-<option value="12">Des</option>
+{% for i in "123456789101112"|make_list %}
+<option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+{% endfor %}
 </select>
 
 <select name="tahun">
@@ -70,28 +59,22 @@
 {% endblock %}
 
 
-
-<!-- ================= DASHBOARD ================= -->
 {% block result_list %}
 
 <h2 style="margin-bottom:20px;">Dashboard Statistik Laporan Bullying</h2>
 
 <div style="display:flex; gap:20px; margin-bottom:20px; flex-wrap:wrap;">
-
 <div class="admin-card">Total Laporan <b>{{ total_laporan }}</b></div>
 <div class="admin-card">Baru <b>{{ laporan_baru }}</b></div>
 <div class="admin-card">Diproses <b>{{ diproses }}</b></div>
 <div class="admin-card">Selesai <b>{{ selesai }}</b></div>
-
 </div>
 
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:25px; margin-bottom:30px;">
-
 <div class="admin-card"><canvas id="statusChart"></canvas></div>
 <div class="admin-card"><canvas id="jenisChart"></canvas></div>
 <div class="admin-card"><canvas id="kelasChart"></canvas></div>
 <div class="admin-card"><canvas id="trenChart"></canvas></div>
-
 </div>
 
 {{ block.super }}
