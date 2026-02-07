@@ -1,11 +1,13 @@
 from django.contrib import admin
 from django.db.models import Count
-from django.db.models.functions import TruncDay, TruncMonth, TruncYear
+from django.db.models.functions import TruncMonth
 from .models import Laporan
 
 
 @admin.register(Laporan)
 class LaporanAdmin(admin.ModelAdmin):
+
+    # ⭐ Dashboard Template
     change_list_template = "admin/laporan/laporan_change_list.html"
 
     list_display = (
@@ -18,23 +20,32 @@ class LaporanAdmin(admin.ModelAdmin):
         "tanggal",
     )
 
-    readonly_fields = ("kode_laporan", "tanggal")
+    list_filter = (
+        "status",
+        "jenis_bullying",
+        "kelas_korban",
+        "tanggal",
+    )
 
-    # ================= FILTER ADMIN =================
+    search_fields = (
+        "kode_laporan",
+        "nama_korban",
+        "nama_terlapor",
+    )
+
+    readonly_fields = (
+        "kode_laporan",
+        "tanggal",
+    )
+
+    # ================= FILTER CUSTOM =================
     def get_queryset(self, request):
-        """
-        Pastikan get_queryset membaca parameter GET custom (jenis, kelas, status, periode, tanggal, bulan, tahun).
-        Admin ChangeList akan tetap memakai queryset dari super() lalu dipengaruhi oleh parameter ini.
-        """
+
         qs = super().get_queryset(request)
 
         jenis = request.GET.get("jenis")
         kelas = request.GET.get("kelas")
         status = request.GET.get("status")
-        periode = request.GET.get("periode", "semua")
-        tanggal = request.GET.get("tanggal")
-        bulan = request.GET.get("bulan")
-        tahun = request.GET.get("tahun")
 
         if jenis:
             qs = qs.filter(jenis_bullying=jenis)
@@ -45,76 +56,51 @@ class LaporanAdmin(admin.ModelAdmin):
         if status:
             qs = qs.filter(status=status)
 
-        if periode == "hari" and tanggal:
-            qs = qs.filter(tanggal__date=tanggal)
-        elif periode == "bulan" and bulan and tahun:
-            qs = qs.filter(tanggal__month=bulan, tanggal__year=tahun)
-        elif periode == "tahun" and tahun:
-            qs = qs.filter(tanggal__year=tahun)
-
         return qs
 
-    # ================= DASHBOARD ADMIN =================
+    # ================= DASHBOARD =================
     def changelist_view(self, request, extra_context=None):
-        """
-        Ambil ChangeList (cl) dari response.context_data, gunakan cl.queryset sebagai sumber data
-        untuk grafik dan summary sehingga sinkron dengan tabel admin (filter, search, pagination).
-        """
+
         response = super().changelist_view(request, extra_context)
 
         if hasattr(response, "context_data"):
-            cl = response.context_data.get("cl")
-            if cl:
-                qs = cl.queryset
 
-                # Summary
-                total = qs.count()
-                baru = qs.filter(status="baru").count()
-                diproses = qs.filter(status="diproses").count()
-                selesai = qs.filter(status="selesai").count()
+            cl = response.context_data["cl"]
+            qs = cl.queryset
 
-                # Grafik kategori
-                grafik_status = list(qs.values("status").annotate(total=Count("id")))
-                grafik_jenis = list(qs.values("jenis_bullying").annotate(total=Count("id")))
-                grafik_kelas = list(qs.values("kelas_korban").annotate(total=Count("id")))
+            grafik_status = list(
+                qs.values("status").annotate(total=Count("id"))
+            )
 
-                # Grafik tren (default per bulan, atau hari/tahun bila dipilih)
-                periode = request.GET.get("periode", "semua")
-                if periode == "hari":
-                    grafik_tren = list(
-                        qs.annotate(waktu=TruncDay("tanggal"))
-                          .values("waktu")
-                          .annotate(total=Count("id"))
-                          .order_by("waktu")
-                    )
-                elif periode == "tahun":
-                    grafik_tren = list(
-                        qs.annotate(waktu=TruncYear("tanggal"))
-                          .values("waktu")
-                          .annotate(total=Count("id"))
-                          .order_by("waktu")
-                    )
-                else:
-                    grafik_tren = list(
-                        qs.annotate(waktu=TruncMonth("tanggal"))
-                          .values("waktu")
-                          .annotate(total=Count("id"))
-                          .order_by("waktu")
-                    )
+            grafik_jenis = list(
+                qs.values("jenis_bullying").annotate(total=Count("id"))
+            )
 
-                response.context_data.update({
-                    "total_laporan": total,
-                    "laporan_baru": baru,
-                    "diproses": diproses,
-                    "selesai": selesai,
-                    "grafik_status": grafik_status,
-                    "grafik_jenis": grafik_jenis,
-                    "grafik_kelas": grafik_kelas,
-                    "grafik_tren": grafik_tren,
-                    "jenis_choices": Laporan.JENIS_BULLYING_CHOICES,
-                    "kelas_choices": Laporan.KELAS_CHOICES,
-                    "daftar_tahun": Laporan.objects.dates("tanggal", "year"),
-                })
+            grafik_kelas = list(
+                qs.values("kelas_korban").annotate(total=Count("id"))
+            )
+
+            grafik_tren = list(
+                qs.annotate(waktu=TruncMonth("tanggal"))
+                .values("waktu")
+                .annotate(total=Count("id"))
+                .order_by("waktu")
+            )
+
+            response.context_data.update({
+                "total_laporan": qs.count(),
+                "laporan_baru": qs.filter(status="baru").count(),
+                "diproses": qs.filter(status="diproses").count(),
+                "selesai": qs.filter(status="selesai").count(),
+
+                "grafik_status": grafik_status,
+                "grafik_jenis": grafik_jenis,
+                "grafik_kelas": grafik_kelas,
+                "grafik_tren": grafik_tren,
+
+                "jenis_choices": Laporan.JENIS_BULLYING_CHOICES,
+                "kelas_choices": Laporan.KELAS_CHOICES,
+            })
 
         return response
 
