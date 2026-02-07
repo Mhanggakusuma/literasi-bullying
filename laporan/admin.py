@@ -21,7 +21,7 @@ class LaporanAdmin(admin.ModelAdmin):
 
     readonly_fields = ("kode_laporan", "tanggal")
 
-    # ================= FILTER ADMIN =================
+    # ================= FILTER DATA =================
     def get_queryset(self, request):
 
         qs = super().get_queryset(request)
@@ -29,6 +29,7 @@ class LaporanAdmin(admin.ModelAdmin):
         jenis = request.GET.get("jenis")
         kelas = request.GET.get("kelas")
         status = request.GET.get("status")
+
         periode = request.GET.get("periode", "semua")
         tanggal = request.GET.get("tanggal")
         bulan = request.GET.get("bulan")
@@ -57,15 +58,14 @@ class LaporanAdmin(admin.ModelAdmin):
 
         return qs
 
-
-    # ================= DASHBOARD ADMIN =================
+    # ================= DASHBOARD =================
     def changelist_view(self, request, extra_context=None):
 
         response = super().changelist_view(request, extra_context)
 
         if hasattr(response, "context_data"):
 
-            # ⭐ Queryset resmi Django Admin
+            # ⭐ queryset resmi admin
             cl = response.context_data["cl"]
             qs = cl.queryset
 

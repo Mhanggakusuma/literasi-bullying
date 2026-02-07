@@ -2,10 +2,16 @@
 
 {% block content %}
 
-<h2>Dashboard Statistik Laporan Bullying</h2>
+<h2 style="margin-bottom:20px;">Dashboard Statistik Laporan Bullying</h2>
 
 <!-- ================= FILTER ================= -->
 <form method="get" style="margin-bottom:25px; display:flex; gap:10px; flex-wrap:wrap;">
+
+{% for key, value in request.GET.items %}
+    {% if key not in "jenis kelas status periode tanggal bulan tahun" %}
+        <input type="hidden" name="{{ key }}" value="{{ value }}">
+    {% endif %}
+{% endfor %}
 
 <select name="jenis">
 <option value="">Semua Jenis</option>
@@ -95,63 +101,42 @@ height:300px;
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-
-function buildChart(id,type,labels,data,labelName){
+function buildChart(id,type,labels,data){
 new Chart(document.getElementById(id),{
 type:type,
 data:{
 labels:labels,
 datasets:[{
-label:labelName,
+label:"Jumlah",
 data:data,
 backgroundColor:[
 '#0d6efd','#f45b69','#ffc107','#198754','#6f42c1'
 ]
 }]
 },
-options:{
-responsive:true,
-maintainAspectRatio:false
-}
+options:{responsive:true,maintainAspectRatio:false}
 });
 }
 
-/* STATUS */
-buildChart(
-"statusChart",
-"pie",
+buildChart("statusChart","pie",
 [{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
-[{% for i in grafik_status %}{{ i.total }},{% endfor %}],
-"Jumlah"
+[{% for i in grafik_status %}{{ i.total }},{% endfor %}]
 );
 
-/* JENIS */
-buildChart(
-"jenisChart",
-"bar",
+buildChart("jenisChart","bar",
 [{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
-[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}],
-"Jumlah"
+[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
 );
 
-/* KELAS */
-buildChart(
-"kelasChart",
-"bar",
+buildChart("kelasChart","bar",
 [{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
-[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}],
-"Jumlah"
+[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
 );
 
-/* TREN */
-buildChart(
-"trenChart",
-"line",
+buildChart("trenChart","line",
 [{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
-[{% for i in grafik_tren %}{{ i.total }},{% endfor %}],
-"Jumlah"
+[{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
 );
-
 </script>
 
 {% endblock %}
