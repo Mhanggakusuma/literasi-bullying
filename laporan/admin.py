@@ -22,12 +22,10 @@ class LaporanAdmin(admin.ModelAdmin):
     readonly_fields = ("kode_laporan", "tanggal")
 
 
-    # =================================================
-    # FILTER CUSTOM (Dipakai Semua Komponen)
-    # =================================================
+    # ================= FILTER CUSTOM =================
     def filter_queryset(self, request):
 
-        qs = Laporan.objects.all()
+        qs = super().get_queryset(request)
 
         jenis = request.GET.get("jenis")
         kelas = request.GET.get("kelas")
@@ -61,34 +59,26 @@ class LaporanAdmin(admin.ModelAdmin):
         return qs
 
 
-    # =================================================
-    # AGAR TABEL ADMIN IKUT FILTER
-    # =================================================
-    def get_queryset(self, request):
-        return self.filter_queryset(request)
-
-
-    # =================================================
-    # DASHBOARD ADMIN + CHART
-    # =================================================
+    # ================= CHANGE LIST =================
     def changelist_view(self, request, extra_context=None):
 
         response = super().changelist_view(request, extra_context=extra_context)
 
-        # ⭐ Hindari error redirect
         if not hasattr(response, "context_data"):
             return response
 
         qs = self.filter_queryset(request)
 
-        # ===== Statistik =====
+        # ⭐ PAKSA CHANGE LIST PAKAI FILTER
+        response.context_data["cl"].queryset = qs
+
+        # ===== Chart =====
         grafik_status = list(qs.values("status").annotate(total=Count("id")))
         grafik_jenis = list(qs.values("jenis_bullying").annotate(total=Count("id")))
         grafik_kelas = list(qs.values("kelas_korban").annotate(total=Count("id")))
 
         periode = request.GET.get("periode")
 
-        # ===== Grafik Tren =====
         if periode == "hari":
             grafik_tren = list(
                 qs.annotate(waktu=TruncDay("tanggal"))
@@ -134,9 +124,6 @@ class LaporanAdmin(admin.ModelAdmin):
         return response
 
 
-    # =================================================
-    # TAMPILKAN PELAPOR DI ADMIN
-    # =================================================
     @admin.display(description="Pelapor")
     def get_pelapor_admin(self, obj):
         return obj.pelapor.get_full_name() or obj.pelapor.username
