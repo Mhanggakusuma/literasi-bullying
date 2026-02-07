@@ -4,8 +4,15 @@
 
 <h2>Dashboard Statistik Laporan Bullying</h2>
 
-<!-- ================= FILTER UTAMA ================= -->
+<!-- ================= FILTER ================= -->
 <form method="get" style="margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap;">
+
+<!-- Pertahankan parameter admin -->
+{% for key,value in request.GET.items %}
+    {% if key not in "jenis kelas status periode tanggal bulan tahun".split %}
+        <input type="hidden" name="{{ key }}" value="{{ value }}">
+    {% endif %}
+{% endfor %}
 
 <select name="jenis">
 <option value="">Semua Jenis</option>
@@ -33,29 +40,21 @@
 </select>
 
 <select name="periode" id="periodeSelect">
-<option value="">Semua Waktu</option>
+<option value="semua" {% if not request.GET.periode or request.GET.periode == "semua" %}selected{% endif %}>
+Semua Waktu
+</option>
 <option value="hari" {% if request.GET.periode == "hari" %}selected{% endif %}>Per Hari</option>
 <option value="bulan" {% if request.GET.periode == "bulan" %}selected{% endif %}>Per Bulan</option>
 <option value="tahun" {% if request.GET.periode == "tahun" %}selected{% endif %}>Per Tahun</option>
 </select>
 
-<input type="date" name="tanggal" id="filterTanggal"
-       value="{{ request.GET.tanggal }}">
+<input type="date" name="tanggal" id="filterTanggal" value="{{ request.GET.tanggal }}">
 
 <select name="bulan" id="filterBulan">
 <option value="">Pilih Bulan</option>
-<option value="1" {% if request.GET.bulan == "1" %}selected{% endif %}>Januari</option>
-<option value="2" {% if request.GET.bulan == "2" %}selected{% endif %}>Februari</option>
-<option value="3" {% if request.GET.bulan == "3" %}selected{% endif %}>Maret</option>
-<option value="4" {% if request.GET.bulan == "4" %}selected{% endif %}>April</option>
-<option value="5" {% if request.GET.bulan == "5" %}selected{% endif %}>Mei</option>
-<option value="6" {% if request.GET.bulan == "6" %}selected{% endif %}>Juni</option>
-<option value="7" {% if request.GET.bulan == "7" %}selected{% endif %}>Juli</option>
-<option value="8" {% if request.GET.bulan == "8" %}selected{% endif %}>Agustus</option>
-<option value="9" {% if request.GET.bulan == "9" %}selected{% endif %}>September</option>
-<option value="10" {% if request.GET.bulan == "10" %}selected{% endif %}>Oktober</option>
-<option value="11" {% if request.GET.bulan == "11" %}selected{% endif %}>November</option>
-<option value="12" {% if request.GET.bulan == "12" %}selected{% endif %}>Desember</option>
+{% for i in "123456789101112"|make_list %}
+<option value="{{ i }}" {% if request.GET.bulan == i %}selected{% endif %}>{{ i }}</option>
+{% endfor %}
 </select>
 
 <select name="tahun" id="filterTahun">
@@ -74,40 +73,24 @@
 
 <!-- ================= SUMMARY ================= -->
 <div style="display:flex; gap:20px; margin-bottom:20px; flex-wrap:wrap;">
-
 <div class="admin-card">Total Laporan <b>{{ total_laporan }}</b></div>
 <div class="admin-card">Baru <b>{{ laporan_baru }}</b></div>
 <div class="admin-card">Diproses <b>{{ diproses }}</b></div>
 <div class="admin-card">Selesai <b>{{ selesai }}</b></div>
-
 </div>
 
 
-<!-- ================= GRAFIK ================= -->
+<!-- ================= CHART ================= -->
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:25px; margin-bottom:30px;">
 
-<div class="admin-card chart-box">
-<canvas id="statusChart"></canvas>
-</div>
-
-<div class="admin-card chart-box">
-<canvas id="jenisChart"></canvas>
-</div>
-
-<div class="admin-card chart-box">
-<canvas id="kelasChart"></canvas>
-</div>
-
-<div class="admin-card chart-box">
-<canvas id="trenChart"></canvas>
-</div>
+<div class="admin-card chart-box"><canvas id="statusChart"></canvas></div>
+<div class="admin-card chart-box"><canvas id="jenisChart"></canvas></div>
+<div class="admin-card chart-box"><canvas id="kelasChart"></canvas></div>
+<div class="admin-card chart-box"><canvas id="trenChart"></canvas></div>
 
 </div>
 
-
-<!-- ================= TABEL LAPORAN ================= -->
 {{ block.super }}
-
 
 <style>
 .admin-card{
@@ -116,12 +99,8 @@ padding:15px 20px;
 border-radius:10px;
 box-shadow:0 2px 8px rgba(0,0,0,0.1);
 }
-
-.chart-box{
-height:300px;
-}
+.chart-box{height:300px;}
 </style>
-
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -152,31 +131,19 @@ createChart("kelasChart","bar",
 );
 
 createChart("trenChart","line",
-[{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
+[
+{% for i in grafik_tren %}
+"{% if request.GET.periode == 'hari' %}
+{{ i.waktu|date:'d M Y' }}
+{% elif request.GET.periode == 'tahun' %}
+{{ i.waktu|date:'Y' }}
+{% else %}
+{{ i.waktu|date:'M Y' }}
+{% endif %}",
+{% endfor %}
+],
 [{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
 );
-</script>
-
-
-<!-- ================= TOGGLE INPUT PERIODE ================= -->
-<script>
-const periode=document.getElementById("periodeSelect");
-const tanggal=document.getElementById("filterTanggal");
-const bulan=document.getElementById("filterBulan");
-const tahun=document.getElementById("filterTahun");
-
-function updateFilter(){
-tanggal.style.display="none";
-bulan.style.display="none";
-tahun.style.display="none";
-
-if(periode.value==="hari"){tanggal.style.display="inline-block";}
-if(periode.value==="bulan"){bulan.style.display="inline-block";tahun.style.display="inline-block";}
-if(periode.value==="tahun"){tahun.style.display="inline-block";}
-}
-
-periode.addEventListener("change",updateFilter);
-updateFilter();
 </script>
 
 {% endblock %}

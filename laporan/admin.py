@@ -22,15 +22,17 @@ class LaporanAdmin(admin.ModelAdmin):
     readonly_fields = ("kode_laporan", "tanggal")
 
 
-    # ================= FILTER CUSTOM =================
-    def filter_queryset(self, request):
+    # =================================================
+    # FILTER UTAMA ADMIN
+    # =================================================
+    def get_queryset(self, request):
 
         qs = super().get_queryset(request)
 
         jenis = request.GET.get("jenis")
         kelas = request.GET.get("kelas")
         status = request.GET.get("status")
-        periode = request.GET.get("periode")
+        periode = request.GET.get("periode", "semua")
         tanggal = request.GET.get("tanggal")
         bulan = request.GET.get("bulan")
         tahun = request.GET.get("tahun")
@@ -59,7 +61,9 @@ class LaporanAdmin(admin.ModelAdmin):
         return qs
 
 
-    # ================= CHANGE LIST =================
+    # =================================================
+    # DASHBOARD + CHART ADMIN
+    # =================================================
     def changelist_view(self, request, extra_context=None):
 
         response = super().changelist_view(request, extra_context=extra_context)
@@ -67,18 +71,19 @@ class LaporanAdmin(admin.ModelAdmin):
         if not hasattr(response, "context_data"):
             return response
 
-        qs = self.filter_queryset(request)
+        qs = self.get_queryset(request)
 
-        # ⭐ PAKSA CHANGE LIST PAKAI FILTER
+        # Paksa tabel admin ikut filter
         response.context_data["cl"].queryset = qs
 
-        # ===== Chart =====
+        # ================= STATISTIK =================
         grafik_status = list(qs.values("status").annotate(total=Count("id")))
         grafik_jenis = list(qs.values("jenis_bullying").annotate(total=Count("id")))
         grafik_kelas = list(qs.values("kelas_korban").annotate(total=Count("id")))
 
-        periode = request.GET.get("periode")
+        periode = request.GET.get("periode", "semua")
 
+        # ================= TREN =================
         if periode == "hari":
             grafik_tren = list(
                 qs.annotate(waktu=TruncDay("tanggal"))
