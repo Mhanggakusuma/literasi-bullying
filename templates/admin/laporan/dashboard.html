@@ -4,7 +4,7 @@
 
 <h1>Dashboard Analitik Laporan</h1>
 
-<div style="display:grid; grid-template-columns:repeat(2,1fr); gap:20px;">
+<div style="display:grid; grid-template-columns:repeat(2,1fr); gap:30px;">
 
     <canvas id="jenisChart"></canvas>
     <canvas id="kelasChart"></canvas>
@@ -17,38 +17,54 @@
 
 <script>
 
+const jenisData = JSON.parse('{{ jenis_json|escapejs }}');
+const kelasData = JSON.parse('{{ kelas_json|escapejs }}');
+const statusData = JSON.parse('{{ status_json|escapejs }}');
+const waktuData = JSON.parse('{{ waktu_json|escapejs }}');
+
 function chart(id, labels, data, label){
     new Chart(document.getElementById(id), {
         type:'bar',
         data:{
             labels:labels,
-            datasets:[{label:label,data:data}]
+            datasets:[{
+                label:label,
+                data:data
+            }]
         }
     });
 }
 
-chart("jenisChart",
-    {{ jenis|safe }}.map(x=>x.jenis_bullying),
-    {{ jenis|safe }}.map(x=>x.total),
+// Jenis Bullying
+chart(
+    "jenisChart",
+    jenisData.map(x=>x.jenis_bullying),
+    jenisData.map(x=>x.total),
     "Jenis Bullying"
 );
 
-chart("kelasChart",
-    {{ kelas|safe }}.map(x=>x.kelas_korban),
-    {{ kelas|safe }}.map(x=>x.total),
+// Kelas Korban
+chart(
+    "kelasChart",
+    kelasData.map(x=>x.kelas_korban),
+    kelasData.map(x=>x.total),
     "Kelas Korban"
 );
 
-chart("statusChart",
-    {{ status|safe }}.map(x=>x.status),
-    {{ status|safe }}.map(x=>x.total),
-    "Status"
+// Status
+chart(
+    "statusChart",
+    statusData.map(x=>x.status),
+    statusData.map(x=>x.total),
+    "Status Laporan"
 );
 
-chart("waktuChart",
-    {{ waktu|safe }}.map(x=>x.bulan),
-    {{ waktu|safe }}.map(x=>x.total),
-    "Tren Waktu"
+// Tren Waktu
+chart(
+    "waktuChart",
+    waktuData.map(x=>new Date(x.bulan).toLocaleDateString("id-ID",{month:'short',year:'numeric'})),
+    waktuData.map(x=>x.total),
+    "Tren Laporan"
 );
 
 </script>

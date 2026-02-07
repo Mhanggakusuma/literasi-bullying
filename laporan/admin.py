@@ -3,6 +3,8 @@ from django.urls import path
 from django.shortcuts import render
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
+from django.core.serializers.json import DjangoJSONEncoder
+import json
 
 from .models import Laporan
 
@@ -38,7 +40,7 @@ class LaporanAdmin(admin.ModelAdmin):
     readonly_fields = ("kode_laporan", "tanggal")
 
     # =================================================
-    # TAMBAH URL ADMIN DASHBOARD
+    # TAMBAH URL DASHBOARD ADMIN
     # =================================================
     def get_urls(self):
         urls = super().get_urls()
@@ -60,24 +62,42 @@ class LaporanAdmin(admin.ModelAdmin):
 
         laporan = Laporan.objects.all()
 
-        jenis = laporan.values("jenis_bullying").annotate(total=Count("id"))
-        kelas = laporan.values("kelas_korban").annotate(total=Count("id"))
-        status = laporan.values("status").annotate(total=Count("id"))
+        jenis = list(
+            laporan.values("jenis_bullying")
+            .annotate(total=Count("id"))
+        )
 
-        waktu = laporan.annotate(
-            bulan=TruncMonth("tanggal")
-        ).values("bulan").annotate(total=Count("id")).order_by("bulan")
+        kelas = list(
+            laporan.values("kelas_korban")
+            .annotate(total=Count("id"))
+        )
+
+        status = list(
+            laporan.values("status")
+            .annotate(total=Count("id"))
+        )
+
+        waktu = list(
+            laporan.annotate(bulan=TruncMonth("tanggal"))
+            .values("bulan")
+            .annotate(total=Count("id"))
+            .order_by("bulan")
+        )
 
         context = dict(
             self.admin_site.each_context(request),
-            jenis=list(jenis),
-            kelas=list(kelas),
-            status=list(status),
-            waktu=list(waktu),
+
+            jenis_json=json.dumps(jenis, cls=DjangoJSONEncoder),
+            kelas_json=json.dumps(kelas, cls=DjangoJSONEncoder),
+            status_json=json.dumps(status, cls=DjangoJSONEncoder),
+            waktu_json=json.dumps(waktu, cls=DjangoJSONEncoder),
         )
 
         return render(request, "admin/laporan/dashboard.html", context)
 
+    # =================================================
+    # TAMPILKAN NAMA PELAPOR
+    # =================================================
     @admin.display(description="Pelapor")
     def get_pelapor_admin(self, obj):
         return obj.pelapor.get_full_name() or obj.pelapor.username
