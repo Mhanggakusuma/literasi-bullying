@@ -1527,7 +1527,7 @@ select {
 
 .dashboard-layout {
   display: grid;
-  grid-template-columns: 1.1fr 1.6fr;
+  grid-template-columns: 2fr 1fr; /* ⭐ LAPORAN LEBIH BESAR */
   gap: 25px;
   margin-top: 40px;
 }
@@ -1546,7 +1546,7 @@ select {
   box-shadow: 0 10px 25px rgba(0,0,0,.12);
 
   /* Scroll laporan */
-  max-height: 850px;
+  max-height: 900px;
   overflow-y: auto;
 }
 
@@ -1629,6 +1629,15 @@ select {
 
 
 
+/* ================= PIE CHART WRAPPER ================= */
+.status-chart-wrapper {
+  width: 100%;
+  max-width: 350px;
+  margin: auto;
+}
+
+
+
 /* ===================================================== */
 /* ================= RESPONSIVE ========================= */
 /* ===================================================== */
@@ -1679,11 +1688,6 @@ select {
 
 }
 
-.status-chart-wrapper {
-  width: 100%;
-  max-width: 350px;
-  margin: auto;
-}
 
 /* ===================================================== */
 /* ============ BK TINDAK LANJUT (FINAL FIX) ============ */
