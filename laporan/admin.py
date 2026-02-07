@@ -62,7 +62,7 @@ class LaporanAdmin(admin.ModelAdmin):
 
 
     # =================================================
-    # DASHBOARD CHART ADMIN
+    # DASHBOARD ADMIN
     # =================================================
     def changelist_view(self, request, extra_context=None):
 
