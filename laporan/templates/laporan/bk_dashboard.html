@@ -91,10 +91,20 @@
       <!-- Input Bulan -->
       <select name="bulan" id="filterBulan">
         <option value="">Pilih Bulan</option>
-        {% for i in "123456789101112"|make_list %}
-        <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
-        {% endfor %}
-      </select>
+        <option value="1" {% if request.GET.bulan == "1" %}selected{% endif %}>Januari</option>
+        <option value="2" {% if request.GET.bulan == "2" %}selected{% endif %}>Februari</option>
+        <option value="3" {% if request.GET.bulan == "3" %}selected{% endif %}>Maret</option>
+        <option value="4" {% if request.GET.bulan == "4" %}selected{% endif %}>April</option>
+        <option value="5" {% if request.GET.bulan == "5" %}selected{% endif %}>Mei</option>
+        <option value="6" {% if request.GET.bulan == "6" %}selected{% endif %}>Juni</option>
+        <option value="7" {% if request.GET.bulan == "7" %}selected{% endif %}>Juli</option>
+        <option value="8" {% if request.GET.bulan == "8" %}selected{% endif %}>Agustus</option>
+        <option value="9" {% if request.GET.bulan == "9" %}selected{% endif %}>September</option>
+        <option value="10" {% if request.GET.bulan == "10" %}selected{% endif %}>Oktober</option>
+        <option value="11" {% if request.GET.bulan == "11" %}selected{% endif %}>November</option>
+        <option value="12" {% if request.GET.bulan == "12" %}selected{% endif %}>Desember</option>
+    </select>
+
 
       <!-- Input Tahun -->
       <select name="tahun" id="filterTahun">
