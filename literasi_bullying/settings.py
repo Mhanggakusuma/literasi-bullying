@@ -32,6 +32,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 # Aplikasi yang digunakan dalam project
 INSTALLED_APPS = [
+    'admin_tools_stats',
     "jazzmin",  
 
     "django.contrib.admin",
