@@ -2,8 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render
 from django.db.models import Count
-from django.db.models.functions import TruncMonth
-
+from django.db.models.functions import TruncDay, TruncMonth
 from .models import Laporan
 
 
@@ -26,7 +25,7 @@ class LaporanAdmin(admin.ModelAdmin):
         "kelas_korban",
     )
 
-    # ===== TAMBAH MENU DASHBOARD ADMIN =====
+    # ===== URL DASHBOARD =====
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
@@ -38,15 +37,20 @@ class LaporanAdmin(admin.ModelAdmin):
         ]
         return custom_urls + urls
 
-    # ===== VIEW DASHBOARD =====
+    # ===== DASHBOARD VIEW =====
     def dashboard_view(self, request):
 
         qs = Laporan.objects.all()
 
-        # ===== FILTER DASHBOARD =====
+        # ===== FILTER DASAR =====
         jenis = request.GET.get("jenis")
         kelas = request.GET.get("kelas")
         status = request.GET.get("status")
+
+        periode = request.GET.get("periode")
+        tanggal = request.GET.get("tanggal")
+        bulan = request.GET.get("bulan")
+        tahun = request.GET.get("tahun")
 
         if jenis:
             qs = qs.filter(jenis_bullying=jenis)
@@ -57,16 +61,39 @@ class LaporanAdmin(admin.ModelAdmin):
         if status:
             qs = qs.filter(status=status)
 
+        # ===== FILTER PERIODE =====
+        if periode == "hari" and tanggal:
+            qs = qs.filter(tanggal__date=tanggal)
+
+        elif periode == "bulan" and bulan and tahun:
+            qs = qs.filter(
+                tanggal__month=bulan,
+                tanggal__year=tahun
+            )
+
+        elif periode == "tahun" and tahun:
+            qs = qs.filter(tanggal__year=tahun)
+
+        # ===== GRAFIK =====
         grafik_status = qs.values("status").annotate(total=Count("id"))
         grafik_jenis = qs.values("jenis_bullying").annotate(total=Count("id"))
         grafik_kelas = qs.values("kelas_korban").annotate(total=Count("id"))
 
-        grafik_tren = (
-            qs.annotate(waktu=TruncMonth("tanggal"))
-            .values("waktu")
-            .annotate(total=Count("id"))
-            .order_by("waktu")
-        )
+        # ===== GRAFIK TREN =====
+        if periode == "hari":
+            grafik_tren = (
+                qs.annotate(waktu=TruncDay("tanggal"))
+                .values("waktu")
+                .annotate(total=Count("id"))
+                .order_by("waktu")
+            )
+        else:
+            grafik_tren = (
+                qs.annotate(waktu=TruncMonth("tanggal"))
+                .values("waktu")
+                .annotate(total=Count("id"))
+                .order_by("waktu")
+            )
 
         context = dict(
             self.admin_site.each_context(request),
@@ -83,6 +110,7 @@ class LaporanAdmin(admin.ModelAdmin):
 
             jenis_choices=Laporan.JENIS_BULLYING_CHOICES,
             kelas_choices=Laporan.KELAS_CHOICES,
+            daftar_tahun=Laporan.objects.dates("tanggal", "year"),
         )
 
         return render(request, "admin/laporan/dashboard.html", context)
