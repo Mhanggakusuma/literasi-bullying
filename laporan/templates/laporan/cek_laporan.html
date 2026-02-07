@@ -12,7 +12,7 @@
       Kerahasiaan identitas dijaga untuk keamanan semua pihak
     </p>
 
-    <!-- ================= INPUT KODE ================= -->
+    <!-- INPUT KODE -->
     <div class="cek-laporan-card mx-auto mt-5">
       <img src="{% static 'img/shield.png' %}" class="cek-laporan-icon">
 
@@ -20,13 +20,11 @@
 
       <form method="post">
         {% csrf_token %}
-        <input
-          type="text"
-          name="kode"
-          class="cek-laporan-input form-control text-center mb-4"
-          placeholder="Masukkan kode laporan"
-          required
-        >
+        <input type="text"
+               name="kode"
+               class="cek-laporan-input form-control text-center mb-4"
+               placeholder="Masukkan kode laporan"
+               required>
 
         <button type="submit" class="cek-laporan-btn-primary w-100">
           Cek Status
@@ -34,7 +32,6 @@
       </form>
     </div>
 
-    <!-- ================= HASIL ================= -->
     {% if laporan %}
     <div class="cek-laporan-detail-card mx-auto mt-5 p-4">
 
@@ -45,19 +42,18 @@
 
       <div class="mt-4 text-start">
 
-        <!-- 🔒 PELAPOR SELALU ANONIM -->
+        <!-- PELAPOR SELALU ANONIM -->
         <p>
           <strong>Pelapor :</strong> Anonim 🔒
         </p>
 
-        <!-- ⭐ KORBAN SUPPORT ANONIM -->
+        <!-- ✅ FIX DISINI -->
         <p>
           <strong>Korban :</strong>
-          {{ laporan.tampilkan_korban(request.user) }}
+          {{ laporan.tampilkan_korban }}
           ({{ laporan.kelas_korban }})
         </p>
 
-        <!-- TERLAPOR -->
         {% if laporan.nama_terlapor %}
         <p>
           <strong>Terlapor :</strong>
@@ -75,7 +71,6 @@
 
         <hr>
 
-        <!-- ================= WAKTU & TEMPAT ================= -->
         <p>
           <strong>Waktu Kejadian :</strong>
           {{ laporan.tanggal_kejadian|date:"d M Y" }}
@@ -91,13 +86,9 @@
 
         <hr>
 
-        <!-- ================= KRONOLOGI ================= -->
         <p><strong>Kronologi :</strong></p>
-        <p>
-          {{ laporan.isi_laporan|linebreaksbr }}
-        </p>
+        <p>{{ laporan.isi_laporan|linebreaksbr }}</p>
 
-        <!-- ================= DAMPAK ================= -->
         {% if laporan.dampak_korban %}
         <p><strong>Dampak :</strong></p>
         <ul>
@@ -114,20 +105,16 @@
         </p>
         {% endif %}
 
-        <!-- ================= HARAPAN ================= -->
         {% if laporan.harapan_pelapor %}
         <hr>
         <p><strong>Harapan Pelapor :</strong></p>
-        <p>
-          {{ laporan.harapan_pelapor|linebreaksbr }}
-        </p>
+        <p>{{ laporan.harapan_pelapor|linebreaksbr }}</p>
         {% endif %}
 
       </div>
 
       <hr>
 
-      <!-- ================= STATUS ================= -->
       <div class="text-center">
         <h3>Status Laporan</h3>
         <p class="cek-laporan-status">
@@ -135,7 +122,6 @@
         </p>
       </div>
 
-      <!-- ================= CATATAN BK ================= -->
       {% if laporan.catatan_bk %}
       <div class="card bg-light border-0 p-3 mb-3">
         <h5>Catatan Guru BK</h5>
@@ -143,7 +129,6 @@
       </div>
       {% endif %}
 
-      <!-- ================= BUKTI BK ================= -->
       <div class="d-grid gap-2">
         {% if laporan.bukti_tindak_lanjut %}
         <a href="{{ laporan.bukti_tindak_lanjut.url }}"
