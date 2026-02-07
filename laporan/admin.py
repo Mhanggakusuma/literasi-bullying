@@ -62,28 +62,18 @@ class LaporanAdmin(admin.ModelAdmin):
 
 
     # =================================================
-    # DASHBOARD + CHART ADMIN
+    # DASHBOARD CHART ADMIN
     # =================================================
     def changelist_view(self, request, extra_context=None):
 
-        response = super().changelist_view(request, extra_context=extra_context)
-
-        if not hasattr(response, "context_data"):
-            return response
-
         qs = self.get_queryset(request)
 
-        # Paksa tabel admin ikut filter
-        response.context_data["cl"].queryset = qs
-
-        # ================= STATISTIK =================
         grafik_status = list(qs.values("status").annotate(total=Count("id")))
         grafik_jenis = list(qs.values("jenis_bullying").annotate(total=Count("id")))
         grafik_kelas = list(qs.values("kelas_korban").annotate(total=Count("id")))
 
         periode = request.GET.get("periode", "semua")
 
-        # ================= TREN =================
         if periode == "hari":
             grafik_tren = list(
                 qs.annotate(waktu=TruncDay("tanggal"))
@@ -110,7 +100,8 @@ class LaporanAdmin(admin.ModelAdmin):
 
         daftar_tahun = Laporan.objects.dates("tanggal", "year")
 
-        response.context_data.update({
+        extra_context = extra_context or {}
+        extra_context.update({
             "total_laporan": qs.count(),
             "laporan_baru": qs.filter(status="baru").count(),
             "diproses": qs.filter(status="diproses").count(),
@@ -126,7 +117,7 @@ class LaporanAdmin(admin.ModelAdmin):
             "daftar_tahun": daftar_tahun,
         })
 
-        return response
+        return super().changelist_view(request, extra_context=extra_context)
 
 
     @admin.display(description="Pelapor")
