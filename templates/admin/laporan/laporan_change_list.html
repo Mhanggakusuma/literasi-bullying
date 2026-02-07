@@ -1,10 +1,81 @@
 {% extends "admin/change_list.html" %}
 
+
+<!-- ================= FILTER ================= -->
+{% block object-tools %}
+
+<form method="get" style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
+
+<select name="jenis">
+<option value="">Semua Jenis</option>
+{% for val,label in jenis_choices %}
+<option value="{{ val }}" {% if request.GET.jenis == val %}selected{% endif %}>{{ label }}</option>
+{% endfor %}
+</select>
+
+<select name="kelas">
+<option value="">Semua Kelas</option>
+{% for val,label in kelas_choices %}
+<option value="{{ val }}" {% if request.GET.kelas == val %}selected{% endif %}>{{ label }}</option>
+{% endfor %}
+</select>
+
+<select name="status">
+<option value="">Semua Status</option>
+<option value="baru" {% if request.GET.status == "baru" %}selected{% endif %}>Baru</option>
+<option value="diproses" {% if request.GET.status == "diproses" %}selected{% endif %}>Diproses</option>
+<option value="selesai" {% if request.GET.status == "selesai" %}selected{% endif %}>Selesai</option>
+</select>
+
+<select name="periode">
+<option value="semua">Semua Waktu</option>
+<option value="hari" {% if request.GET.periode == "hari" %}selected{% endif %}>Per Hari</option>
+<option value="bulan" {% if request.GET.periode == "bulan" %}selected{% endif %}>Per Bulan</option>
+<option value="tahun" {% if request.GET.periode == "tahun" %}selected{% endif %}>Per Tahun</option>
+</select>
+
+<input type="date" name="tanggal" value="{{ request.GET.tanggal }}">
+
+<select name="bulan">
+<option value="">Bulan</option>
+<option value="1">Jan</option>
+<option value="2">Feb</option>
+<option value="3">Mar</option>
+<option value="4">Apr</option>
+<option value="5">Mei</option>
+<option value="6">Jun</option>
+<option value="7">Jul</option>
+<option value="8">Ags</option>
+<option value="9">Sep</option>
+<option value="10">Okt</option>
+<option value="11">Nov</option>
+<option value="12">Des</option>
+</select>
+
+<select name="tahun">
+<option value="">Tahun</option>
+{% for t in daftar_tahun %}
+<option value="{{ t.year }}" {% if request.GET.tahun == t.year|stringformat:"s" %}selected{% endif %}>
+{{ t.year }}
+</option>
+{% endfor %}
+</select>
+
+<button type="submit" class="button">Filter</button>
+
+</form>
+
+{{ block.super }}
+
+{% endblock %}
+
+
+
+<!-- ================= DASHBOARD ================= -->
 {% block result_list %}
 
 <h2 style="margin-bottom:20px;">Dashboard Statistik Laporan Bullying</h2>
 
-<!-- ================= SUMMARY ================= -->
 <div style="display:flex; gap:20px; margin-bottom:20px; flex-wrap:wrap;">
 
 <div class="admin-card">Total Laporan <b>{{ total_laporan }}</b></div>
@@ -14,25 +85,12 @@
 
 </div>
 
-
-<!-- ================= CHART ================= -->
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:25px; margin-bottom:30px;">
 
-<div class="admin-card chart-box">
-<canvas id="statusChart"></canvas>
-</div>
-
-<div class="admin-card chart-box">
-<canvas id="jenisChart"></canvas>
-</div>
-
-<div class="admin-card chart-box">
-<canvas id="kelasChart"></canvas>
-</div>
-
-<div class="admin-card chart-box">
-<canvas id="trenChart"></canvas>
-</div>
+<div class="admin-card"><canvas id="statusChart"></canvas></div>
+<div class="admin-card"><canvas id="jenisChart"></canvas></div>
+<div class="admin-card"><canvas id="kelasChart"></canvas></div>
+<div class="admin-card"><canvas id="trenChart"></canvas></div>
 
 </div>
 
@@ -45,10 +103,6 @@ padding:15px 20px;
 border-radius:10px;
 box-shadow:0 2px 8px rgba(0,0,0,0.1);
 }
-
-.chart-box{
-height:300px;
-}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -58,7 +112,7 @@ function createChart(id,type,labels,data){
 new Chart(document.getElementById(id),{
 type:type,
 data:{labels:labels,datasets:[{data:data}]},
-options:{responsive:true,maintainAspectRatio:false}
+options:{responsive:true}
 });
 }
 </script>
