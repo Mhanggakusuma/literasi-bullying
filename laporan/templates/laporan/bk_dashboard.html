@@ -6,7 +6,7 @@
 <div class="bk-dashboard-page">
   <div class="bk-dashboard">
 
-    <!-- ================= HEADER ================= -->
+    <!-- HEADER -->
     <header class="dashboard-header">
       <div>
         <span class="bk-badge">Akses Khusus Guru BK</span>
@@ -19,7 +19,7 @@
       </a>
     </header>
 
-    <!-- ================= SUMMARY ================= -->
+    <!-- SUMMARY -->
     <section class="dashboard-cards">
       <div class="summary-card">
         <p>Total Laporan</p>
@@ -42,20 +42,24 @@
       </div>
     </section>
 
-    <!-- ================= FILTER ================= -->
+    <!-- FILTER SIMPLE -->
     <form method="get" class="filter-bar">
 
       <select name="jenis">
         <option value="">Semua Jenis</option>
         {% for val,label in jenis_choices %}
-        <option value="{{ val }}" {% if val == selected_jenis %}selected{% endif %}>{{ label }}</option>
+        <option value="{{ val }}" {% if val == selected_jenis %}selected{% endif %}>
+          {{ label }}
+        </option>
         {% endfor %}
       </select>
 
       <select name="kelas">
         <option value="">Semua Kelas</option>
         {% for val,label in kelas_choices %}
-        <option value="{{ val }}" {% if val == selected_kelas %}selected{% endif %}>{{ label }}</option>
+        <option value="{{ val }}" {% if val == selected_kelas %}selected{% endif %}>
+          {{ label }}
+        </option>
         {% endfor %}
       </select>
 
@@ -76,8 +80,8 @@
       <input type="date" name="tanggal" id="filterTanggal" value="{{ request.GET.tanggal }}">
 
       <select name="bulan" id="filterBulan">
-        <option value="">Pilih Bulan</option>
-        {% for i in "123456789101112"|make_list %}
+        <option value="">Bulan</option>
+        {% for m in "123456789101112"|make_list %}
         <option value="{{ forloop.counter }}" {% if request.GET.bulan == forloop.counter|stringformat:"s" %}selected{% endif %}>
           {{ forloop.counter }}
         </option>
@@ -85,7 +89,7 @@
       </select>
 
       <select name="tahun" id="filterTahun">
-        <option value="">Pilih Tahun</option>
+        <option value="">Tahun</option>
         {% for t in daftar_tahun %}
         <option value="{{ t.year }}" {% if request.GET.tahun == t.year|stringformat:"s" %}selected{% endif %}>
           {{ t.year }}
@@ -96,12 +100,11 @@
       <button type="submit" class="btn btn-primary">Filter</button>
     </form>
 
-    <!-- ================= MAIN DASHBOARD ================= -->
+    <!-- MAIN DASHBOARD -->
     <div class="dashboard-main">
 
-      <!-- ================= LAPORAN KIRI ================= -->
+      <!-- LAPORAN -->
       <div class="laporan-area">
-
         <h3>Daftar Laporan</h3>
 
         {% for lap in laporan %}
@@ -109,6 +112,7 @@
 
           <div class="laporan-top d-flex justify-content-between">
             <strong>{{ lap.kode_laporan }}</strong>
+
             <span class="status {{ lap.status }}">
               {{ lap.get_status_display }}
             </span>
@@ -135,11 +139,10 @@
         {% empty %}
         <p>Tidak ada laporan</p>
         {% endfor %}
-
       </div>
 
 
-      <!-- ================= CHART KANAN ================= -->
+      <!-- CHART -->
       <div class="chart-area">
 
         <div class="chart-card">
@@ -167,7 +170,7 @@
 
 <style>
 
-/* ===== MAIN GRID ===== */
+/* GRID */
 .dashboard-main {
   display: grid;
   grid-template-columns: 1.2fr 1.8fr;
@@ -175,15 +178,23 @@
   margin-top: 25px;
 }
 
-/* ===== LAPORAN ===== */
-.laporan-area {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 8px 25px rgba(0,0,0,.12);
+/* FILTER SIMPLE */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
-/* ===== CHART ===== */
+.filter-bar select,
+.filter-bar input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ced4da;
+  min-width: 140px;
+}
+
+/* CHART */
 .chart-area {
   display: grid;
   grid-template-columns: repeat(2,1fr);
@@ -192,18 +203,17 @@
 
 .chart-card {
   background: #ffffff;
-  border-radius: 16px;
   padding: 18px;
+  border-radius: 16px;
   box-shadow: 0 8px 25px rgba(0,0,0,.12);
 }
 
 .chart-card canvas {
-  width: 100% !important;
   height: 260px !important;
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 992px) {
+/* RESPONSIVE */
+@media (max-width:992px){
   .dashboard-main {
     grid-template-columns: 1fr;
   }
@@ -215,68 +225,54 @@
 
 </style>
 
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!-- STATUS CHART FIX -->
 <script>
-const chartOptions = {
-  responsive:true,
-  scales:{
-    y:{
-      beginAtZero:true,
-      ticks:{
-        precision:0,
-        stepSize:1
-      }
-    }
-  }
-};
-
 new Chart(document.getElementById("statusChart"), {
-  type:'pie',
-  data:{
-    labels:[{% for i in grafik_status %}"{{ i.status|title }}",{% endfor %}],
-    datasets:[{
-      data:[{% for i in grafik_status %}{{ i.total }},{% endfor %}]
+  type: 'pie',
+  data: {
+    labels: [
+      {% for i in grafik_status %}
+        "{% if i.status == 'baru' %}Laporan Baru{% elif i.status == 'diproses' %}Sedang Diproses{% else %}Selesai Ditangani{% endif %}",
+      {% endfor %}
+    ],
+    datasets: [{
+      data: [{% for i in grafik_status %}{{ i.total }},{% endfor %}],
+      backgroundColor: ["#6c757d","#ff9800","#198754"]
     }]
   }
 });
+</script>
 
+<script>
 new Chart(document.getElementById("jenisChart"), {
   type:'bar',
   data:{
     labels:[{% for i in grafik_jenis %}"{{ i.jenis_bullying|title }}",{% endfor %}],
-    datasets:[{
-      data:[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
-    }]
-  },
-  options:chartOptions
+    datasets:[{ data:[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}] }]
+  }
 });
+</script>
 
+<script>
 new Chart(document.getElementById("kelasChart"), {
   type:'bar',
   data:{
     labels:[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
-    datasets:[{
-      data:[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
-    }]
-  },
-  options:chartOptions
+    datasets:[{ data:[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}] }]
+  }
 });
+</script>
 
+<script>
 new Chart(document.getElementById("trenChart"), {
   type:'line',
   data:{
-    labels:[
-      {% for i in grafik_tren %}
-      "{{ i.waktu|date:'d M Y' }}",
-      {% endfor %}
-    ],
-    datasets:[{
-      data:[{% for i in grafik_tren %}{{ i.total }},{% endfor %}],
-      tension:0.3
-    }]
-  },
-  options:chartOptions
+    labels:[{% for i in grafik_tren %}"{{ i.waktu|date:'d M Y' }}",{% endfor %}],
+    datasets:[{ data:[{% for i in grafik_tren %}{{ i.total }},{% endfor %}] }]
+  }
 });
 </script>
 
@@ -291,18 +287,9 @@ function updateFilter(){
   bulan.style.display="none";
   tahun.style.display="none";
 
-  if(periode.value==="hari"){
-    tanggal.style.display="inline-block";
-  }
-
-  if(periode.value==="bulan"){
-    bulan.style.display="inline-block";
-    tahun.style.display="inline-block";
-  }
-
-  if(periode.value==="tahun"){
-    tahun.style.display="inline-block";
-  }
+  if(periode.value==="hari"){ tanggal.style.display="inline-block"; }
+  if(periode.value==="bulan"){ bulan.style.display="inline-block"; tahun.style.display="inline-block"; }
+  if(periode.value==="tahun"){ tahun.style.display="inline-block"; }
 }
 
 periode.addEventListener("change", updateFilter);
