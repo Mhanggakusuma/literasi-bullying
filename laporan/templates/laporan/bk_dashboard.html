@@ -42,7 +42,7 @@
       </div>
     </section>
 
-    <!-- FILTER SIMPLE -->
+    <!-- FILTER -->
     <form method="get" class="filter-bar">
 
       <select name="jenis">
@@ -100,7 +100,7 @@
       <button type="submit" class="btn btn-primary">Filter</button>
     </form>
 
-    <!-- MAIN DASHBOARD -->
+    <!-- MAIN -->
     <div class="dashboard-main">
 
       <!-- LAPORAN -->
@@ -112,7 +112,6 @@
 
           <div class="laporan-top d-flex justify-content-between">
             <strong>{{ lap.kode_laporan }}</strong>
-
             <span class="status {{ lap.status }}">
               {{ lap.get_status_display }}
             </span>
@@ -144,23 +143,10 @@
 
       <!-- CHART -->
       <div class="chart-area">
-
-        <div class="chart-card">
-          <canvas id="statusChart"></canvas>
-        </div>
-
-        <div class="chart-card">
-          <canvas id="jenisChart"></canvas>
-        </div>
-
-        <div class="chart-card">
-          <canvas id="kelasChart"></canvas>
-        </div>
-
-        <div class="chart-card">
-          <canvas id="trenChart"></canvas>
-        </div>
-
+        <div class="chart-card"><canvas id="statusChart"></canvas></div>
+        <div class="chart-card"><canvas id="jenisChart"></canvas></div>
+        <div class="chart-card"><canvas id="kelasChart"></canvas></div>
+        <div class="chart-card"><canvas id="trenChart"></canvas></div>
       </div>
 
     </div>
@@ -169,130 +155,135 @@
 </div>
 
 <style>
-
-/* GRID */
-.dashboard-main {
-  display: grid;
-  grid-template-columns: 1.2fr 1.8fr;
-  gap: 30px;
-  margin-top: 25px;
+.dashboard-main{
+  display:grid;
+  grid-template-columns:1.2fr 1.8fr;
+  gap:30px;
 }
 
-/* FILTER SIMPLE */
-.filter-bar {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
+.filter-bar{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
 }
 
 .filter-bar select,
-.filter-bar input {
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #ced4da;
-  min-width: 140px;
+.filter-bar input{
+  padding:6px 10px;
+  border-radius:6px;
+  border:1px solid #ced4da;
 }
 
-/* CHART */
-.chart-area {
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-  gap: 20px;
+.chart-area{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
 }
 
-.chart-card {
-  background: #ffffff;
-  padding: 18px;
-  border-radius: 16px;
-  box-shadow: 0 8px 25px rgba(0,0,0,.12);
+.chart-card{
+  background:#fff;
+  padding:18px;
+  border-radius:16px;
+  box-shadow:0 8px 25px rgba(0,0,0,.12);
 }
 
-.chart-card canvas {
-  height: 260px !important;
+.chart-card canvas{
+  height:260px!important;
 }
 
-/* RESPONSIVE */
-@media (max-width:992px){
-  .dashboard-main {
-    grid-template-columns: 1fr;
-  }
-
-  .chart-area {
-    grid-template-columns: 1fr;
-  }
+@media(max-width:992px){
+  .dashboard-main{grid-template-columns:1fr;}
+  .chart-area{grid-template-columns:1fr;}
 }
-
 </style>
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- STATUS CHART FIX -->
 <script>
-new Chart(document.getElementById("statusChart"), {
-  type: 'pie',
-  data: {
-    labels: [
-      {% for i in grafik_status %}
-        "{% if i.status == 'baru' %}Laporan Baru{% elif i.status == 'diproses' %}Sedang Diproses{% else %}Selesai Ditangani{% endif %}",
-      {% endfor %}
-    ],
-    datasets: [{
-      data: [{% for i in grafik_status %}{{ i.total }},{% endfor %}],
-      backgroundColor: ["#6c757d","#ff9800","#198754"]
+function autoOptions(data){
+  const maxVal=Math.max(...data,1);
+  return{
+    responsive:true,
+    scales:{
+      y:{
+        beginAtZero:true,
+        suggestedMax:maxVal+1,
+        ticks:{precision:0}
+      }
+    }
+  }
+}
+
+/* STATUS CHART */
+const statusMap={baru:0,diproses:0,selesai:0};
+{% for i in grafik_status %}
+statusMap["{{ i.status }}"]={{ i.total }};
+{% endfor %}
+
+new Chart(statusChart,{
+  type:'pie',
+  data:{
+    labels:["Laporan Baru","Sedang Diproses","Selesai Ditangani"],
+    datasets:[{
+      data:[statusMap.baru,statusMap.diproses,statusMap.selesai],
+      backgroundColor:["#6c757d","#ff9800","#198754"]
     }]
   }
 });
-</script>
 
-<script>
-new Chart(document.getElementById("jenisChart"), {
+/* JENIS */
+const jenisData=[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}];
+new Chart(jenisChart,{
   type:'bar',
   data:{
-    labels:[{% for i in grafik_jenis %}"{{ i.jenis_bullying|title }}",{% endfor %}],
-    datasets:[{ data:[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}] }]
-  }
+    labels:[{% for i in grafik_jenis %}"{{ i.get_jenis_bullying_display }}",{% endfor %}],
+    datasets:[{data:jenisData}]
+  },
+  options:autoOptions(jenisData)
 });
-</script>
 
-<script>
-new Chart(document.getElementById("kelasChart"), {
+/* KELAS */
+const kelasData=[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}];
+new Chart(kelasChart,{
   type:'bar',
   data:{
     labels:[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
-    datasets:[{ data:[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}] }]
-  }
+    datasets:[{data:kelasData}]
+  },
+  options:autoOptions(kelasData)
 });
-</script>
 
-<script>
-new Chart(document.getElementById("trenChart"), {
+/* TREN */
+const trenData=[{% for i in grafik_tren %}{{ i.total }},{% endfor %}];
+new Chart(trenChart,{
   type:'line',
   data:{
     labels:[{% for i in grafik_tren %}"{{ i.waktu|date:'d M Y' }}",{% endfor %}],
-    datasets:[{ data:[{% for i in grafik_tren %}{{ i.total }},{% endfor %}] }]
-  }
+    datasets:[{data:trenData,tension:.3}]
+  },
+  options:autoOptions(trenData)
 });
 </script>
 
 <script>
-const periode = document.getElementById("periodeSelect");
-const tanggal = document.getElementById("filterTanggal");
-const bulan = document.getElementById("filterBulan");
-const tahun = document.getElementById("filterTahun");
+const periode=document.getElementById("periodeSelect");
+const tanggal=document.getElementById("filterTanggal");
+const bulan=document.getElementById("filterBulan");
+const tahun=document.getElementById("filterTahun");
 
 function updateFilter(){
   tanggal.style.display="none";
   bulan.style.display="none";
   tahun.style.display="none";
 
-  if(periode.value==="hari"){ tanggal.style.display="inline-block"; }
-  if(periode.value==="bulan"){ bulan.style.display="inline-block"; tahun.style.display="inline-block"; }
-  if(periode.value==="tahun"){ tahun.style.display="inline-block"; }
+  if(periode.value==="hari") tanggal.style.display="inline-block";
+  if(periode.value==="bulan"){bulan.style.display="inline-block";tahun.style.display="inline-block";}
+  if(periode.value==="tahun") tahun.style.display="inline-block";
 }
 
-periode.addEventListener("change", updateFilter);
+periode.addEventListener("change",updateFilter);
 updateFilter();
 </script>
 
