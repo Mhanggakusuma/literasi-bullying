@@ -40,7 +40,6 @@
 
 <!-- ================= FILTER ================= -->
 <form method="get" class="filter-bar">
-
 <select name="jenis">
 <option value="">Semua Jenis</option>
 {% for val,label in jenis_choices %}
@@ -98,8 +97,53 @@
 </form>
 
 
-<!-- ================= CHART ================= -->
-<div class="chart-container">
+<!-- ================= LAYOUT BARU ================= -->
+<div class="dashboard-layout">
+
+
+<!-- ========= KIRI : LAPORAN ========= -->
+<div class="laporan-section">
+<div class="laporan-card">
+<h3>Daftar Laporan</h3>
+
+{% for lap in laporan %}
+<div class="laporan-item">
+
+<div class="laporan-top d-flex justify-content-between">
+<strong>{{ lap.kode_laporan }}</strong>
+<span class="status {{ lap.status }}">
+{{ lap.get_status_display }}
+</span>
+</div>
+
+<p class="laporan-meta">
+<strong>Pelapor:</strong>
+{{ lap.tampilkan_pelapor }}
+• {{ lap.get_jenis_bullying_display }}
+• {{ lap.tanggal|date:"d M Y" }}
+</p>
+
+<p class="laporan-meta">
+<strong>Korban:</strong>
+{{ lap.tampilkan_korban }} ({{ lap.kelas_korban }})
+</p>
+
+<a href="{% url 'bk_tindak_lanjut' lap.id %}" class="btn-detail">
+Lihat Detail
+</a>
+
+</div>
+{% empty %}
+<p>Tidak ada laporan</p>
+{% endfor %}
+
+</div>
+</div>
+
+
+
+<!-- ========= KANAN : GRAFIK ========= -->
+<div class="chart-section">
 
 <div class="chart-card">
 <h4>Grafik Status Laporan</h4>
@@ -123,44 +167,7 @@
 
 </div>
 
-
-<!-- ================= LIST LAPORAN ================= -->
-<div class="laporan-card mt-5">
-  <h3>Daftar Laporan</h3>
-
-  {% for lap in laporan %}
-  <div class="laporan-item">
-
-    <div class="laporan-top d-flex justify-content-between">
-      <strong>{{ lap.kode_laporan }}</strong>
-      <span class="status {{ lap.status }}">
-        {{ lap.get_status_display }}
-      </span>
-    </div>
-
-    <p class="laporan-meta">
-      <strong>Pelapor:</strong>
-      {{ lap.tampilkan_pelapor }}
-      • {{ lap.get_jenis_bullying_display }}
-      • {{ lap.tanggal|date:"d M Y" }}
-    </p>
-
-    <p class="laporan-meta">
-      <strong>Korban:</strong>
-      {{ lap.tampilkan_korban }} ({{ lap.kelas_korban }})
-    </p>
-
-    <a href="{% url 'bk_tindak_lanjut' lap.id %}" class="btn-detail">
-      Lihat Detail
-    </a>
-
-  </div>
-
-  {% empty %}
-    <p>Tidak ada laporan</p>
-  {% endfor %}
 </div>
-
 </div>
 </div>
 
@@ -202,7 +209,8 @@ data:{
 labels:[{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
 datasets:[{
 label:'Jumlah',
-data:[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
+data:[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}],
+backgroundColor:'rgba(13,110,253,0.8)'
 }]
 },
 options:sharedOptions
@@ -216,14 +224,15 @@ data:{
 labels:[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
 datasets:[{
 label:'Jumlah',
-data:[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
+data:[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}],
+backgroundColor:'rgba(75,192,192,0.7)'
 }]
 },
 options:sharedOptions
 });
 
 
-/* ================= TREN (BAR CHART) ================= */
+/* ===== TREN (WARNA DISAMAKAN DENGAN KELAS) ===== */
 
 new Chart(document.getElementById("trenChart"), {
 type:'bar',
@@ -244,9 +253,8 @@ labels:[
 datasets:[{
 label:'Jumlah Laporan',
 data:[{% for i in grafik_tren %}{{ i.total }},{% endfor %}],
-backgroundColor:'rgba(13,110,253,0.8)',
-borderRadius:6,
-barPercentage:0.6
+backgroundColor:'rgba(75,192,192,0.7)',
+borderRadius:6
 }]
 },
 options:sharedOptions
@@ -268,7 +276,10 @@ bulan.style.display='none';
 tahun.style.display='none';
 
 if(periode.value==='hari') tanggal.style.display='inline-block';
-if(periode.value==='bulan'){ bulan.style.display='inline-block'; tahun.style.display='inline-block'; }
+if(periode.value==='bulan'){
+bulan.style.display='inline-block';
+tahun.style.display='inline-block';
+}
 if(periode.value==='tahun') tahun.style.display='inline-block';
 }
 

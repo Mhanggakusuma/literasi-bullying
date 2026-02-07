@@ -1437,11 +1437,6 @@ select {
 
 .dashboard-header h1 {
   font-weight: 800;
-  margin: 5px 0;
-}
-
-.dashboard-header p {
-  opacity: .85;
 }
 
 .bk-badge {
@@ -1465,7 +1460,6 @@ select {
 
 .btn-download:hover {
   transform: translateY(-2px);
-  background: #f1f3f5;
 }
 
 
@@ -1489,14 +1483,7 @@ select {
   transform: translateY(-4px);
 }
 
-.summary-card p {
-  font-size: 14px;
-  font-weight: 600;
-  color: #6c757d;
-}
-
 .summary-card h2 {
-  margin-top: 8px;
   font-size: 32px;
   font-weight: 800;
   color: #0d6efd;
@@ -1521,13 +1508,6 @@ select {
   border: 1px solid #ced4da;
   font-weight: 600;
   min-width: 160px;
-  transition: .2s;
-}
-
-.filter-bar select:focus,
-.filter-bar input:focus {
-  border-color: #0d6efd;
-  outline: none;
 }
 
 .filter-bar button {
@@ -1537,53 +1517,46 @@ select {
   padding: 10px 22px;
   border-radius: 12px;
   font-weight: 700;
-  transition: .3s;
-}
-
-.filter-bar button:hover {
-  background: #0b5ed7;
 }
 
 
-/* ================= CHART AREA ================= */
-.chart-container {
+
+/* ===================================================== */
+/* ================= DASHBOARD LAYOUT =================== */
+/* ===================================================== */
+
+.dashboard-layout {
   display: grid;
-  grid-template-columns: repeat(2,1fr);
+  grid-template-columns: 1.1fr 1.6fr;
   gap: 25px;
-  margin-top: 35px;
-}
-
-.chart-card {
-  background: white;
-  padding: 22px;
-  border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(0,0,0,.12);
-  transition: .2s;
-}
-
-.chart-card:hover {
-  transform: translateY(-3px);
-}
-
-.chart-card h4 {
-  font-weight: 700;
-  margin-bottom: 18px;
-  color: #495057;
-}
-
-.chart-card canvas {
-  width: 100% !important;
-  height: 300px !important;
+  margin-top: 40px;
 }
 
 
-/* ================= LIST LAPORAN ================= */
+
+/* ================= LEFT - LAPORAN ================= */
+.laporan-section {
+  height: 100%;
+}
+
 .laporan-card {
-  margin-top: 45px;
   background: white;
   padding: 25px;
   border-radius: 18px;
   box-shadow: 0 10px 25px rgba(0,0,0,.12);
+
+  /* Scroll laporan */
+  max-height: 850px;
+  overflow-y: auto;
+}
+
+.laporan-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.laporan-card::-webkit-scrollbar-thumb {
+  background: #0d6efd;
+  border-radius: 10px;
 }
 
 .laporan-card h3 {
@@ -1604,15 +1577,27 @@ select {
   transform: translateY(-3px);
 }
 
-.laporan-top {
-  margin-bottom: 8px;
+
+
+/* ================= RIGHT - CHART ================= */
+.chart-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 25px;
 }
 
-.laporan-meta {
-  font-size: 14px;
-  color: #495057;
-  margin: 6px 0;
+.chart-card {
+  background: white;
+  padding: 22px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.12);
 }
+
+.chart-card canvas {
+  width: 100% !important;
+  height: 280px !important;
+}
+
 
 
 /* ================= STATUS BADGE ================= */
@@ -1629,44 +1614,39 @@ select {
 .status.selesai { background:#198754; }
 
 
-/* ================= BUTTON DETAIL ================= */
+
+/* ================= BUTTON ================= */
 .btn-detail {
   display: inline-flex;
-  align-items: center;
   background: #0d6efd;
   color: white;
   padding: 9px 18px;
   border-radius: 12px;
   font-weight: 700;
   text-decoration: none;
-  transition: .3s;
   margin-top: 8px;
 }
 
-.btn-detail:hover {
-  background: #0b5ed7;
-}
 
 
-/* ================= RESPONSIVE ================= */
+/* ===================================================== */
+/* ================= RESPONSIVE ========================= */
+/* ===================================================== */
 
-/* Tablet */
-@media (max-width: 1200px) {
-  .bk-dashboard {
-    padding: 90px 35px;
-  }
-
+@media(max-width:1200px){
   .dashboard-cards {
     grid-template-columns: repeat(2,1fr);
   }
 }
 
+@media(max-width:992px){
 
-/* Tablet kecil */
-@media (max-width: 992px) {
-
-  .chart-container {
+  .dashboard-layout {
     grid-template-columns: 1fr;
+  }
+
+  .laporan-card {
+    max-height: none;
   }
 
   .dashboard-header {
@@ -1677,9 +1657,7 @@ select {
 
 }
 
-
-/* Mobile */
-@media (max-width: 576px) {
+@media(max-width:576px){
 
   .bk-dashboard {
     padding: 70px 18px;
