@@ -17,6 +17,7 @@
 
         <div class="bk-tl-info text-start">
 
+          <!-- ================= DATA UMUM ================= -->
           <p><strong>Kode Laporan :</strong> {{ laporan.kode_laporan }}</p>
 
           <p>
@@ -36,6 +37,7 @@
 
           <hr>
 
+          <!-- ================= WAKTU & TEMPAT ================= -->
           <p>
             <strong>Waktu Kejadian :</strong>
             {{ laporan.tanggal_kejadian|date:"d M Y" }}
@@ -51,13 +53,28 @@
 
           <hr>
 
-          <!-- ✅ FIX DISINI -->
+          <!-- ================= KORBAN ================= -->
           <p>
             <strong>Korban :</strong>
             {{ laporan.tampilkan_korban }}
             ({{ laporan.kelas_korban }})
           </p>
 
+          <!-- INTERNAL KORBAN JIKA ANONIM -->
+          {% if laporan.is_korban_anonim %}
+          <details class="mt-2">
+            <summary style="cursor:pointer; font-weight:600;">
+              🔐 Identitas Korban (Internal BK)
+            </summary>
+
+            <div class="mt-2">
+              <p><strong>Nama :</strong> {{ laporan.nama_korban }}</p>
+              <p><strong>Kelas :</strong> {{ laporan.kelas_korban }}</p>
+            </div>
+          </details>
+          {% endif %}
+
+          <!-- ================= TERLAPOR ================= -->
           {% if laporan.nama_terlapor %}
           <p>
             <strong>Terlapor :</strong>
@@ -75,11 +92,13 @@
 
           <hr>
 
+          <!-- ================= KRONOLOGI ================= -->
           <p>
             <strong>Kronologi :</strong><br>
             {{ laporan.isi_laporan|linebreaksbr }}
           </p>
 
+          <!-- ================= DAMPAK ================= -->
           {% if laporan.dampak_korban %}
           <hr>
           <p><strong>Dampak :</strong></p>
@@ -97,6 +116,7 @@
           </p>
           {% endif %}
 
+          <!-- ================= HARAPAN ================= -->
           {% if laporan.harapan_pelapor %}
           <hr>
           <p>
@@ -105,6 +125,7 @@
           </p>
           {% endif %}
 
+          <!-- ================= BUKTI ================= -->
           {% if laporan.bukti %}
           <a href="{{ laporan.bukti.url }}"
              target="_blank"
@@ -115,13 +136,13 @@
 
           <hr>
 
+          <!-- ================= IDENTITAS PELAPOR INTERNAL ================= -->
           <details class="mt-4">
             <summary style="cursor:pointer; font-weight:700;">
               🔐 Identitas Pelapor (Internal BK)
             </summary>
 
             <div class="mt-3">
-
               <p>
                 <strong>Nama :</strong>
                 {{ laporan.pelapor.get_full_name|default:laporan.pelapor.username }}
@@ -136,16 +157,12 @@
                 <strong>Kelas :</strong>
                 {{ laporan.pelapor.profile.kelas }}
               </p>
-
-              <small class="text-muted">
-                Data ini hanya untuk keperluan penanganan kasus.
-              </small>
-
             </div>
           </details>
 
           <hr>
 
+          <!-- ================= FORM BK ================= -->
           <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
@@ -157,8 +174,7 @@
             </label>
             {{ form.bukti_tindak_lanjut }}
 
-            <button type="submit"
-                    class="bk-tl-btn-primary w-100 mt-4">
+            <button type="submit" class="bk-tl-btn-primary w-100 mt-4">
               Simpan Tindak Lanjut
             </button>
 
