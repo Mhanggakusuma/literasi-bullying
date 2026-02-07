@@ -135,87 +135,105 @@
 const sharedOptions = {
 responsive:true,
 maintainAspectRatio:false,
-scales:{
-y:{beginAtZero:true}
-}
+scales:{ y:{beginAtZero:true} }
 };
 
 
 /* ===== STATUS ===== */
-const statusRaw = {{ grafik_status|safe }};
 new Chart(document.getElementById("statusChart"), {
 type:'pie',
 data:{
-labels: statusRaw.map(i=>i.status),
-datasets:[{ data: statusRaw.map(i=>i.total) }]
+labels:[
+{% for i in grafik_status %}
+"{{ i.status }}",
+{% endfor %}
+],
+datasets:[{
+data:[
+{% for i in grafik_status %}
+{{ i.total }},
+{% endfor %}
+]
+}]
 }
 });
 
 
 /* ===== JENIS ===== */
-const jenisRaw = {{ grafik_jenis|safe }};
 new Chart(document.getElementById("jenisChart"), {
 type:'bar',
 data:{
-labels: jenisRaw.map(i=>i.jenis_bullying),
+labels:[
+{% for i in grafik_jenis %}
+"{{ i.jenis_bullying }}",
+{% endfor %}
+],
 datasets:[{
 label:'Jumlah',
-data: jenisRaw.map(i=>i.total)
+data:[
+{% for i in grafik_jenis %}
+{{ i.total }},
+{% endfor %}
+]
 }]
 },
-options: sharedOptions
+options:sharedOptions
 });
 
 
 /* ===== KELAS ===== */
-const kelasRaw = {{ grafik_kelas|safe }};
 new Chart(document.getElementById("kelasChart"), {
 type:'bar',
 data:{
-labels: kelasRaw.map(i=>i.kelas_korban),
+labels:[
+{% for i in grafik_kelas %}
+"{{ i.kelas_korban }}",
+{% endfor %}
+],
 datasets:[{
 label:'Jumlah',
-data: kelasRaw.map(i=>i.total)
+data:[
+{% for i in grafik_kelas %}
+{{ i.total }},
+{% endfor %}
+]
 }]
 },
-options: sharedOptions
+options:sharedOptions
 });
 
 
 /* ===== TREN ===== */
-const trenRaw = {{ grafik_tren|safe }};
-
-const trenLabels = trenRaw.map(i=>{
-const d = new Date(i.waktu);
-
-{% if periode == "bulan" %}
-return d.getDate();
-
-{% elif periode == "tahun" %}
-return d.toLocaleString('id-ID',{month:'short'});
-
-{% elif periode == "hari" %}
-return d.toLocaleDateString('id-ID');
-
-{% else %}
-return d.toLocaleString('id-ID',{month:'short',year:'numeric'});
-{% endif %}
-});
-
 new Chart(document.getElementById("trenChart"), {
 type:'line',
 data:{
-labels: trenLabels,
+labels:[
+{% for i in grafik_tren %}
+{% if periode == "bulan" %}
+"{{ i.waktu|date:'d' }}",
+{% elif periode == "tahun" %}
+"{{ i.waktu|date:'M' }}",
+{% elif periode == "hari" %}
+"{{ i.waktu|date:'d M Y' }}",
+{% else %}
+"{{ i.waktu|date:'M Y' }}",
+{% endif %}
+{% endfor %}
+],
 datasets:[{
 label:'Jumlah Laporan',
-data: trenRaw.map(i=>i.total),
+data:[
+{% for i in grafik_tren %}
+{{ i.total }},
+{% endfor %}
+],
 borderWidth:3,
 tension:0,
 pointRadius:5,
 fill:false
 }]
 },
-options: sharedOptions
+options:sharedOptions
 });
 
 </script>
@@ -234,7 +252,10 @@ bulan.style.display='none';
 tahun.style.display='none';
 
 if(periode.value==='hari') tanggal.style.display='inline-block';
-if(periode.value==='bulan'){ bulan.style.display='inline-block'; tahun.style.display='inline-block'; }
+if(periode.value==='bulan'){
+bulan.style.display='inline-block';
+tahun.style.display='inline-block';
+}
 if(periode.value==='tahun') tahun.style.display='inline-block';
 }
 
