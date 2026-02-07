@@ -1,14 +1,9 @@
 from django.contrib import admin
-from django.db.models import Count
-from django.db.models.functions import TruncMonth
 from .models import Laporan
 
 
 @admin.register(Laporan)
 class LaporanAdmin(admin.ModelAdmin):
-
-    # ⭐ Dashboard Template
-    change_list_template = "admin/laporan/laporan_change_list.html"
 
     list_display = (
         "kode_laporan",
@@ -29,8 +24,12 @@ class LaporanAdmin(admin.ModelAdmin):
 
     search_fields = (
         "kode_laporan",
+        "pelapor__username",
+        "pelapor__first_name",
+        "pelapor__last_name",
         "nama_korban",
         "nama_terlapor",
+        "lokasi_kejadian",
     )
 
     readonly_fields = (
@@ -38,71 +37,62 @@ class LaporanAdmin(admin.ModelAdmin):
         "tanggal",
     )
 
-    # ================= FILTER CUSTOM =================
-    def get_queryset(self, request):
-
-        qs = super().get_queryset(request)
-
-        jenis = request.GET.get("jenis")
-        kelas = request.GET.get("kelas")
-        status = request.GET.get("status")
-
-        if jenis:
-            qs = qs.filter(jenis_bullying=jenis)
-
-        if kelas:
-            qs = qs.filter(kelas_korban=kelas)
-
-        if status:
-            qs = qs.filter(status=status)
-
-        return qs
-
-    # ================= DASHBOARD =================
-    def changelist_view(self, request, extra_context=None):
-
-        response = super().changelist_view(request, extra_context)
-
-        if hasattr(response, "context_data"):
-
-            cl = response.context_data["cl"]
-            qs = cl.queryset
-
-            grafik_status = list(
-                qs.values("status").annotate(total=Count("id"))
+    fieldsets = (
+        ("🔒 Identitas Pelapor (Internal)", {
+            "fields": (
+                "pelapor",
+                "is_anonymous",
             )
+        }),
 
-            grafik_jenis = list(
-                qs.values("jenis_bullying").annotate(total=Count("id"))
+        ("🕒 Waktu & Tempat Kejadian", {
+            "fields": (
+                "tanggal_kejadian",
+                "perkiraan_waktu",
+                "lokasi_kejadian",
             )
+        }),
 
-            grafik_kelas = list(
-                qs.values("kelas_korban").annotate(total=Count("id"))
+        ("👤 Korban & Terlapor", {
+            "fields": (
+                "nama_korban",
+                "kelas_korban",
+                "nama_terlapor",
+                "kelas_terlapor",
             )
+        }),
 
-            grafik_tren = list(
-                qs.annotate(waktu=TruncMonth("tanggal"))
-                .values("waktu")
-                .annotate(total=Count("id"))
-                .order_by("waktu")
+        ("🚨 Detail Perundungan", {
+            "fields": (
+                "jenis_bullying",
+                "isi_laporan",
+                "bukti",
             )
+        }),
 
-            response.context_data.update({
-                "total_laporan": qs.count(),
-                "laporan_baru": qs.filter(status="baru").count(),
-                "diproses": qs.filter(status="diproses").count(),
-                "selesai": qs.filter(status="selesai").count(),
+        ("💔 Dampak & Harapan", {
+            "fields": (
+                "dampak_korban",
+                "dampak_lainnya",
+                "harapan_pelapor",
+            )
+        }),
 
-                "grafik_status": grafik_status,
-                "grafik_jenis": grafik_jenis,
-                "grafik_kelas": grafik_kelas,
-                "grafik_tren": grafik_tren,
+        ("🧾 Tindak Lanjut Guru BK", {
+            "fields": (
+                "status",
+                "catatan_bk",
+                "bukti_tindak_lanjut",
+            )
+        }),
 
-                "jenis_choices": Laporan.JENIS_BULLYING_CHOICES,
-                "kelas_choices": Laporan.KELAS_CHOICES,
-            })
-
-        return response
+        ("🔑 Meta Data", {
+            "fields": (
+                "kode_laporan",
+                "tanggal",
+            )
+        }),
+    )
 
     @admin.display(description="Pelapor")
     def get_pelapor_admin(self, obj):
