@@ -9,7 +9,7 @@
 
 <!-- Pertahankan parameter admin -->
 {% for key,value in request.GET.items %}
-    {% if key not in "jenis kelas status periode tanggal bulan tahun".split %}
+    {% if key != "jenis" and key != "kelas" and key != "status" and key != "periode" and key != "tanggal" and key != "bulan" and key != "tahun" %}
         <input type="hidden" name="{{ key }}" value="{{ value }}">
     {% endif %}
 {% endfor %}
