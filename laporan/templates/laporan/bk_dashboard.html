@@ -16,7 +16,6 @@
   <a href="{% url 'bk_download_laporan' %}" class="btn-download">Download Laporan</a>
 </header>
 
-
 <!-- SUMMARY -->
 <section class="dashboard-cards">
   <div class="summary-card">
@@ -36,7 +35,6 @@
     <h2>{{ selesai }}</h2>
   </div>
 </section>
-
 
 <!-- FILTER -->
 <form method="get" class="filter-bar">
@@ -61,19 +59,19 @@
 
 <select name="status">
 <option value="">Semua Status</option>
-<option value="baru" {% if selected_status == "baru" %}selected{% endif %}>Baru</option>
-<option value="diproses" {% if selected_status == "diproses" %}selected{% endif %}>Diproses</option>
-<option value="selesai" {% if selected_status == "selesai" %}selected{% endif %}>Selesai</option>
+<option value="baru">Baru</option>
+<option value="diproses">Diproses</option>
+<option value="selesai">Selesai</option>
 </select>
 
 <select name="periode" id="periodeSelect">
-<option value="semua" {% if periode == "semua" %}selected{% endif %}>Semua Waktu</option>
-<option value="hari" {% if periode == "hari" %}selected{% endif %}>Per Hari</option>
-<option value="bulan" {% if periode == "bulan" %}selected{% endif %}>Per Bulan</option>
-<option value="tahun" {% if periode == "tahun" %}selected{% endif %}>Per Tahun</option>
+<option value="semua">Semua Waktu</option>
+<option value="hari">Per Hari</option>
+<option value="bulan">Per Bulan</option>
+<option value="tahun">Per Tahun</option>
 </select>
 
-<input type="date" name="tanggal" id="filterTanggal" value="{{ request.GET.tanggal }}">
+<input type="date" name="tanggal" id="filterTanggal">
 
 <select name="bulan" id="filterBulan">
 <option value="">Pilih Bulan</option>
@@ -102,7 +100,6 @@
 
 </form>
 
-
 <!-- LAYOUT -->
 <div class="dashboard-layout">
 
@@ -114,44 +111,20 @@
 
 {% for lap in laporan %}
 <div class="laporan-item">
-
-<div class="laporan-top d-flex justify-content-between">
 <strong>{{ lap.kode_laporan }}</strong>
-<span class="status {{ lap.status }}">
-{{ lap.get_status_display }}
-</span>
+<span class="status {{ lap.status }}">{{ lap.get_status_display }}</span>
+<p>{{ lap.tampilkan_pelapor }} • {{ lap.get_jenis_bullying_display }}</p>
 </div>
-
-<p class="laporan-meta">
-<strong>Pelapor:</strong>
-{{ lap.tampilkan_pelapor }}
-• {{ lap.get_jenis_bullying_display }}
-• {{ lap.tanggal|date:"d M Y" }}
-</p>
-
-<p class="laporan-meta">
-<strong>Korban:</strong>
-{{ lap.tampilkan_korban }} ({{ lap.kelas_korban }})
-</p>
-
-<a href="{% url 'bk_tindak_lanjut' lap.id %}" class="btn-detail">
-Lihat Detail
-</a>
-
-</div>
-{% empty %}
-<p>Tidak ada laporan</p>
 {% endfor %}
 
 </div>
 </div>
 
-
 <!-- RIGHT -->
 <div class="chart-section">
 
 <div class="chart-card">
-<h4>Grafik Status Laporan</h4>
+<h4>Grafik Status</h4>
 <canvas id="statusChart"></canvas>
 </div>
 
@@ -166,7 +139,7 @@ Lihat Detail
 </div>
 
 <div class="chart-card">
-<h4>Grafik Tren Periode</h4>
+<h4>Grafik Tren</h4>
 <canvas id="trenChart"></canvas>
 </div>
 
@@ -175,29 +148,32 @@ Lihat Detail
 </div>
 </div>
 
-
-<!-- CHART JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 
-function generateHeatColors(data){
+// ===== GRADASI MERAH =====
+function redGradient(data){
 const max=Math.max(...data);
-return data.map(val=>{
-let ratio=max===0?0:val/max;
-let r=Math.round(255*ratio);
-let g=Math.round(180*(1-ratio));
-return `rgb(${r},${g},80)`;
+return data.map(v=>{
+let r=max===0?0:v/max;
+return `rgba(220,53,69,${0.3 + r*0.7})`;
 });
 }
 
+// ===== MERAH KE KUNING =====
+function redYellowGradient(data){
+const max=Math.max(...data);
+return data.map(v=>{
+let r=max===0?0:v/max;
+let g=Math.round(220 - r*180);
+return `rgb(255,${g},0)`;
+});
+}
 
-function chart(id,type,labels,data,labelName){
-
-let backgroundColors=[];
-
-if(id==="statusChart"){
-backgroundColors=labels.map(l=>{
+// ===== STATUS COLOR =====
+function statusColor(labels){
+return labels.map(l=>{
 if(l==="baru") return "#dc3545";
 if(l==="diproses") return "#0d6efd";
 if(l==="selesai") return "#198754";
@@ -205,79 +181,66 @@ return "#6c757d";
 });
 }
 
-else if(id==="jenisChart"){
-const colors=["#0d6efd","#6f42c1","#fd7e14","#20c997","#ffc107","#dc3545","#0dcaf0"];
-backgroundColors=labels.map((_,i)=>colors[i%colors.length]);
+// ===== JENIS COLOR =====
+function jenisColor(labels){
+return labels.map(l=>{
+l=l.toLowerCase();
+if(l.includes("fisik")) return "#dc3545";
+if(l.includes("verbal")) return "#fd7e14";
+if(l.includes("sosial")) return "#6f42c1";
+if(l.includes("cyber")) return "#0d6efd";
+return "#6c757d";
+});
 }
 
-else{
-backgroundColors=generateHeatColors(data);
-}
+// ===== CHART UNIVERSAL =====
+function chart(id,type,labels,data,label){
+
+let colors=[];
+
+if(id==="statusChart") colors=statusColor(labels);
+else if(id==="jenisChart") colors=jenisColor(labels);
+else if(id==="kelasChart") colors=redGradient(data);
+else if(id==="trenChart") colors=redYellowGradient(data);
 
 new Chart(document.getElementById(id),{
 type:type,
 data:{
 labels:labels,
 datasets:[{
-label:labelName,
+label:label,
 data:data,
-backgroundColor:backgroundColors
+backgroundColor:colors
 }]
-},
-options:{
-responsive:true,
-maintainAspectRatio:false,
-scales:type!=="pie"?{y:{beginAtZero:true}}:{}
 }
 });
 }
 
-
+// LOAD CHART
 chart("statusChart","pie",
 [{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
 [{% for i in grafik_status %}{{ i.total }},{% endfor %}],
-"Status Laporan"
+"Status"
 );
 
 chart("jenisChart","bar",
 [{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
 [{% for i in grafik_jenis %}{{ i.total }},{% endfor %}],
-"Jenis Bullying"
+"Jenis"
 );
 
 chart("kelasChart","bar",
 [{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
 [{% for i in grafik_kelas %}{{ i.total }},{% endfor %}],
-"Kelas Korban"
+"Kelas"
 );
 
 chart("trenChart","bar",
 [{% for i in grafik_tren %}"{{ i.label }}",{% endfor %}],
 [{% for i in grafik_tren %}{{ i.total }},{% endfor %}],
-"Tren Laporan"
+"Tren"
 );
 
-</script>
-
-
-<script>
-const periode=document.getElementById("periodeSelect");
-const tanggal=document.getElementById("filterTanggal");
-const bulan=document.getElementById("filterBulan");
-const tahun=document.getElementById("filterTahun");
-
-function updateFilter(){
-tanggal.style.display='none';
-bulan.style.display='none';
-tahun.style.display='none';
-
-if(periode.value==='hari') tanggal.style.display='inline-block';
-if(periode.value==='bulan'){bulan.style.display='inline-block';tahun.style.display='inline-block';}
-if(periode.value==='tahun') tahun.style.display='inline-block';
-}
-
-periode.addEventListener('change',updateFilter);
-updateFilter();
 </script>
 
 {% endblock %}
