@@ -191,29 +191,53 @@
 
 <script>
 
-/* GRADIENT KELAS MERAH → ORANGE */
+/* GRADIENT KELAS ORANGE → MERAH */
 function gradientKelas(data){
+
 const max=Math.max(...data);
+
 return data.map(v=>{
+
 let ratio=v/max;
+
+/* 
+Data sedikit = Orange
+Data banyak = Merah
+*/
+
 let r=255;
-let g=Math.round(165*ratio);
+let g=Math.round(165*(1-ratio));
 let opacity=0.4+(0.6*ratio);
+
 return `rgba(${r},${g},0,${opacity})`;
+
 });
 }
 
-/* GRADIENT TREN MERAH → KUNING */
+
+/* GRADIENT TREN KUNING → MERAH */
 function gradientTrend(data){
+
 const max=Math.max(...data);
+
 return data.map(v=>{
+
 let ratio=v/max;
+
+/*
+Data sedikit = Kuning
+Data banyak = Merah
+*/
+
 let r=255;
-let g=Math.round(255*ratio);
+let g=Math.round(255*(1-ratio));
 let opacity=0.4+(0.6*ratio);
+
 return `rgba(${r},${g},0,${opacity})`;
+
 });
 }
+
 
 function chart(id,type,labels,data){
 
