@@ -11,6 +11,15 @@
 
 <h1 class="dashboard-title">Dashboard Statistik Laporan Bullying</h1>
 
+<!-- ================= SUMMARY (PINDAH KE ATAS) ================= -->
+<div class="summary-grid">
+<div class="summary-card total">Total Laporan <h2>{{ total_laporan }}</h2></div>
+<div class="summary-card baru">Baru <h2>{{ laporan_baru }}</h2></div>
+<div class="summary-card proses">Diproses <h2>{{ diproses }}</h2></div>
+<div class="summary-card selesai">Selesai <h2>{{ selesai }}</h2></div>
+</div>
+
+
 <!-- ================= FILTER ================= -->
 <form method="get" class="filter-bar">
 
@@ -50,18 +59,9 @@
 
 <select name="bulan">
 <option value="">Pilih Bulan</option>
-<option value="1">Januari</option>
-<option value="2">Februari</option>
-<option value="3">Maret</option>
-<option value="4">April</option>
-<option value="5">Mei</option>
-<option value="6">Juni</option>
-<option value="7">Juli</option>
-<option value="8">Agustus</option>
-<option value="9">September</option>
-<option value="10">Oktober</option>
-<option value="11">November</option>
-<option value="12">Desember</option>
+{% for i in "123456789101112"|make_list %}
+<option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+{% endfor %}
 </select>
 
 <select name="tahun">
@@ -77,132 +77,146 @@
 
 </form>
 
-<!-- ================= SUMMARY ================= -->
-<div class="summary-grid">
-<div class="summary-card">Total Laporan <h2>{{ total_laporan }}</h2></div>
-<div class="summary-card">Baru <h2>{{ laporan_baru }}</h2></div>
-<div class="summary-card">Diproses <h2>{{ diproses }}</h2></div>
-<div class="summary-card">Selesai <h2>{{ selesai }}</h2></div>
-</div>
 
 <!-- ================= GRAFIK ================= -->
 <div class="chart-grid">
 
-<!-- STATUS -->
 <div class="chart-card">
 <h3>Grafik Status Laporan</h3>
-
 <div class="chart-wrapper">
 <canvas id="statusChart"></canvas>
 </div>
-
-<div class="chart-info">
-{% for i in grafik_status %}
-<span class="info-badge">{{ i.status|title }} : {{ i.total }}</span>
-{% endfor %}
-<span class="info-total">Total : {{ total_status }}</span>
-</div>
 </div>
 
-<!-- JENIS -->
 <div class="chart-card">
 <h3>Grafik Jenis Bullying</h3>
-
 <div class="chart-wrapper">
 <canvas id="jenisChart"></canvas>
 </div>
-
-<div class="chart-info">
-{% for i in grafik_jenis %}
-<span class="info-badge">{{ i.jenis_bullying|title }} : {{ i.total }}</span>
-{% endfor %}
-<span class="info-total">Total : {{ total_jenis }}</span>
-</div>
 </div>
 
-<!-- KELAS -->
 <div class="chart-card">
 <h3>Grafik Berdasarkan Kelas Korban</h3>
-
 <div class="chart-wrapper">
 <canvas id="kelasChart"></canvas>
 </div>
-
-<div class="chart-info">
-{% for i in grafik_kelas %}
-<span class="info-badge">{{ i.kelas_korban }} : {{ i.total }}</span>
-{% endfor %}
-<span class="info-total">Total : {{ total_kelas }}</span>
-</div>
 </div>
 
-<!-- TREN -->
 <div class="chart-card">
 <h3>Grafik Tren Laporan</h3>
-
 <div class="chart-wrapper">
 <canvas id="trenChart"></canvas>
 </div>
-
-<div class="chart-info">
-
-{% if tren_detail %}
-    {% for i in tren_detail %}
-        <span class="info-badge">
-            {{ i.label }} = {{ i.total }}
-        </span>
-    {% endfor %}
-{% endif %}
-
-<span class="info-total">
-Total : {{ total_tren }} laporan
-</span>
-
-</div>
 </div>
 
 </div>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-function chart(id,type,labels,data){
 
-let config={
+// ================= COLOR FUNCTION =================
+function gradientColor(ctx, value, max, start, end){
+let ratio=value/max;
+let r=Math.round(start[0]+(end[0]-start[0])*ratio);
+let g=Math.round(start[1]+(end[1]-start[1])*ratio);
+let b=Math.round(start[2]+(end[2]-start[2])*ratio);
+return `rgb(${r},${g},${b})`;
+}
+
+
+// ================= STATUS COLOR =================
+function statusColor(label){
+if(label==="baru") return "#dc3545";      // merah
+if(label==="diproses") return "#0d6efd";  // biru
+if(label==="selesai") return "#198754";   // hijau
+return "#6c757d";
+}
+
+
+// ================= JENIS COLOR =================
+function jenisColor(label){
+if(label==="fisik") return "#dc3545";
+if(label==="verbal") return "#fd7e14";
+if(label==="sosial") return "#6f42c1";
+if(label==="siber") return "#0dcaf0";
+if(label==="psikologis") return "#198754";
+return "#adb5bd";
+}
+
+
+// ================= GENERIC CHART =================
+function buildChart(id,type,labels,data,colorCallback){
+
+let ctx=document.getElementById(id).getContext("2d");
+let max=Math.max(...data,1);
+
+let colors=data.map((val,i)=>{
+return colorCallback(labels[i],val,max);
+});
+
+new Chart(ctx,{
 type:type,
-data:{labels:labels,datasets:[{data:data}]},
-options:{responsive:true,maintainAspectRatio:false}
-};
-
-if(type!=="pie"){
-config.options.scales={
-y:{beginAtZero:true,ticks:{stepSize:1,precision:0}}
-};
+data:{
+labels:labels,
+datasets:[{
+data:data,
+backgroundColor:colors
+}]
+},
+options:{
+responsive:true,
+maintainAspectRatio:false,
+scales:type!=="pie"?{
+y:{beginAtZero:true,ticks:{stepSize:1}}
+}:undefined
+}
+});
 }
 
-new Chart(document.getElementById(id),config);
-}
 
-chart("statusChart","pie",
-[{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
-[{% for i in grafik_status %}{{ i.total }},{% endfor %}]
+
+// ================= STATUS =================
+buildChart(
+"statusChart",
+"pie",
+[{% for i in grafik_status %}"{{ i.status|default:'-' }}",{% endfor %}],
+[{% for i in grafik_status %}{{ i.total }},{% endfor %}],
+(label)=>statusColor(label)
 );
 
-chart("jenisChart","bar",
-[{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
-[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
+
+// ================= JENIS =================
+buildChart(
+"jenisChart",
+"bar",
+[{% for i in grafik_jenis %}"{{ i.jenis_bullying|default:'-' }}",{% endfor %}],
+[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}],
+(label)=>jenisColor(label)
 );
 
-chart("kelasChart","bar",
-[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
-[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
+
+// ================= KELAS GRADIENT =================
+buildChart(
+"kelasChart",
+"bar",
+[{% for i in grafik_kelas %}"{{ i.kelas_korban|default:'-' }}",{% endfor %}],
+[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}],
+(label,val,max)=>gradientColor(null,val,max,[255,230,0],[220,53,69])
 );
 
-chart("trenChart","bar",
+
+// ================= TREN GRADIENT =================
+buildChart(
+"trenChart",
+"bar",
 [{% for i in grafik_tren %}"{{ i.waktu|date:'d M Y' }}",{% endfor %}],
-[{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
+[{% for i in grafik_tren %}{{ i.total }},{% endfor %}],
+(label,val,max)=>gradientColor(null,val,max,[255,159,64],[220,53,69])
 );
+
 </script>
 
 {% endblock %}
