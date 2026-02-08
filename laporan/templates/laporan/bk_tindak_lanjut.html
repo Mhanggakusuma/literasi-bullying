@@ -3,27 +3,28 @@
 {% block title %}Tindak Lanjut Kasus{% endblock %}
 
 {% block content %}
+
 <section class="bk-tindak-lanjut">
 
 <div class="bk-tl-hero">
-<div class="container">
+<div class="container bk-tl-container">
 
 <!-- HEADER -->
 <div class="text-center mb-5">
-  <h1 class="bk-tl-title">Tindak Lanjut Kasus Bullying</h1>
-  <p class="bk-tl-subtitle">
-    Jaga kerahasiaan data demi keamanan dan kenyamanan semua pihak
-  </p>
+<h1 class="bk-tl-title">Tindak Lanjut Kasus Bullying</h1>
+<p class="bk-tl-subtitle">
+Jaga kerahasiaan data demi keamanan dan kenyamanan semua pihak
+</p>
 </div>
 
-<!-- MAIN CARD -->
+<!-- CARD UTAMA -->
 <div class="bk-tl-card">
 
 <img src="{% static 'img/ribbon.png' %}" class="bk-tl-icon">
 
 <div class="row g-4">
 
-<!-- ================= LEFT COLUMN ================= -->
+<!-- ================= LEFT ================= -->
 <div class="col-lg-6">
 
 <div class="bk-section">
@@ -63,18 +64,30 @@
 <div class="bk-section">
 <h5>👤 Korban & Terlapor</h5>
 
-<p><strong>Korban :</strong> {{ laporan.tampilkan_korban }} ({{ laporan.kelas_korban }})</p>
+<p>
+<strong>Korban :</strong>
+{{ laporan.tampilkan_korban }} ({{ laporan.kelas_korban }})
+</p>
 
 {% if laporan.is_korban_anonim %}
 <details class="mt-2">
 <summary>🔐 Identitas Korban Internal</summary>
-<p class="mt-2"><strong>Nama :</strong> {{ laporan.nama_korban }}</p>
+
+<div class="mt-2">
+<p><strong>Nama :</strong> {{ laporan.nama_korban }}</p>
 <p><strong>Kelas :</strong> {{ laporan.kelas_korban }}</p>
+</div>
 </details>
 {% endif %}
 
 {% if laporan.nama_terlapor %}
-<p><strong>Terlapor :</strong> {{ laporan.nama_terlapor }} ({{ laporan.kelas_terlapor }})</p>
+<p>
+<strong>Terlapor :</strong>
+{{ laporan.nama_terlapor }}
+{% if laporan.kelas_terlapor %}
+({{ laporan.kelas_terlapor }})
+{% endif %}
+</p>
 {% endif %}
 
 <p><strong>Jenis :</strong> {{ laporan.get_jenis_bullying_display }}</p>
@@ -83,7 +96,7 @@
 
 </div>
 
-<!-- ================= RIGHT COLUMN ================= -->
+<!-- ================= RIGHT ================= -->
 <div class="col-lg-6">
 
 <div class="bk-section">
@@ -102,6 +115,12 @@
 </div>
 {% endif %}
 
+{% if laporan.dampak_lainnya %}
+<div class="bk-section">
+<p><strong>Dampak Lainnya :</strong> {{ laporan.dampak_lainnya }}</p>
+</div>
+{% endif %}
+
 {% if laporan.harapan_pelapor %}
 <div class="bk-section">
 <h5>🙏 Harapan Pelapor</h5>
@@ -110,32 +129,37 @@
 {% endif %}
 
 {% if laporan.bukti %}
-<a href="{{ laporan.bukti.url }}" target="_blank" class="bk-tl-btn-success mt-2">
+<a href="{{ laporan.bukti.url }}"
+target="_blank"
+class="bk-tl-btn-success mt-2">
 📎 Lihat Bukti Pelapor
 </a>
 {% endif %}
 
 </div>
+
 </div>
 
 <hr class="my-4">
 
-<!-- ================= IDENTITAS PELAPOR ================= -->
+<!-- IDENTITAS PELAPOR -->
 <details class="bk-section">
 <summary>🔐 Identitas Pelapor Internal</summary>
 
-<p class="mt-2"><strong>Nama :</strong>
+<div class="mt-3">
+<p>
+<strong>Nama :</strong>
 {{ laporan.pelapor.get_full_name|default:laporan.pelapor.username }}
 </p>
 
 <p><strong>NIS :</strong> {{ laporan.pelapor.profile.nis }}</p>
 <p><strong>Kelas :</strong> {{ laporan.pelapor.profile.kelas }}</p>
-
+</div>
 </details>
 
 <hr class="my-4">
 
-<!-- ================= FORM BK ================= -->
+<!-- FORM BK -->
 <form method="post" enctype="multipart/form-data">
 
 {% csrf_token %}
@@ -155,14 +179,18 @@
 </button>
 
 {% if laporan.status != "selesai" %}
-<button type="submit" name="selesai" value="1" class="btn btn-success w-100 mt-2">
+<button type="submit"
+name="selesai"
+value="1"
+class="btn btn-success w-100 mt-2">
 ✔ Tandai Selesai
 </button>
 {% endif %}
 
 </form>
 
-<a href="{% url 'bk_dashboard' %}" class="btn btn-outline-secondary w-100 mt-3">
+<a href="{% url 'bk_dashboard' %}"
+class="btn btn-outline-secondary w-100 mt-3">
 ← Kembali ke Dashboard
 </a>
 
@@ -171,4 +199,5 @@
 </div>
 </div>
 </section>
+
 {% endblock %}
