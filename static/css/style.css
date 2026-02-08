@@ -1748,141 +1748,75 @@ select {
 /* ===================================================== */
 /* ============ BK TINDAK LANJUT (FINAL FIX) ============ */
 /* ===================================================== */
-/* ================= HERO ================= */
 .bk-tl-hero{
-min-height:100vh;
 background:linear-gradient(180deg,#0d6efd,#0a3c77);
 padding:120px 20px;
 color:white;
 }
 
-.bk-tl-title{
-font-size:42px;
-font-weight:700;
-}
-
-.bk-tl-subtitle{
-color:#e5e7eb;
-font-size:18px;
-}
-
-/* ================= CARD ================= */
-.bk-tl-card{
-background:white;
-max-width:900px;
-padding:45px;
-border-radius:18px;
-box-shadow:0 20px 45px rgba(0,0,0,0.25);
-color:#333;
-}
-
-.bk-tl-icon{
-width:75px;
-display:block;
-margin:0 auto 25px;
-}
-
-/* ================= SECTION ================= */
-.bk-section{
-border-top:1px solid #eee;
-padding-top:20px;
-margin-top:25px;
-}
-
-.bk-section-title{
-font-weight:700;
-color:#0d6efd;
-margin-bottom:15px;
-}
-
-/* ================= GRID ================= */
-.bk-grid{
+/* GRID */
+.bk-tl-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:15px;
+grid-template-columns:2fr 1fr;
+gap:25px;
 }
 
-.bk-grid label{
-font-size:13px;
-color:#888;
-display:block;
+/* CARD */
+.bk-card{
+background:white;
+padding:25px;
+border-radius:14px;
+box-shadow:0 8px 25px rgba(0,0,0,0.15);
+color:#333;
+margin-bottom:20px;
 }
 
-.bk-grid p{
-font-weight:600;
-margin:0;
-}
-
-/* ================= TEXT BLOCK ================= */
-.bk-text-block{
+/* SCROLL BOX */
+.bk-scroll-box{
+max-height:180px;
+overflow-y:auto;
 background:#f8f9fa;
-padding:15px;
+padding:12px;
 border-radius:10px;
-line-height:1.6;
 }
 
-/* ================= LIST ================= */
-.bk-list{
-padding-left:20px;
-}
-
-/* ================= SECRET ================= */
-.bk-secret{
-background:#f1f5f9;
-padding:15px;
-border-radius:10px;
-margin-top:10px;
-}
-
-.bk-secret summary{
-font-weight:700;
-cursor:pointer;
-}
-
-/* ================= FORM ================= */
-.bk-tl-label{
-font-weight:600;
-margin-bottom:6px;
-display:block;
-}
-
-textarea,input[type="file"]{
+/* FORM */
+textarea,input[type=file]{
 width:100%;
 border:1px solid #ccc;
 border-radius:10px;
-padding:12px;
+padding:10px;
 }
 
-/* ================= BUTTON ================= */
-.bk-tl-btn-primary{
+/* BUTTON */
+.bk-btn-primary{
 width:100%;
 background:#0d6efd;
+color:white;
 border:none;
-padding:14px;
-border-radius:12px;
-color:white;
+padding:12px;
+border-radius:10px;
 font-weight:600;
 }
 
-.bk-tl-btn-success{
-display:block;
-text-align:center;
-background:#22c55e;
-color:white;
-padding:14px;
-border-radius:12px;
-text-decoration:none;
-font-weight:600;
+/* STICKY FORM */
+.sticky-card{
+position:sticky;
+top:110px;
 }
 
-/* ================= RESPONSIVE ================= */
-@media(max-width:768px){
-.bk-tl-card{
-padding:30px 20px;
+/* RESPONSIVE */
+@media(max-width:900px){
+
+.bk-tl-grid{
+grid-template-columns:1fr;
 }
-.bk-tl-title{
-font-size:30px;
+
+.sticky-card{
+position:relative;
+top:0;
 }
+
 }
 
 /* ===================================================== */
