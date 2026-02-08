@@ -1868,6 +1868,19 @@ font-weight:600;
 text-decoration:none;
 }
 
+.bk-section ul{
+  padding-left:20px;
+  margin:0;
+}
+
+.bk-section ul li{
+  color:#212529;
+  font-size:16px;
+  line-height:1.6;
+  margin-bottom:6px;
+  background:transparent !important;
+}
+
 @media(max-width:768px){
 
 .bk-tl-title{
