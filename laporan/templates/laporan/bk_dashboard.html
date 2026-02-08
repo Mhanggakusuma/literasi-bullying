@@ -263,6 +263,20 @@ colors=gradientTrend(data);
 }
 
 
+/* ⭐ KONDISI LEGEND */
+let legendOption = {};
+
+if(id !== "statusChart"){
+legendOption = {
+labels:{
+boxWidth:0,
+boxHeight:0,
+padding:10
+}
+};
+}
+
+
 new Chart(document.getElementById(id),{
 type:type,
 data:{
@@ -277,15 +291,8 @@ options:{
 responsive:true,
 maintainAspectRatio:false,
 
-/* ⭐ HILANGKAN KOTAK WARNA LEGEND */
 plugins:{
-legend:{
-labels:{
-boxWidth:0,
-boxHeight:0,
-padding:10
-}
-}
+legend:legendOption
 },
 
 scales:type!=="pie"?{
