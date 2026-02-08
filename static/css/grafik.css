@@ -1,65 +1,103 @@
-.dashboard-wrapper {
-    padding: 10px 5px;
+/* ===== DASHBOARD WRAPPER ===== */
+.dashboard-wrapper{
+    max-width: 1300px;
 }
 
-.filter-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
+
+/* ===== FILTER BAR ===== */
+.filter-bar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:25px;
 }
 
 .filter-bar select,
-.filter-bar input {
-    padding: 6px 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    min-width: 140px;
+.filter-bar input{
+    padding:6px 10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    min-width:150px;
 }
 
-.filter-bar button {
-    padding: 6px 14px;
-    border-radius: 6px;
-    background: #007bff;
-    color: white;
-    border: none;
+.filter-bar button{
+    padding:6px 16px;
+    border:none;
+    border-radius:6px;
+    background:#007bff;
+    color:white;
 }
 
-.summary-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 25px;
+
+/* ===== SUMMARY CARD ===== */
+.summary-container{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+    gap:15px;
+    margin-bottom:30px;
 }
 
-.summary-card {
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    min-width: 150px;
-    text-align: center;
+.summary-card{
+    background:white;
+    padding:18px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+    text-align:center;
+    font-size:16px;
 }
 
-.chart-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 25px;
+
+/* ===== GRID CHART ===== */
+.chart-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px,1fr));
+    gap:25px;
 }
 
-.chart-card {
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+/* ===== CARD CHART ===== */
+.chart-card{
+    background:white;
+    padding:18px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+    display:flex;
+    flex-direction:column;
 }
 
-.chart-box {
-    height: 320px;
-    margin-bottom: 10px;
+
+/* ===== AREA CHART ===== */
+.chart-box{
+    height:300px;
+    width:100%;
 }
 
-.chart-detail ul {
-    padding-left: 20px;
-    font-size: 14px;
+
+/* ===== DETAIL LIST ===== */
+.chart-detail{
+    margin-top:10px;
+    font-size:14px;
+}
+
+.chart-detail ul{
+    padding-left:18px;
+}
+
+.chart-detail li{
+    margin-bottom:4px;
+}
+
+
+/* ===== RESPONSIVE MOBILE ===== */
+@media(max-width:768px){
+
+    .filter-bar{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .chart-grid{
+        grid-template-columns:1fr;
+    }
+
 }

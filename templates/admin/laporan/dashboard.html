@@ -9,6 +9,7 @@
 
 <div class="dashboard-wrapper">
 
+<!-- ================= FILTER ================= -->
 <form method="get" class="filter-bar">
 
 <select name="jenis">
@@ -38,33 +39,31 @@
 
 <select name="periode" id="periodeSelect">
 <option value="">Semua Waktu</option>
-<option value="hari">Per Hari</option>
-<option value="bulan">Per Bulan</option>
-<option value="tahun">Per Tahun</option>
+<option value="hari" {% if request.GET.periode == "hari" %}selected{% endif %}>Per Hari</option>
+<option value="bulan" {% if request.GET.periode == "bulan" %}selected{% endif %}>Per Bulan</option>
+<option value="tahun" {% if request.GET.periode == "tahun" %}selected{% endif %}>Per Tahun</option>
 </select>
 
-<input type="date" name="tanggal" id="filterTanggal">
+<input type="date" name="tanggal" id="filterTanggal"
+value="{{ request.GET.tanggal }}">
 
 <select name="bulan" id="filterBulan">
 <option value="">Pilih Bulan</option>
-<option value="1">Januari</option>
-<option value="2">Februari</option>
-<option value="3">Maret</option>
-<option value="4">April</option>
-<option value="5">Mei</option>
-<option value="6">Juni</option>
-<option value="7">Juli</option>
-<option value="8">Agustus</option>
-<option value="9">September</option>
-<option value="10">Oktober</option>
-<option value="11">November</option>
-<option value="12">Desember</option>
+{% for i in "123456789101112"|make_list %}
+<option value="{{ forloop.counter }}"
+{% if request.GET.bulan == forloop.counter|stringformat:"s" %}selected{% endif %}>
+{{ forloop.counter }}
+</option>
+{% endfor %}
 </select>
 
 <select name="tahun" id="filterTahun">
 <option value="">Pilih Tahun</option>
 {% for t in daftar_tahun %}
-<option value="{{ t.year }}">{{ t.year }}</option>
+<option value="{{ t.year }}"
+{% if request.GET.tahun == t.year|stringformat:"s" %}selected{% endif %}>
+{{ t.year }}
+</option>
 {% endfor %}
 </select>
 
@@ -73,18 +72,37 @@
 </form>
 
 
+<!-- ================= SUMMARY ================= -->
 <div class="summary-container">
-<div class="summary-card">Total Laporan <b>{{ total_laporan }}</b></div>
-<div class="summary-card">Baru <b>{{ laporan_baru }}</b></div>
-<div class="summary-card">Diproses <b>{{ diproses }}</b></div>
-<div class="summary-card">Selesai <b>{{ selesai }}</b></div>
+
+<div class="summary-card">
+Total Laporan <br><b>{{ total_laporan }}</b>
+</div>
+
+<div class="summary-card">
+Baru <br><b>{{ laporan_baru }}</b>
+</div>
+
+<div class="summary-card">
+Diproses <br><b>{{ diproses }}</b>
+</div>
+
+<div class="summary-card">
+Selesai <br><b>{{ selesai }}</b>
+</div>
+
 </div>
 
 
+<!-- ================= GRAFIK ================= -->
 <div class="chart-grid">
 
+<!-- STATUS -->
 <div class="chart-card">
-<div class="chart-box"><canvas id="statusChart"></canvas></div>
+<div class="chart-box">
+<canvas id="statusChart"></canvas>
+</div>
+
 <div class="chart-detail">
 <ul>
 {% for i in grafik_status %}
@@ -95,8 +113,13 @@
 </div>
 </div>
 
+
+<!-- JENIS -->
 <div class="chart-card">
-<div class="chart-box"><canvas id="jenisChart"></canvas></div>
+<div class="chart-box">
+<canvas id="jenisChart"></canvas>
+</div>
+
 <div class="chart-detail">
 <ul>
 {% for i in grafik_jenis %}
@@ -107,8 +130,13 @@
 </div>
 </div>
 
+
+<!-- KELAS -->
 <div class="chart-card">
-<div class="chart-box"><canvas id="kelasChart"></canvas></div>
+<div class="chart-box">
+<canvas id="kelasChart"></canvas>
+</div>
+
 <div class="chart-detail">
 <ul>
 {% for i in grafik_kelas %}
@@ -119,8 +147,13 @@
 </div>
 </div>
 
+
+<!-- TREN -->
 <div class="chart-card">
-<div class="chart-box"><canvas id="trenChart"></canvas></div>
+<div class="chart-box">
+<canvas id="trenChart"></canvas>
+</div>
+
 <div class="chart-detail">
 <ul>
 {% for i in grafik_tren %}
@@ -135,14 +168,29 @@
 </div>
 
 
+<!-- ================= CHART JS ================= -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 function chart(id,type,labels,data){
 new Chart(document.getElementById(id),{
 type:type,
-data:{labels:labels,datasets:[{data:data}]},
-options:{responsive:true,maintainAspectRatio:false}
+data:{
+labels:labels,
+datasets:[{
+data:data
+}]
+},
+options:{
+responsive:true,
+maintainAspectRatio:false,
+scales:{
+y:{
+beginAtZero:true,
+ticks:{precision:0,stepSize:1}
+}
+}
+}
 });
 }
 
@@ -165,6 +213,37 @@ chart("trenChart","bar",
 [{% for i in grafik_tren %}"{{ i.waktu|date:'d M Y' }}",{% endfor %}],
 [{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
 );
+</script>
+
+
+<!-- ================= FILTER PERIODE JS ================= -->
+<script>
+const periode=document.getElementById("periodeSelect");
+const tanggal=document.getElementById("filterTanggal");
+const bulan=document.getElementById("filterBulan");
+const tahun=document.getElementById("filterTahun");
+
+function updateFilter(){
+tanggal.style.display="none";
+bulan.style.display="none";
+tahun.style.display="none";
+
+if(periode.value==="hari"){
+tanggal.style.display="inline-block";
+}
+
+if(periode.value==="bulan"){
+bulan.style.display="inline-block";
+tahun.style.display="inline-block";
+}
+
+if(periode.value==="tahun"){
+tahun.style.display="inline-block";
+}
+}
+
+periode.addEventListener("change",updateFilter);
+updateFilter();
 </script>
 
 {% endblock %}
