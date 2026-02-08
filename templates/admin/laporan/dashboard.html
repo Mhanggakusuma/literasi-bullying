@@ -1,11 +1,15 @@
 {% extends "admin/base_site.html" %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/grafik.css' %}?v=auth">
 
 {% block content %}
 
 <h2>Dashboard Statistik Laporan Bullying</h2>
 
-<!-- FILTER -->
-<form method="get" style="margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap;">
+<div class="dashboard-wrapper">
+
+<form method="get" class="filter-bar">
 
 <select name="jenis">
 <option value="">Semua Jenis</option>
@@ -27,9 +31,9 @@
 
 <select name="status">
 <option value="">Semua Status</option>
-<option value="baru">Baru</option>
-<option value="diproses">Diproses</option>
-<option value="selesai">Selesai</option>
+<option value="baru" {% if request.GET.status == "baru" %}selected{% endif %}>Baru</option>
+<option value="diproses" {% if request.GET.status == "diproses" %}selected{% endif %}>Diproses</option>
+<option value="selesai" {% if request.GET.status == "selesai" %}selected{% endif %}>Selesai</option>
 </select>
 
 <select name="periode" id="periodeSelect">
@@ -68,20 +72,20 @@
 
 </form>
 
-<!-- SUMMARY -->
-<div style="display:flex; gap:20px; margin-bottom:20px;">
-<div class="admin-card">Total Laporan <b>{{ total_laporan }}</b></div>
-<div class="admin-card">Baru <b>{{ laporan_baru }}</b></div>
-<div class="admin-card">Diproses <b>{{ diproses }}</b></div>
-<div class="admin-card">Selesai <b>{{ selesai }}</b></div>
+
+<div class="summary-container">
+<div class="summary-card">Total Laporan <b>{{ total_laporan }}</b></div>
+<div class="summary-card">Baru <b>{{ laporan_baru }}</b></div>
+<div class="summary-card">Diproses <b>{{ diproses }}</b></div>
+<div class="summary-card">Selesai <b>{{ selesai }}</b></div>
 </div>
 
-<!-- GRAFIK -->
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:25px;">
 
-<div class="admin-card chart-box">
-<canvas id="statusChart"></canvas>
-<hr>
+<div class="chart-grid">
+
+<div class="chart-card">
+<div class="chart-box"><canvas id="statusChart"></canvas></div>
+<div class="chart-detail">
 <ul>
 {% for i in grafik_status %}
 <li>{{ i.status|title }} = {{ i.total }}</li>
@@ -89,10 +93,11 @@
 </ul>
 <b>Total Status = {{ total_status }}</b>
 </div>
+</div>
 
-<div class="admin-card chart-box">
-<canvas id="jenisChart"></canvas>
-<hr>
+<div class="chart-card">
+<div class="chart-box"><canvas id="jenisChart"></canvas></div>
+<div class="chart-detail">
 <ul>
 {% for i in grafik_jenis %}
 <li>{{ i.jenis_bullying|title }} = {{ i.total }}</li>
@@ -100,10 +105,11 @@
 </ul>
 <b>Total Jenis = {{ total_jenis }}</b>
 </div>
+</div>
 
-<div class="admin-card chart-box">
-<canvas id="kelasChart"></canvas>
-<hr>
+<div class="chart-card">
+<div class="chart-box"><canvas id="kelasChart"></canvas></div>
+<div class="chart-detail">
 <ul>
 {% for i in grafik_kelas %}
 <li>{{ i.kelas_korban }} = {{ i.total }}</li>
@@ -111,10 +117,11 @@
 </ul>
 <b>Total Kelas = {{ total_kelas }}</b>
 </div>
+</div>
 
-<div class="admin-card chart-box">
-<canvas id="trenChart"></canvas>
-<hr>
+<div class="chart-card">
+<div class="chart-box"><canvas id="trenChart"></canvas></div>
+<div class="chart-detail">
 <ul>
 {% for i in grafik_tren %}
 <li>{{ i.waktu|date:'d M Y' }} = {{ i.total }}</li>
@@ -122,18 +129,11 @@
 </ul>
 <b>Total Tren = {{ total_tren }}</b>
 </div>
-
 </div>
 
-<style>
-.admin-card{
-background:white;
-padding:15px;
-border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
-.chart-box{ height:320px; }
-</style>
+</div>
+</div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -142,16 +142,7 @@ function chart(id,type,labels,data){
 new Chart(document.getElementById(id),{
 type:type,
 data:{labels:labels,datasets:[{data:data}]},
-options:{
-responsive:true,
-maintainAspectRatio:false,
-scales:{
-y:{
-beginAtZero:true,
-ticks:{precision:0,stepSize:1}
-}
-}
-}
+options:{responsive:true,maintainAspectRatio:false}
 });
 }
 
@@ -174,26 +165,6 @@ chart("trenChart","bar",
 [{% for i in grafik_tren %}"{{ i.waktu|date:'d M Y' }}",{% endfor %}],
 [{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
 );
-</script>
-
-<script>
-const periode=document.getElementById("periodeSelect");
-const tanggal=document.getElementById("filterTanggal");
-const bulan=document.getElementById("filterBulan");
-const tahun=document.getElementById("filterTahun");
-
-function updateFilter(){
-tanggal.style.display="none";
-bulan.style.display="none";
-tahun.style.display="none";
-
-if(periode.value==="hari"){tanggal.style.display="inline-block";}
-if(periode.value==="bulan"){bulan.style.display="inline-block";tahun.style.display="inline-block";}
-if(periode.value==="tahun"){tahun.style.display="inline-block";}
-}
-
-periode.addEventListener("change",updateFilter);
-updateFilter();
 </script>
 
 {% endblock %}

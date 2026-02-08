@@ -1,0 +1,65 @@
+.dashboard-wrapper {
+    padding: 10px 5px;
+}
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-bar select,
+.filter-bar input {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    min-width: 140px;
+}
+
+.filter-bar button {
+    padding: 6px 14px;
+    border-radius: 6px;
+    background: #007bff;
+    color: white;
+    border: none;
+}
+
+.summary-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.summary-card {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    min-width: 150px;
+    text-align: center;
+}
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+}
+
+.chart-card {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.chart-box {
+    height: 320px;
+    margin-bottom: 10px;
+}
+
+.chart-detail ul {
+    padding-left: 20px;
+    font-size: 14px;
+}
