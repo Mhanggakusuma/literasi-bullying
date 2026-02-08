@@ -8,160 +8,182 @@
 <div class="bk-tl-hero">
 <div class="container">
 
-<div class="text-center mb-5">
-  <h1 class="bk-tl-title">Tindak Lanjut Kasus Bullying</h1>
-  <p class="bk-tl-subtitle">
-    Jaga kerahasiaan data demi keamanan dan kenyamanan semua pihak
-  </p>
+<!-- HEADER -->
+<div class="bk-tl-header text-center">
+    <h1 class="bk-tl-title">Tindak Lanjut Kasus Bullying</h1>
+    <p class="bk-tl-subtitle">
+        Data bersifat rahasia dan hanya digunakan untuk penanganan kasus
+    </p>
 </div>
 
-<div class="bk-tl-card">
+<!-- CARD UTAMA -->
+<div class="bk-tl-card mx-auto mt-5">
 
 <img src="{% static 'img/ribbon.png' %}" class="bk-tl-icon">
 
-<div class="row g-4">
+<div class="bk-tl-info">
 
-<!-- ================= LEFT ================= -->
-<div class="col-lg-6">
+<!-- ================= DATA UMUM ================= -->
+<div class="bk-section">
+<h5 class="bk-section-title">Informasi Laporan</h5>
 
-<div class="bk-tl-section">
-<h5>Informasi Laporan</h5>
+<div class="bk-grid">
 
-<p><strong>Kode Laporan :</strong> {{ laporan.kode_laporan }}</p>
+<div>
+<label>Kode Laporan</label>
+<p>{{ laporan.kode_laporan }}</p>
+</div>
 
+<div>
+<label>Status</label>
 <p>
-<strong>Status :</strong>
 <span class="badge
 {% if laporan.status == 'selesai' %}bg-success
-{% elif laporan.status == 'diproses' %}bg-warning
+{% elif laporan.status == 'diproses' %}bg-warning text-dark
 {% else %}bg-secondary{% endif %}">
 {{ laporan.get_status_display }}
 </span>
 </p>
-
-<p><strong>Tanggal Lapor :</strong> {{ laporan.tanggal|date:"d M Y" }}</p>
 </div>
 
+<div>
+<label>Tanggal Lapor</label>
+<p>{{ laporan.tanggal|date:"d M Y" }}</p>
+</div>
 
-<div class="bk-tl-section">
-<h5>Waktu dan Lokasi Kejadian</h5>
+</div>
+</div>
 
+<!-- ================= WAKTU & TEMPAT ================= -->
+<div class="bk-section">
+<h5 class="bk-section-title">Waktu & Lokasi Kejadian</h5>
+
+<div class="bk-grid">
+
+<div>
+<label>Waktu Kejadian</label>
 <p>
-<strong>Waktu :</strong>
 {{ laporan.tanggal_kejadian|date:"d M Y" }}
 {% if laporan.perkiraan_waktu %}
 ({{ laporan.get_perkiraan_waktu_display }})
 {% endif %}
 </p>
-
-<p><strong>Lokasi :</strong> {{ laporan.lokasi_kejadian|default:"-" }}</p>
 </div>
 
+<div>
+<label>Lokasi</label>
+<p>{{ laporan.lokasi_kejadian|default:"-" }}</p>
+</div>
 
-<div class="bk-tl-section">
-<h5>Data Korban</h5>
+</div>
+</div>
 
-<p>
-<strong>Korban :</strong>
-{{ laporan.tampilkan_korban }}
-({{ laporan.kelas_korban }})
+<!-- ================= PIHAK TERLIBAT ================= -->
+<div class="bk-section">
+<h5 class="bk-section-title">Pihak Terlibat</h5>
+
+<p><strong>Korban :</strong>
+{{ laporan.tampilkan_korban }} ({{ laporan.kelas_korban }})
 </p>
 
 {% if laporan.is_korban_anonim %}
-<details class="bk-tl-details">
-<summary>Identitas Korban (Internal)</summary>
-
-<p><strong>Nama :</strong> {{ laporan.nama_korban }}</p>
-<p><strong>Kelas :</strong> {{ laporan.kelas_korban }}</p>
+<details class="bk-secret">
+<summary>🔐 Identitas Korban (Internal)</summary>
+<div>
+<p>Nama : {{ laporan.nama_korban }}</p>
+<p>Kelas : {{ laporan.kelas_korban }}</p>
+</div>
 </details>
 {% endif %}
-</div>
-
-
-<div class="bk-tl-section">
-<h5>Data Terlapor</h5>
 
 {% if laporan.nama_terlapor %}
 <p>
+<strong>Terlapor :</strong>
 {{ laporan.nama_terlapor }}
 {% if laporan.kelas_terlapor %}
 ({{ laporan.kelas_terlapor }})
 {% endif %}
 </p>
-{% else %}
-<p>-</p>
 {% endif %}
 
 <p>
 <strong>Jenis Bullying :</strong>
 {{ laporan.get_jenis_bullying_display }}
 </p>
-</div>
 
 </div>
 
-<!-- ================= RIGHT ================= -->
-<div class="col-lg-6">
-
-<div class="bk-tl-section">
-<h5>Kronologi Kejadian</h5>
-<p class="bk-tl-box">
+<!-- ================= KRONOLOGI ================= -->
+<div class="bk-section">
+<h5 class="bk-section-title">Kronologi Kejadian</h5>
+<p class="bk-text-block">
 {{ laporan.isi_laporan|linebreaksbr }}
 </p>
 </div>
 
-
+<!-- ================= DAMPAK ================= -->
 {% if laporan.dampak_korban %}
-<div class="bk-tl-section">
-<h5>Dampak yang Dialami Korban</h5>
-<ul>
+<div class="bk-section">
+<h5 class="bk-section-title">Dampak Korban</h5>
+
+<ul class="bk-list">
 {% for d in laporan.dampak_korban %}
 <li>{{ d }}</li>
 {% endfor %}
 </ul>
+
+{% if laporan.dampak_lainnya %}
+<p><strong>Lainnya :</strong> {{ laporan.dampak_lainnya }}</p>
+{% endif %}
 </div>
 {% endif %}
 
-
+<!-- ================= HARAPAN ================= -->
 {% if laporan.harapan_pelapor %}
-<div class="bk-tl-section">
-<h5>Harapan Pelapor</h5>
-<p class="bk-tl-box">
+<div class="bk-section">
+<h5 class="bk-section-title">Harapan Pelapor</h5>
+<p class="bk-text-block">
 {{ laporan.harapan_pelapor|linebreaksbr }}
 </p>
 </div>
 {% endif %}
 
-
+<!-- ================= BUKTI ================= -->
 {% if laporan.bukti %}
 <a href="{{ laporan.bukti.url }}" target="_blank"
-class="bk-tl-btn-success w-100">
-Lihat Bukti Pelapor
+class="bk-tl-btn-success my-3">
+📎 Lihat Bukti Pelapor
 </a>
 {% endif %}
 
+<!-- ================= IDENTITAS PELAPOR ================= -->
+<details class="bk-secret mt-4">
+<summary>🔐 Identitas Pelapor (Internal)</summary>
+
+<div>
+<p><strong>Nama :</strong>
+{{ laporan.pelapor.get_full_name|default:laporan.pelapor.username }}
+</p>
+<p><strong>NIS :</strong> {{ laporan.pelapor.profile.nis }}</p>
+<p><strong>Kelas :</strong> {{ laporan.pelapor.profile.kelas }}</p>
 </div>
 
-</div>
+</details>
 
-<hr class="bk-tl-divider">
+<!-- ================= FORM BK ================= -->
+<div class="bk-section mt-4">
+<h5 class="bk-section-title">Tindak Lanjut Guru BK</h5>
 
-<!-- ================= FORM ================= -->
 <form method="post" enctype="multipart/form-data">
-
 {% csrf_token %}
 
-<div class="bk-tl-section">
-<h5>Catatan Guru BK</h5>
+<label class="bk-tl-label">Catatan Guru BK</label>
 {{ form.catatan_bk }}
-</div>
 
-<div class="bk-tl-section">
-<h5>Bukti Tindak Lanjut</h5>
+<label class="bk-tl-label mt-3">Bukti Tindak Lanjut</label>
 {{ form.bukti_tindak_lanjut }}
-</div>
 
-<button type="submit" class="bk-tl-btn-primary w-100">
+<button type="submit" class="bk-tl-btn-primary mt-4">
 Simpan Tindak Lanjut
 </button>
 
@@ -176,8 +198,10 @@ Tandai Selesai
 
 <a href="{% url 'bk_dashboard' %}"
 class="btn btn-outline-secondary w-100 mt-3">
-Kembali ke Dashboard
+← Kembali
 </a>
+
+</div>
 
 </div>
 </div>

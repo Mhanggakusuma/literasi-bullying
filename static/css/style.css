@@ -1748,122 +1748,141 @@ select {
 /* ===================================================== */
 /* ============ BK TINDAK LANJUT (FINAL FIX) ============ */
 /* ===================================================== */
-
 /* ================= HERO ================= */
 .bk-tl-hero{
-min-height:105dvh;
-background:linear-gradient(180deg,#0d6efd,#052c65);
-padding:120px 20px 140px;
+min-height:100vh;
+background:linear-gradient(180deg,#0d6efd,#0a3c77);
+padding:120px 20px;
 color:white;
 }
 
-/* TITLE */
 .bk-tl-title{
-font-size:44px;
+font-size:42px;
 font-weight:700;
 }
 
 .bk-tl-subtitle{
-font-size:18px;
 color:#e5e7eb;
+font-size:18px;
 }
 
-/* CARD */
+/* ================= CARD ================= */
 .bk-tl-card{
 background:white;
-max-width:1100px;
-margin:auto;
+max-width:900px;
 padding:45px;
 border-radius:18px;
-box-shadow:0 15px 40px rgba(0,0,0,0.2);
-color:#111;
+box-shadow:0 20px 45px rgba(0,0,0,0.25);
+color:#333;
 }
 
-/* ICON */
 .bk-tl-icon{
-width:80px;
+width:75px;
 display:block;
-margin:0 auto 30px;
+margin:0 auto 25px;
 }
 
-/* SECTION */
-.bk-tl-section{
-background:#f9fafb;
-padding:18px 20px;
-border-radius:12px;
-margin-bottom:18px;
+/* ================= SECTION ================= */
+.bk-section{
+border-top:1px solid #eee;
+padding-top:20px;
+margin-top:25px;
 }
 
-.bk-tl-section h5{
+.bk-section-title{
 font-weight:700;
-margin-bottom:10px;
+color:#0d6efd;
+margin-bottom:15px;
 }
 
-/* BOX TEXT */
-.bk-tl-box{
-background:white;
-padding:12px;
+/* ================= GRID ================= */
+.bk-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+}
+
+.bk-grid label{
+font-size:13px;
+color:#888;
+display:block;
+}
+
+.bk-grid p{
+font-weight:600;
+margin:0;
+}
+
+/* ================= TEXT BLOCK ================= */
+.bk-text-block{
+background:#f8f9fa;
+padding:15px;
 border-radius:10px;
-border:1px solid #e5e7eb;
+line-height:1.6;
 }
 
-/* DETAILS */
-.bk-tl-details{
+/* ================= LIST ================= */
+.bk-list{
+padding-left:20px;
+}
+
+/* ================= SECRET ================= */
+.bk-secret{
+background:#f1f5f9;
+padding:15px;
+border-radius:10px;
 margin-top:10px;
 }
 
-.bk-tl-details summary{
+.bk-secret summary{
+font-weight:700;
 cursor:pointer;
+}
+
+/* ================= FORM ================= */
+.bk-tl-label{
 font-weight:600;
+margin-bottom:6px;
+display:block;
 }
 
-/* DIVIDER */
-.bk-tl-divider{
-margin:35px 0;
-opacity:0.2;
-}
-
-/* FORM */
-textarea,
-input[type=file]{
+textarea,input[type="file"]{
 width:100%;
+border:1px solid #ccc;
 border-radius:10px;
-border:1px solid #d1d5db;
 padding:12px;
 }
 
-/* BUTTON */
+/* ================= BUTTON ================= */
 .bk-tl-btn-primary{
+width:100%;
 background:#0d6efd;
 border:none;
 padding:14px;
-font-size:18px;
 border-radius:12px;
 color:white;
+font-weight:600;
 }
 
 .bk-tl-btn-success{
-background:#198754;
+display:block;
+text-align:center;
+background:#22c55e;
 color:white;
 padding:14px;
 border-radius:12px;
-display:block;
-text-align:center;
 text-decoration:none;
-margin-top:15px;
+font-weight:600;
 }
 
-/* RESPONSIVE */
+/* ================= RESPONSIVE ================= */
 @media(max-width:768px){
-
 .bk-tl-card{
-padding:25px;
+padding:30px 20px;
 }
-
 .bk-tl-title{
-font-size:32px;
+font-size:30px;
 }
-
 }
 
 /* ===================================================== */
