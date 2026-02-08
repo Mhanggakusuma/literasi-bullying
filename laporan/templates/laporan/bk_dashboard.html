@@ -34,7 +34,6 @@
   </div>
 </section>
 
-
 <form method="get" class="filter-bar">
 
 <select name="jenis">
@@ -69,18 +68,9 @@
 
 <select name="bulan" id="filterBulan">
 <option value="">Pilih Bulan</option>
-<option value="1" {% if request.GET.bulan == "1" %}selected{% endif %}>Januari</option>
-<option value="2" {% if request.GET.bulan == "2" %}selected{% endif %}>Februari</option>
-<option value="3" {% if request.GET.bulan == "3" %}selected{% endif %}>Maret</option>
-<option value="4" {% if request.GET.bulan == "4" %}selected{% endif %}>April</option>
-<option value="5" {% if request.GET.bulan == "5" %}selected{% endif %}>Mei</option>
-<option value="6" {% if request.GET.bulan == "6" %}selected{% endif %}>Juni</option>
-<option value="7" {% if request.GET.bulan == "7" %}selected{% endif %}>Juli</option>
-<option value="8" {% if request.GET.bulan == "8" %}selected{% endif %}>Agustus</option>
-<option value="9" {% if request.GET.bulan == "9" %}selected{% endif %}>September</option>
-<option value="10" {% if request.GET.bulan == "10" %}selected{% endif %}>Oktober</option>
-<option value="11" {% if request.GET.bulan == "11" %}selected{% endif %}>November</option>
-<option value="12" {% if request.GET.bulan == "12" %}selected{% endif %}>Desember</option>
+{% for i in "123456789101112"|make_list %}
+<option value="{{ i }}" {% if request.GET.bulan == i %}selected{% endif %}>{{ i }}</option>
+{% endfor %}
 </select>
 
 <select name="tahun" id="filterTahun">
@@ -98,10 +88,12 @@
 
 <div class="laporan-section">
 <div class="laporan-card">
+
 <h3>Daftar Laporan</h3>
 
 {% for lap in laporan %}
 <div class="laporan-item">
+
 <div class="laporan-top d-flex justify-content-between">
 <strong>{{ lap.kode_laporan }}</strong>
 <span class="status {{ lap.status }}">{{ lap.get_status_display }}</span>
@@ -118,6 +110,7 @@
 </p>
 
 <a href="{% url 'bk_tindak_lanjut' lap.id %}" class="btn-detail">Lihat Detail</a>
+
 </div>
 {% empty %}
 <p>Tidak ada laporan</p>
@@ -129,24 +122,63 @@
 
 <div class="chart-section">
 
+<!-- STATUS -->
 <div class="chart-card">
 <h4>Grafik Status Laporan</h4>
 <canvas id="statusChart"></canvas>
+
+<div class="chart-info">
+{% for i in grafik_status %}
+<span class="info-badge">{{ i.status|title }} : {{ i.total }}</span>
+{% endfor %}
+<span class="info-total">Total : {{ total_laporan }}</span>
+</div>
 </div>
 
+
+<!-- JENIS -->
 <div class="chart-card">
 <h4>Grafik Jenis Bullying</h4>
 <canvas id="jenisChart"></canvas>
+
+<div class="chart-info">
+{% for i in grafik_jenis %}
+<span class="info-badge">{{ i.jenis_bullying|title }} : {{ i.total }}</span>
+{% endfor %}
+<span class="info-total">Total : {{ total_laporan }}</span>
+</div>
 </div>
 
+
+<!-- KELAS -->
 <div class="chart-card">
 <h4>Grafik Kelas Korban</h4>
 <canvas id="kelasChart"></canvas>
+
+<div class="chart-info">
+{% for i in grafik_kelas %}
+<span class="info-badge">{{ i.kelas_korban }} : {{ i.total }}</span>
+{% endfor %}
+<span class="info-total">Total : {{ total_laporan }}</span>
+</div>
 </div>
 
+
+<!-- TREN -->
 <div class="chart-card">
 <h4>Grafik Tren Periode</h4>
 <canvas id="trenChart"></canvas>
+
+<div class="chart-info">
+{% if tren_detail %}
+{% for i in tren_detail %}
+<span class="info-badge">{{ i.label }} : {{ i.total }}</span>
+{% endfor %}
+{% else %}
+<span class="info-badge">Tidak ada data tren</span>
+{% endif %}
+<span class="info-total">Total : {{ total_laporan }}</span>
+</div>
 </div>
 
 </div>
@@ -159,40 +191,75 @@
 
 <script>
 
-/* ===== GRADIENT ===== */
-
+/* GRADIENT KELAS ORANGE → MERAH */
 function gradientKelas(data){
-const max=Math.max(...data,1);
+
+const max=Math.max(...data);
+
 return data.map(v=>{
+
 let ratio=v/max;
-return `rgba(255,${Math.round(165*(1-ratio))},0,${0.4+(0.6*ratio)})`;
+
+/* 
+Data sedikit = Orange
+Data banyak = Merah
+*/
+
+let r=255;
+let g=Math.round(165*(1-ratio));
+let opacity=0.4+(0.6*ratio);
+
+return `rgba(${r},${g},0,${opacity})`;
+
 });
 }
 
+
+/* GRADIENT TREN KUNING → MERAH */
 function gradientTrend(data){
-const max=Math.max(...data,1);
+
+const max=Math.max(...data);
+
 return data.map(v=>{
+
 let ratio=v/max;
-return `rgba(255,${Math.round(255*(1-ratio))},0,${0.4+(0.6*ratio)})`;
+
+/*
+Data sedikit = Kuning
+Data banyak = Merah
+*/
+
+let r=255;
+let g=Math.round(255*(1-ratio));
+let opacity=0.4+(0.6*ratio);
+
+return `rgba(${r},${g},0,${opacity})`;
+
 });
 }
 
-
-/* ===== CHART ===== */
 
 function chart(id,type,labels,data){
-
-labels = labels.map(l => (l || "Tidak diketahui").trim());
-data = data.map(d => d || 0);
 
 let colors=[];
 
 if(id==="statusChart"){
-colors=["#dc3545","#0d6efd","#198754"];
+colors=labels.map(l=>{
+if(l==="baru") return "#dc3545";
+if(l==="diproses") return "#0d6efd";
+if(l==="selesai") return "#198754";
+});
 }
 
 else if(id==="jenisChart"){
-colors=data.map(()=>"#fd7e14");
+colors=labels.map(l=>{
+l=l.toLowerCase();
+if(l.includes("fisik")) return "#dc3545";
+if(l.includes("verbal")) return "#fd7e14";
+if(l.includes("sosial")) return "#6f42c1";
+if(l.includes("cyber")) return "#0d6efd";
+return "#6c757d";
+});
 }
 
 else if(id==="kelasChart"){
@@ -205,7 +272,13 @@ colors=gradientTrend(data);
 
 new Chart(document.getElementById(id),{
 type:type,
-data:{labels:labels,datasets:[{data:data,backgroundColor:colors}]},
+data:{
+labels:labels,
+datasets:[{
+data:data,
+backgroundColor:colors
+}]
+},
 options:{
 responsive:true,
 maintainAspectRatio:false,
@@ -214,27 +287,28 @@ scales:type!=="pie"?{y:{beginAtZero:true}}:{}
 });
 }
 
-
-/* ===== RENDER ===== */
-
+/* STATUS */
 chart("statusChart","pie",
-[{% for i in grafik_status %}"{{ i.status|default:'Tidak diketahui' }}",{% endfor %}],
-[{% for i in grafik_status %}{{ i.total|default:0 }},{% endfor %}]
+[{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
+[{% for i in grafik_status %}{{ i.total }},{% endfor %}]
 );
 
+/* JENIS */
 chart("jenisChart","bar",
-[{% for i in grafik_jenis %}"{{ i.jenis_bullying|default:'Tidak diketahui' }}",{% endfor %}],
-[{% for i in grafik_jenis %}{{ i.total|default:0 }},{% endfor %}]
+[{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
+[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
 );
 
+/* KELAS */
 chart("kelasChart","bar",
-[{% for i in grafik_kelas %}"{{ i.kelas_korban|default:'Tidak diketahui' }}",{% endfor %}],
-[{% for i in grafik_kelas %}{{ i.total|default:0 }},{% endfor %}]
+[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
+[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
 );
 
+/* TREN */
 chart("trenChart","bar",
-[{% for i in grafik_tren %}"{{ i.label|default:'-' }}",{% endfor %}],
-[{% for i in grafik_tren %}{{ i.total|default:0 }},{% endfor %}]
+[{% for i in grafik_tren %}"{{ i.label }}",{% endfor %}],
+[{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
 );
 
 </script>
