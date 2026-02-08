@@ -27,9 +27,9 @@
 
 <select name="status">
 <option value="">Semua Status</option>
-<option value="baru" {% if request.GET.status == "baru" %}selected{% endif %}>Baru</option>
-<option value="diproses" {% if request.GET.status == "diproses" %}selected{% endif %}>Diproses</option>
-<option value="selesai" {% if request.GET.status == "selesai" %}selected{% endif %}>Selesai</option>
+<option value="baru">Baru</option>
+<option value="diproses">Diproses</option>
+<option value="selesai">Selesai</option>
 </select>
 
 <select name="periode" id="periodeSelect">
@@ -69,7 +69,7 @@
 </form>
 
 <!-- SUMMARY -->
-<div style="display:flex; gap:20px; margin-bottom:20px; flex-wrap:wrap;">
+<div style="display:flex; gap:20px; margin-bottom:20px;">
 <div class="admin-card">Total Laporan <b>{{ total_laporan }}</b></div>
 <div class="admin-card">Baru <b>{{ laporan_baru }}</b></div>
 <div class="admin-card">Diproses <b>{{ diproses }}</b></div>
@@ -81,18 +81,46 @@
 
 <div class="admin-card chart-box">
 <canvas id="statusChart"></canvas>
+<hr>
+<ul>
+{% for i in grafik_status %}
+<li>{{ i.status|title }} = {{ i.total }}</li>
+{% endfor %}
+</ul>
+<b>Total Status = {{ total_status }}</b>
 </div>
 
 <div class="admin-card chart-box">
 <canvas id="jenisChart"></canvas>
+<hr>
+<ul>
+{% for i in grafik_jenis %}
+<li>{{ i.jenis_bullying|title }} = {{ i.total }}</li>
+{% endfor %}
+</ul>
+<b>Total Jenis = {{ total_jenis }}</b>
 </div>
 
 <div class="admin-card chart-box">
 <canvas id="kelasChart"></canvas>
+<hr>
+<ul>
+{% for i in grafik_kelas %}
+<li>{{ i.kelas_korban }} = {{ i.total }}</li>
+{% endfor %}
+</ul>
+<b>Total Kelas = {{ total_kelas }}</b>
 </div>
 
 <div class="admin-card chart-box">
 <canvas id="trenChart"></canvas>
+<hr>
+<ul>
+{% for i in grafik_tren %}
+<li>{{ i.waktu|date:'d M Y' }} = {{ i.total }}</li>
+{% endfor %}
+</ul>
+<b>Total Tren = {{ total_tren }}</b>
 </div>
 
 </div>
@@ -100,11 +128,11 @@
 <style>
 .admin-card{
 background:white;
-padding:15px 20px;
+padding:15px;
 border-radius:10px;
 box-shadow:0 2px 8px rgba(0,0,0,0.1);
 }
-.chart-box{ height:300px; }
+.chart-box{ height:320px; }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -120,10 +148,7 @@ maintainAspectRatio:false,
 scales:{
 y:{
 beginAtZero:true,
-ticks:{
-precision:0,
-stepSize:1
-}
+ticks:{precision:0,stepSize:1}
 }
 }
 }

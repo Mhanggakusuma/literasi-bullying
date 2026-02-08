@@ -51,6 +51,7 @@ class LaporanAdmin(admin.ModelAdmin):
         bulan = request.GET.get("bulan")
         tahun = request.GET.get("tahun")
 
+        # ===== FILTER DASAR =====
         if jenis:
             qs = qs.filter(jenis_bullying=jenis)
 
@@ -60,56 +61,55 @@ class LaporanAdmin(admin.ModelAdmin):
         if status:
             qs = qs.filter(status=status)
 
-        # ================= FILTER PERIODE =================
+        # ===== FILTER PERIODE =====
         if periode == "hari" and tanggal:
             qs = qs.filter(tanggal__date=tanggal)
 
         elif periode == "bulan" and bulan and tahun:
-            qs = qs.filter(
-                tanggal__month=bulan,
-                tanggal__year=tahun
-            )
+            qs = qs.filter(tanggal__month=bulan, tanggal__year=tahun)
 
         elif periode == "tahun" and tahun:
             qs = qs.filter(tanggal__year=tahun)
 
-        # ================= GRAFIK =================
-        grafik_status = qs.values("status").annotate(total=Count("id"))
-        grafik_jenis = qs.values("jenis_bullying").annotate(total=Count("id"))
-        grafik_kelas = qs.values("kelas_korban").annotate(total=Count("id"))
+        # ===== GRAFIK =====
+        grafik_status = list(qs.values("status").annotate(total=Count("id")))
+        grafik_jenis = list(qs.values("jenis_bullying").annotate(total=Count("id")))
+        grafik_kelas = list(qs.values("kelas_korban").annotate(total=Count("id")))
 
-        # ================= GRAFIK TREN =================
+        # ===== GRAFIK TREN =====
         if periode == "bulan" and bulan and tahun:
-            grafik_tren = (
+            grafik_tren = list(
                 qs.annotate(waktu=TruncDay("tanggal"))
                 .values("waktu")
                 .annotate(total=Count("id"))
                 .order_by("waktu")
             )
-
-        elif periode == "tahun" and tahun:
-            grafik_tren = (
-                qs.annotate(waktu=TruncMonth("tanggal"))
-                .values("waktu")
-                .annotate(total=Count("id"))
-                .order_by("waktu")
-            )
-
         else:
-            grafik_tren = (
+            grafik_tren = list(
                 qs.annotate(waktu=TruncMonth("tanggal"))
                 .values("waktu")
                 .annotate(total=Count("id"))
                 .order_by("waktu")
             )
+
+        # ===== TOTAL RINGKASAN =====
+        total_status = sum(i["total"] for i in grafik_status)
+        total_jenis = sum(i["total"] for i in grafik_jenis)
+        total_kelas = sum(i["total"] for i in grafik_kelas)
+        total_tren = sum(i["total"] for i in grafik_tren)
 
         context = dict(
             self.admin_site.each_context(request),
 
-            grafik_status=list(grafik_status),
-            grafik_jenis=list(grafik_jenis),
-            grafik_kelas=list(grafik_kelas),
-            grafik_tren=list(grafik_tren),
+            grafik_status=grafik_status,
+            grafik_jenis=grafik_jenis,
+            grafik_kelas=grafik_kelas,
+            grafik_tren=grafik_tren,
+
+            total_status=total_status,
+            total_jenis=total_jenis,
+            total_kelas=total_kelas,
+            total_tren=total_tren,
 
             total_laporan=qs.count(),
             laporan_baru=qs.filter(status="baru").count(),
