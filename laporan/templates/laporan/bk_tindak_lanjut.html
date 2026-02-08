@@ -17,13 +17,14 @@ Jaga kerahasiaan data demi keamanan dan kenyamanan semua pihak
 </p>
 </div>
 
+<!-- CARD -->
 <div class="bk-tl-card">
 
 <img src="{% static 'img/ribbon.png' %}" class="bk-tl-icon">
 
 <div class="row g-4">
 
-<!-- LEFT -->
+<!-- ================= LEFT COLUMN ================= -->
 <div class="col-lg-6">
 
 <div class="bk-section">
@@ -94,7 +95,7 @@ Jaga kerahasiaan data demi keamanan dan kenyamanan semua pihak
 
 </div>
 
-<!-- RIGHT -->
+<!-- ================= RIGHT COLUMN ================= -->
 <div class="col-lg-6">
 
 <div class="bk-section">
@@ -126,21 +127,7 @@ Jaga kerahasiaan data demi keamanan dan kenyamanan semua pihak
 </div>
 {% endif %}
 
-{% if laporan.bukti %}
-<a href="{{ laporan.bukti.url }}"
-target="_blank"
-class="bk-tl-btn-success mt-2">
-Lihat Bukti Pelapor
-</a>
-{% endif %}
-
-</div>
-
-</div>
-
-<hr class="my-4">
-
-<!-- IDENTITAS PELAPOR -->
+<!-- IDENTITAS PELAPOR PINDAH KE KOLOM KANAN -->
 <details class="bk-section">
 <summary>Identitas Pelapor Internal</summary>
 
@@ -155,9 +142,21 @@ Lihat Bukti Pelapor
 </div>
 </details>
 
+{% if laporan.bukti %}
+<a href="{{ laporan.bukti.url }}"
+target="_blank"
+class="bk-tl-btn-success mt-2">
+Lihat Bukti Pelapor
+</a>
+{% endif %}
+
+</div>
+
+</div>
+
 <hr class="my-4">
 
-<!-- FORM BK -->
+<!-- ================= FORM BK ================= -->
 <form method="post" enctype="multipart/form-data">
 
 {% csrf_token %}

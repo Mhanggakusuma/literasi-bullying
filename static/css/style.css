@@ -1749,236 +1749,136 @@ select {
 /* ============ BK TINDAK LANJUT FINAL PRODUCTION ======= */
 /* ===================================================== */
 
-
-/* ===== SECTION GLOBAL ===== */
 .bk-tindak-lanjut{
-  margin-top:-90px;
+margin-top:-90px;
 }
 
-
-/* ===== HERO BACKGROUND ===== */
 .bk-tl-hero{
-  min-height:105dvh;
-  background:linear-gradient(
-    180deg,
-    rgba(13,106,198,0.88),
-    rgba(7,51,96,0.92)
-  );
-  padding:120px 20px 140px;
-  color:#ffffff;
+min-height:105dvh;
+background:linear-gradient(
+180deg,
+rgba(13,106,198,0.88),
+rgba(7,51,96,0.92)
+);
+padding:120px 20px 140px;
+color:white;
 }
 
-
-/* ===== CONTAINER ===== */
 .bk-tl-container{
-  max-width:1100px;
+max-width:1100px;
 }
 
-
-/* ===== TITLE ===== */
 .bk-tl-title{
-  font-size:46px;
-  font-weight:700;
-  color:#ffffff;
-  margin-bottom:8px;
+font-size:46px;
+font-weight:700;
+color:white;
 }
 
 .bk-tl-subtitle{
-  font-size:18px;
-  color:#e7eaf0;
+font-size:18px;
+color:#e7eaf0;
 }
 
-
-/* ===== MAIN CARD ===== */
 .bk-tl-card{
-  background:#ffffff;
-  max-width:950px;
-  margin:auto;
-  padding:45px 50px;
-  border-radius:18px;
-  box-shadow:0 18px 45px rgba(0,0,0,0.25);
+background:white;
+max-width:950px;
+margin:auto;
+padding:45px 50px;
+border-radius:18px;
+box-shadow:0 18px 45px rgba(0,0,0,0.25);
 }
 
-
-/* ===== ICON ===== */
 .bk-tl-icon{
-  width:75px;
-  display:block;
-  margin:0 auto 28px;
+width:75px;
+display:block;
+margin:0 auto 28px;
 }
 
-
-/* ===== SECTION BOX ===== */
 .bk-section{
-  background:#ffffff;
-  padding:20px 22px;
-  border-radius:14px;
-  border:1px solid #e6eaf0;
-  margin-bottom:18px;
-  transition:0.25s;
+background:white;
+padding:20px 22px;
+border-radius:14px;
+border:1px solid #e6eaf0;
+margin-bottom:18px;
 }
 
-.bk-section:hover{
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
-}
-
-
-/* ===== SECTION TITLE ===== */
 .bk-section h5{
-  font-weight:700;
-  font-size:18px;
-  color:#1c4ed8;
-  margin-bottom:14px;
+font-weight:700;
+font-size:18px;
+color:#1c4ed8;
+margin-bottom:14px;
 }
 
-
-/* ===== TEXT ===== */
 .bk-section p{
-  font-size:16px;
-  color:#212529;
-  line-height:1.6;
-  margin-bottom:6px;
+font-size:16px;
+color:#212529;
+line-height:1.6;
+margin-bottom:6px;
 }
 
 .bk-section strong{
-  color:#000000;
+color:#000;
 }
 
-
-/* ===== LIST ===== */
-.bk-section ul{
-  padding-left:20px;
-  margin:0;
-}
-
-.bk-section li{
-  margin-bottom:4px;
-}
-
-
-/* ===== BADGE FIX ===== */
 .badge{
-  font-size:13px;
-  padding:6px 10px;
-  border-radius:8px;
-}
-
-
-/* ===== DETAILS ===== */
-details{
-  margin-top:8px;
+font-size:13px;
+padding:6px 10px;
+border-radius:8px;
 }
 
 details summary{
-  cursor:pointer;
-  font-weight:600;
-  color:#374151;
+cursor:pointer;
+font-weight:600;
+color:#374151;
 }
 
-details summary:hover{
-  color:#0d6efd;
-}
-
-
-/* ===== FORM LABEL ===== */
 .bk-tl-label{
-  font-weight:600;
-  font-size:15px;
-  margin-bottom:6px;
-  display:block;
+font-weight:600;
+font-size:15px;
+margin-bottom:6px;
+display:block;
 }
 
-
-/* ===== INPUT ===== */
 textarea,
-input[type="file"]{
-  width:100%;
-  border-radius:10px;
-  border:1px solid #ced4da;
-  padding:10px;
-  margin-top:6px;
-  font-size:15px;
+input[type=file]{
+width:100%;
+border-radius:10px;
+border:1px solid #ced4da;
+padding:10px;
+margin-top:6px;
 }
 
-
-/* ===== BUTTON PRIMARY ===== */
 .bk-tl-btn-primary{
-  background:#0d6efd;
-  color:#ffffff;
-  border:none;
-  padding:13px;
-  border-radius:10px;
-  font-weight:600;
-  transition:0.25s;
+background:#0d6efd;
+color:white;
+border:none;
+padding:13px;
+border-radius:10px;
+font-weight:600;
 }
 
-.bk-tl-btn-primary:hover{
-  background:#084298;
-  transform:translateY(-2px);
-  box-shadow:0 6px 16px rgba(0,0,0,0.15);
-}
-
-
-/* ===== BUTTON SUCCESS ===== */
 .bk-tl-btn-success{
-  background:#198754;
-  color:#ffffff;
-  padding:12px;
-  border-radius:10px;
-  text-align:center;
-  display:block;
-  font-weight:600;
-  text-decoration:none;
-  transition:0.25s;
-}
-
-.bk-tl-btn-success:hover{
-  background:#157347;
-}
-
-
-/* ===== BACK BUTTON ===== */
-.btn-outline-secondary{
-  border-radius:10px;
-  font-weight:500;
-}
-
-
-/* ===== HR ===== */
-.bk-tl-card hr{
-  border-top:1px solid #e5e7eb;
-}
-
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:992px){
-
-  .bk-tl-card{
-    padding:35px;
-  }
-
+background:#198754;
+color:white;
+padding:12px;
+border-radius:10px;
+text-align:center;
+display:block;
+font-weight:600;
+text-decoration:none;
 }
 
 @media(max-width:768px){
 
-  .bk-tl-title{
-    font-size:32px;
-  }
-
-  .bk-tl-subtitle{
-    font-size:15px;
-  }
-
-  .bk-tl-card{
-    padding:25px;
-  }
-
-  .bk-section{
-    padding:16px;
-  }
-
+.bk-tl-title{
+font-size:32px;
 }
 
+.bk-tl-card{
+padding:25px;
+}
+
+}
 
 /* ===================================================== */
 /* ============ TENTANG BULLYING – FULL CSS ============= */
