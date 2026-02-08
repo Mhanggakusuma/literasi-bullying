@@ -17,18 +17,17 @@ Jaga kerahasiaan data demi keamanan dan kenyamanan semua pihak
 </p>
 </div>
 
-<!-- CARD UTAMA -->
 <div class="bk-tl-card">
 
 <img src="{% static 'img/ribbon.png' %}" class="bk-tl-icon">
 
 <div class="row g-4">
 
-<!-- ================= LEFT ================= -->
+<!-- LEFT -->
 <div class="col-lg-6">
 
 <div class="bk-section">
-<h5>📄 Informasi Laporan</h5>
+<h5>Informasi Laporan</h5>
 
 <p><strong>Kode :</strong> {{ laporan.kode_laporan }}</p>
 
@@ -47,7 +46,7 @@ Jaga kerahasiaan data demi keamanan dan kenyamanan semua pihak
 </div>
 
 <div class="bk-section">
-<h5>⏰ Waktu & Lokasi</h5>
+<h5>Waktu & Lokasi</h5>
 
 <p>
 <strong>Waktu :</strong>
@@ -62,7 +61,7 @@ Jaga kerahasiaan data demi keamanan dan kenyamanan semua pihak
 </div>
 
 <div class="bk-section">
-<h5>👤 Korban & Terlapor</h5>
+<h5>Korban & Terlapor</h5>
 
 <p>
 <strong>Korban :</strong>
@@ -70,9 +69,8 @@ Jaga kerahasiaan data demi keamanan dan kenyamanan semua pihak
 </p>
 
 {% if laporan.is_korban_anonim %}
-<details class="mt-2">
-<summary>🔐 Identitas Korban Internal</summary>
-
+<details>
+<summary>Identitas Korban Internal</summary>
 <div class="mt-2">
 <p><strong>Nama :</strong> {{ laporan.nama_korban }}</p>
 <p><strong>Kelas :</strong> {{ laporan.kelas_korban }}</p>
@@ -96,17 +94,17 @@ Jaga kerahasiaan data demi keamanan dan kenyamanan semua pihak
 
 </div>
 
-<!-- ================= RIGHT ================= -->
+<!-- RIGHT -->
 <div class="col-lg-6">
 
 <div class="bk-section">
-<h5>📝 Kronologi</h5>
+<h5>Kronologi</h5>
 <p>{{ laporan.isi_laporan|linebreaksbr }}</p>
 </div>
 
 {% if laporan.dampak_korban %}
 <div class="bk-section">
-<h5>⚠ Dampak</h5>
+<h5>Dampak</h5>
 <ul>
 {% for d in laporan.dampak_korban %}
 <li>{{ d }}</li>
@@ -123,7 +121,7 @@ Jaga kerahasiaan data demi keamanan dan kenyamanan semua pihak
 
 {% if laporan.harapan_pelapor %}
 <div class="bk-section">
-<h5>🙏 Harapan Pelapor</h5>
+<h5>Harapan Pelapor</h5>
 <p>{{ laporan.harapan_pelapor|linebreaksbr }}</p>
 </div>
 {% endif %}
@@ -132,7 +130,7 @@ Jaga kerahasiaan data demi keamanan dan kenyamanan semua pihak
 <a href="{{ laporan.bukti.url }}"
 target="_blank"
 class="bk-tl-btn-success mt-2">
-📎 Lihat Bukti Pelapor
+Lihat Bukti Pelapor
 </a>
 {% endif %}
 
@@ -144,7 +142,7 @@ class="bk-tl-btn-success mt-2">
 
 <!-- IDENTITAS PELAPOR -->
 <details class="bk-section">
-<summary>🔐 Identitas Pelapor Internal</summary>
+<summary>Identitas Pelapor Internal</summary>
 
 <div class="mt-3">
 <p>
@@ -175,7 +173,7 @@ class="bk-tl-btn-success mt-2">
 </div>
 
 <button type="submit" class="bk-tl-btn-primary w-100">
-💾 Simpan Tindak Lanjut
+Simpan Tindak Lanjut
 </button>
 
 {% if laporan.status != "selesai" %}
@@ -183,7 +181,7 @@ class="bk-tl-btn-success mt-2">
 name="selesai"
 value="1"
 class="btn btn-success w-100 mt-2">
-✔ Tandai Selesai
+Tandai Selesai
 </button>
 {% endif %}
 
@@ -191,7 +189,7 @@ class="btn btn-success w-100 mt-2">
 
 <a href="{% url 'bk_dashboard' %}"
 class="btn btn-outline-secondary w-100 mt-3">
-← Kembali ke Dashboard
+Kembali ke Dashboard
 </a>
 
 </div>

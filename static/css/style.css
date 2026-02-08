@@ -1749,41 +1749,34 @@ select {
 /* BK TINDAK LANJUT FINAL PROFESSIONAL */
 /* ===================================================== */
 
-.bk-tindak-lanjut{
-margin-top:-90px;
+.bk-section{
+padding:18px 22px;
+border-radius:12px;
+border:1px solid #e4e8ee;
+margin-bottom:18px;
+background:#ffffff;
 }
 
-/* HERO */
-.bk-tl-hero{
-min-height:105dvh;
-background:linear-gradient(
-180deg,
-rgba(13,106,198,0.85),
-rgba(7,51,96,0.90)
-);
-padding:120px 20px 140px;
-color:white;
-}
-
-/* CONTAINER */
-.bk-tl-container{
-max-width:1100px;
-}
-
-/* TITLE */
-.bk-tl-title{
-font-size:46px;
+.bk-section h5{
 font-weight:700;
-}
-
-.bk-tl-subtitle{
 font-size:18px;
-color:#e7eaf0;
+margin-bottom:14px;
+color:#1c4ed8;
 }
 
-/* CARD */
+.bk-section p{
+font-size:16px;
+color:#212529;
+margin-bottom:6px;
+line-height:1.6;
+}
+
+.bk-section strong{
+color:#000;
+}
+
 .bk-tl-card{
-background:white;
+background:#ffffff;
 max-width:950px;
 margin:auto;
 padding:40px 45px;
@@ -1791,41 +1784,17 @@ border-radius:18px;
 box-shadow:0 15px 40px rgba(0,0,0,0.25);
 }
 
-/* ICON */
-.bk-tl-icon{
-width:80px;
-display:block;
-margin:0 auto 25px;
-}
-
-/* SECTION */
-.bk-section{
-padding:18px 22px;
-border-radius:12px;
-border:1px solid #eef1f4;
-margin-bottom:18px;
-background:#ffffff;
-transition:0.2s;
-}
-
-.bk-section:hover{
-box-shadow:0 6px 18px rgba(0,0,0,0.08);
-}
-
-.bk-section h5{
+.bk-tl-title{
+font-size:46px;
 font-weight:700;
+color:white;
+}
+
+.bk-tl-subtitle{
 font-size:18px;
-margin-bottom:14px;
-color:#0d6efd;
+color:#e7eaf0;
 }
 
-.bk-section p{
-font-size:16px;
-margin-bottom:6px;
-line-height:1.5;
-}
-
-/* BUTTON PRIMARY */
 .bk-tl-btn-primary{
 background:#0d6efd;
 color:white;
@@ -1833,15 +1802,8 @@ border:none;
 padding:13px;
 border-radius:10px;
 font-weight:600;
-transition:0.3s;
 }
 
-.bk-tl-btn-primary:hover{
-background:#084298;
-transform:translateY(-2px);
-}
-
-/* BUTTON SUCCESS */
 .bk-tl-btn-success{
 background:#198754;
 color:white;
@@ -1852,7 +1814,6 @@ display:block;
 font-weight:600;
 }
 
-/* FORM */
 textarea,
 input[type=file]{
 width:100%;
@@ -1860,25 +1821,6 @@ border-radius:10px;
 border:1px solid #ced4da;
 padding:10px;
 margin-top:6px;
-}
-
-/* DETAILS */
-details summary{
-cursor:pointer;
-font-weight:600;
-}
-
-/* RESPONSIVE */
-@media(max-width:768px){
-
-.bk-tl-title{
-font-size:34px;
-}
-
-.bk-tl-card{
-padding:25px;
-}
-
 }
 
 
