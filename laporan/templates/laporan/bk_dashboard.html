@@ -16,6 +16,7 @@
   <a href="{% url 'bk_download_laporan' %}" class="btn-download">Download Laporan</a>
 </header>
 
+
 <!-- ================= SUMMARY ================= -->
 <section class="dashboard-cards">
   <div class="summary-card">
@@ -36,20 +37,25 @@
   </div>
 </section>
 
+
 <!-- ================= FILTER ================= -->
 <form method="get" class="filter-bar">
 
 <select name="jenis">
 <option value="">Semua Jenis</option>
 {% for val,label in jenis_choices %}
-<option value="{{ val }}" {% if val == selected_jenis %}selected{% endif %}>{{ label }}</option>
+<option value="{{ val }}" {% if val == selected_jenis %}selected{% endif %}>
+{{ label }}
+</option>
 {% endfor %}
 </select>
 
 <select name="kelas">
 <option value="">Semua Kelas</option>
 {% for val,label in kelas_choices %}
-<option value="{{ val }}" {% if val == selected_kelas %}selected{% endif %}>{{ label }}</option>
+<option value="{{ val }}" {% if val == selected_kelas %}selected{% endif %}>
+{{ label }}
+</option>
 {% endfor %}
 </select>
 
@@ -67,7 +73,7 @@
 <option value="tahun" {% if periode == "tahun" %}selected{% endif %}>Per Tahun</option>
 </select>
 
-<input type="date" name="tanggal" id="filterTanggal">
+<input type="date" name="tanggal" id="filterTanggal" value="{{ request.GET.tanggal }}">
 
 <select name="bulan" id="filterBulan">
 <option value="">Pilih Bulan</option>
@@ -94,15 +100,19 @@
 {% endfor %}
 </select>
 
-<button type="submit" class="btn btn-primary">Filter</button>
+<button type="submit">Filter Data</button>
+
 </form>
+
 
 <!-- ================= LAYOUT ================= -->
 <div class="dashboard-layout">
 
+
 <!-- ========= LEFT LAPORAN ========= -->
 <div class="laporan-section">
 <div class="laporan-card">
+
 <h3>Daftar Laporan</h3>
 
 {% for lap in laporan %}
@@ -139,12 +149,15 @@ Lihat Detail
 </div>
 </div>
 
+
 <!-- ========= RIGHT CHART ========= -->
 <div class="chart-section">
+
 
 <!-- STATUS -->
 <div class="chart-card">
 <h4>Grafik Status Laporan</h4>
+
 <div class="status-chart-wrapper">
 <canvas id="statusChart"></canvas>
 </div>
@@ -155,7 +168,9 @@ Lihat Detail
 {% endfor %}
 <span class="info-total">Total : {{ total_laporan }}</span>
 </div>
+
 </div>
+
 
 <!-- JENIS -->
 <div class="chart-card">
@@ -169,6 +184,7 @@ Lihat Detail
 </div>
 </div>
 
+
 <!-- KELAS -->
 <div class="chart-card">
 <h4>Grafik Kelas Korban</h4>
@@ -180,6 +196,7 @@ Lihat Detail
 {% endfor %}
 </div>
 </div>
+
 
 <!-- TREN -->
 <div class="chart-card">
@@ -194,18 +211,21 @@ Lihat Detail
 {% endif %}
 <span class="info-total">Total : {{ total_laporan }}</span>
 </div>
-</div>
 
 </div>
 
+
 </div>
 </div>
 </div>
+</div>
+
 
 <!-- ================= CHART JS ================= -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+
 function chart(id,type,labels,data){
 
 let config={
@@ -221,49 +241,65 @@ config.options.scales={y:{beginAtZero:true,ticks:{stepSize:1}}};
 new Chart(document.getElementById(id),config);
 }
 
+
+/* STATUS */
 chart("statusChart","pie",
 [{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
 [{% for i in grafik_status %}{{ i.total }},{% endfor %}]
 );
 
+
+/* JENIS */
 chart("jenisChart","bar",
 [{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
 [{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
 );
 
+
+/* KELAS */
 chart("kelasChart","bar",
 [{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
 [{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
 );
 
+
+/* TREN */
 chart("trenChart","bar",
 [{% for i in grafik_tren %}"{{ i.waktu|date:'d M Y' }}",{% endfor %}],
 [{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
 );
+
 </script>
+
 
 <!-- ================= FILTER DINAMIS ================= -->
 <script>
+
 const periode=document.getElementById("periodeSelect");
 const tanggal=document.getElementById("filterTanggal");
 const bulan=document.getElementById("filterBulan");
 const tahun=document.getElementById("filterTahun");
 
 function updateFilter(){
+
 tanggal.style.display='none';
 bulan.style.display='none';
 tahun.style.display='none';
 
 if(periode.value==='hari') tanggal.style.display='inline-block';
+
 if(periode.value==='bulan'){
 bulan.style.display='inline-block';
 tahun.style.display='inline-block';
 }
+
 if(periode.value==='tahun') tahun.style.display='inline-block';
+
 }
 
 periode.addEventListener('change',updateFilter);
 updateFilter();
+
 </script>
 
 {% endblock %}
