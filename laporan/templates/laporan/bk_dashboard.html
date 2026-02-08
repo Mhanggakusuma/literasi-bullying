@@ -276,6 +276,18 @@ backgroundColor:colors
 options:{
 responsive:true,
 maintainAspectRatio:false,
+
+/* ⭐ HILANGKAN KOTAK WARNA LEGEND */
+plugins:{
+legend:{
+labels:{
+boxWidth:0,
+boxHeight:0,
+padding:10
+}
+}
+},
+
 scales:type!=="pie"?{
 y:{
 beginAtZero:true,
@@ -340,5 +352,6 @@ if(periode.value==='tahun') tahun.style.display='inline-block';
 periode.addEventListener('change',updateFilter);
 updateFilter();
 </script>
+
 
 {% endblock %}
