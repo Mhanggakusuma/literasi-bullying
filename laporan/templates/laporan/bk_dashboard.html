@@ -15,8 +15,6 @@
   <a href="{% url 'bk_download_laporan' %}" class="btn-download">Download Laporan</a>
 </header>
 
-
-<!-- ================= SUMMARY ================= -->
 <section class="dashboard-cards">
   <div class="summary-card">
     <p>Total Laporan</p>
@@ -36,8 +34,6 @@
   </div>
 </section>
 
-
-<!-- ================= FILTER ================= -->
 <form method="get" class="filter-bar">
 
 <select name="jenis">
@@ -90,7 +86,6 @@
 
 <div class="dashboard-layout">
 
-<!-- ========= LEFT LAPORAN ========= -->
 <div class="laporan-section">
 <div class="laporan-card">
 
@@ -125,7 +120,6 @@
 </div>
 
 
-<!-- ========= RIGHT CHART ========= -->
 <div class="chart-section">
 
 <!-- STATUS -->
@@ -197,34 +191,34 @@
 
 <script>
 
-/* ================= GRADIENT FUNCTION ================= */
-
-function gradientRed(data){
+/* GRADIENT KELAS MERAH → ORANGE */
+function gradientKelas(data){
 const max=Math.max(...data);
 return data.map(v=>{
 let ratio=v/max;
-return `rgba(${Math.round(255*ratio)},0,0,0.8)`;
+let r=255;
+let g=Math.round(165*ratio);
+let opacity=0.4+(0.6*ratio);
+return `rgba(${r},${g},0,${opacity})`;
 });
 }
 
+/* GRADIENT TREN MERAH → KUNING */
 function gradientTrend(data){
 const max=Math.max(...data);
 return data.map(v=>{
 let ratio=v/max;
-let r=Math.round(255*ratio);
-let g=Math.round(200*(1-ratio));
-return `rgba(${r},${g},0,0.8)`;
+let r=255;
+let g=Math.round(255*ratio);
+let opacity=0.4+(0.6*ratio);
+return `rgba(${r},${g},0,${opacity})`;
 });
 }
-
-
-/* ================= CHART FUNCTION ================= */
 
 function chart(id,type,labels,data){
 
 let colors=[];
 
-/* STATUS */
 if(id==="statusChart"){
 colors=labels.map(l=>{
 if(l==="baru") return "#dc3545";
@@ -233,7 +227,6 @@ if(l==="selesai") return "#198754";
 });
 }
 
-/* JENIS */
 else if(id==="jenisChart"){
 colors=labels.map(l=>{
 l=l.toLowerCase();
@@ -245,16 +238,13 @@ return "#6c757d";
 });
 }
 
-/* KELAS (Gradient Merah) */
 else if(id==="kelasChart"){
-colors=gradientRed(data);
+colors=gradientKelas(data);
 }
 
-/* TREN (Gradient Dinamis) */
 else if(id==="trenChart"){
 colors=gradientTrend(data);
 }
-
 
 new Chart(document.getElementById(id),{
 type:type,
@@ -272,9 +262,6 @@ scales:type!=="pie"?{y:{beginAtZero:true}}:{}
 }
 });
 }
-
-
-/* ================= RENDER CHART ================= */
 
 /* STATUS */
 chart("statusChart","pie",
@@ -300,6 +287,30 @@ chart("trenChart","bar",
 [{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
 );
 
+</script>
+
+
+<script>
+const periode=document.getElementById("periodeSelect");
+const tanggal=document.getElementById("filterTanggal");
+const bulan=document.getElementById("filterBulan");
+const tahun=document.getElementById("filterTahun");
+
+function updateFilter(){
+tanggal.style.display='none';
+bulan.style.display='none';
+tahun.style.display='none';
+
+if(periode.value==='hari') tanggal.style.display='inline-block';
+if(periode.value==='bulan'){
+bulan.style.display='inline-block';
+tahun.style.display='inline-block';
+}
+if(periode.value==='tahun') tahun.style.display='inline-block';
+}
+
+periode.addEventListener('change',updateFilter);
+updateFilter();
 </script>
 
 {% endblock %}
