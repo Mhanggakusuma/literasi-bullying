@@ -7,86 +7,141 @@
 
 {% block content %}
 
-<h1>Dashboard Statistik Laporan Bullying</h1>
+<div class="dashboard-container">
 
+<h1 class="dashboard-title">
+Dashboard Statistik Laporan Bullying
+</h1>
+
+<!-- ================= FILTER ================= -->
 <form method="get" class="filter-bar">
+
 <select name="jenis">
 <option value="">Semua Jenis</option>
 {% for val,label in jenis_choices %}
-<option value="{{ val }}">{{ label }}</option>
+<option value="{{ val }}" {% if request.GET.jenis == val %}selected{% endif %}>
+{{ label }}
+</option>
 {% endfor %}
 </select>
 
 <select name="kelas">
 <option value="">Semua Kelas</option>
 {% for val,label in kelas_choices %}
-<option value="{{ val }}">{{ label }}</option>
+<option value="{{ val }}" {% if request.GET.kelas == val %}selected{% endif %}>
+{{ label }}
+</option>
 {% endfor %}
 </select>
 
 <select name="status">
 <option value="">Semua Status</option>
-<option value="baru">Baru</option>
-<option value="diproses">Diproses</option>
-<option value="selesai">Selesai</option>
+<option value="baru" {% if request.GET.status == "baru" %}selected{% endif %}>Baru</option>
+<option value="diproses" {% if request.GET.status == "diproses" %}selected{% endif %}>Diproses</option>
+<option value="selesai" {% if request.GET.status == "selesai" %}selected{% endif %}>Selesai</option>
+</select>
+
+<select name="periode">
+<option value="">Semua Waktu</option>
+<option value="hari" {% if request.GET.periode == "hari" %}selected{% endif %}>Per Hari</option>
+<option value="bulan" {% if request.GET.periode == "bulan" %}selected{% endif %}>Per Bulan</option>
+<option value="tahun" {% if request.GET.periode == "tahun" %}selected{% endif %}>Per Tahun</option>
+</select>
+
+<input type="date" name="tanggal" value="{{ request.GET.tanggal }}">
+
+<select name="bulan">
+<option value="">Pilih Bulan</option>
+{% for i in "123456789101112" %}
+<option value="{{ forloop.counter }}"
+{% if request.GET.bulan == forloop.counter|stringformat:"s" %}selected{% endif %}>
+{{ forloop.counter }}
+</option>
+{% endfor %}
+</select>
+
+<select name="tahun">
+<option value="">Pilih Tahun</option>
+{% for t in daftar_tahun %}
+<option value="{{ t.year }}" {% if request.GET.tahun == t.year|stringformat:"s" %}selected{% endif %}>
+{{ t.year }}
+</option>
+{% endfor %}
 </select>
 
 <button type="submit">Filter</button>
+
 </form>
 
-<!-- SUMMARY -->
+<!-- ================= SUMMARY ================= -->
 <div class="summary-grid">
-<div class="summary-card">Total Laporan <h2>{{ total_laporan }}</h2></div>
-<div class="summary-card">Baru <h2>{{ laporan_baru }}</h2></div>
-<div class="summary-card">Diproses <h2>{{ diproses }}</h2></div>
-<div class="summary-card">Selesai <h2>{{ selesai }}</h2></div>
+
+<div class="summary-card">
+Total Laporan
+<h2>{{ total_laporan }}</h2>
 </div>
 
-<!-- CHART GRID -->
+<div class="summary-card">
+Baru
+<h2>{{ laporan_baru }}</h2>
+</div>
+
+<div class="summary-card">
+Diproses
+<h2>{{ diproses }}</h2>
+</div>
+
+<div class="summary-card">
+Selesai
+<h2>{{ selesai }}</h2>
+</div>
+
+</div>
+
+<!-- ================= GRAFIK ================= -->
 <div class="chart-grid">
 
 <div class="chart-card">
-<div class="chart-title">Grafik Status Laporan</div>
+<h3>Grafik Status Laporan</h3>
 <canvas id="statusChart"></canvas>
-<div class="chart-detail">
+<p class="chart-info">
 {% for i in grafik_status %}
-<span>{{ i.status|title }} = {{ i.total }}</span>
+{{ i.status|title }} = {{ i.total }} |
 {% endfor %}
-<b>Total = {{ total_status }}</b>
-</div>
+Total = {{ total_status }}
+</p>
 </div>
 
 <div class="chart-card">
-<div class="chart-title">Grafik Jenis Bullying</div>
+<h3>Grafik Jenis Bullying</h3>
 <canvas id="jenisChart"></canvas>
-<div class="chart-detail">
+<p class="chart-info">
 {% for i in grafik_jenis %}
-<span>{{ i.jenis_bullying|title }} = {{ i.total }}</span>
+{{ i.jenis_bullying|title }} = {{ i.total }} |
 {% endfor %}
-<b>Total = {{ total_jenis }}</b>
-</div>
+Total = {{ total_jenis }}
+</p>
 </div>
 
 <div class="chart-card">
-<div class="chart-title">Grafik Kelas Korban</div>
+<h3>Grafik Berdasarkan Kelas Korban</h3>
 <canvas id="kelasChart"></canvas>
-<div class="chart-detail">
+<p class="chart-info">
 {% for i in grafik_kelas %}
-<span>{{ i.kelas_korban }} = {{ i.total }}</span>
+{{ i.kelas_korban }} = {{ i.total }} |
 {% endfor %}
-<b>Total = {{ total_kelas }}</b>
-</div>
+Total = {{ total_kelas }}
+</p>
 </div>
 
 <div class="chart-card">
-<div class="chart-title">Grafik Tren Laporan</div>
+<h3>Grafik Tren Laporan</h3>
 <canvas id="trenChart"></canvas>
-<div class="chart-detail">
-{% for i in grafik_tren %}
-<span>{{ i.waktu|date:'M Y' }} = {{ i.total }}</span>
-{% endfor %}
-<b>Total = {{ total_tren }}</b>
+<p class="chart-info">
+Total Laporan = {{ total_tren }}
+</p>
 </div>
+
 </div>
 
 </div>
@@ -95,19 +150,29 @@
 
 <script>
 function chart(id,type,labels,data){
+
 new Chart(document.getElementById(id),{
 type:type,
-data:{labels:labels,datasets:[{data:data}]},
+data:{
+labels:labels,
+datasets:[{data:data}]
+},
+
 options:{
 responsive:true,
 maintainAspectRatio:false,
+
 scales:{
 y:{
 beginAtZero:true,
-ticks:{precision:0,stepSize:1}
+ticks:{
+stepSize:1,
+precision:0
 }
 }
 }
+}
+
 });
 }
 
@@ -127,7 +192,7 @@ chart("kelasChart","bar",
 );
 
 chart("trenChart","bar",
-[{% for i in grafik_tren %}"{{ i.waktu|date:'M Y' }}",{% endfor %}],
+[{% for i in grafik_tren %}"{{ i.waktu|date:'d M Y' }}",{% endfor %}],
 [{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
 );
 </script>
