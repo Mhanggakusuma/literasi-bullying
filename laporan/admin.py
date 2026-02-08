@@ -19,21 +19,15 @@ class LaporanAdmin(admin.ModelAdmin):
         "tanggal",
     )
 
-    list_filter = (
-        "status",
-        "jenis_bullying",
-        "kelas_korban",
-    )
+    list_filter = ("status", "jenis_bullying", "kelas_korban")
 
     # ================= URL DASHBOARD =================
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path(
-                "dashboard/",
-                self.admin_site.admin_view(self.dashboard_view),
-                name="laporan_dashboard",
-            ),
+            path("dashboard/",
+                 self.admin_site.admin_view(self.dashboard_view),
+                 name="laporan_dashboard"),
         ]
         return custom_urls + urls
 
@@ -71,7 +65,7 @@ class LaporanAdmin(admin.ModelAdmin):
         elif periode == "tahun" and tahun:
             qs = qs.filter(tanggal__year=tahun)
 
-        # ===== GRAFIK =====
+        # ===== GRAFIK UTAMA =====
         grafik_status = list(qs.values("status").annotate(total=Count("id")))
         grafik_jenis = list(qs.values("jenis_bullying").annotate(total=Count("id")))
         grafik_kelas = list(qs.values("kelas_korban").annotate(total=Count("id")))
@@ -92,7 +86,24 @@ class LaporanAdmin(admin.ModelAdmin):
                 .order_by("waktu")
             )
 
-        # ===== TOTAL RINGKASAN =====
+        # ===== DETAIL TREN =====
+        tren_detail = []
+
+        if periode == "bulan" and bulan and tahun:
+            for item in grafik_tren:
+                tren_detail.append({
+                    "label": item["waktu"].strftime("%d %b"),
+                    "total": item["total"]
+                })
+
+        elif periode == "tahun" and tahun:
+            for item in grafik_tren:
+                tren_detail.append({
+                    "label": item["waktu"].strftime("%B"),
+                    "total": item["total"]
+                })
+
+        # ===== TOTAL =====
         total_status = sum(i["total"] for i in grafik_status)
         total_jenis = sum(i["total"] for i in grafik_jenis)
         total_kelas = sum(i["total"] for i in grafik_kelas)
@@ -105,6 +116,7 @@ class LaporanAdmin(admin.ModelAdmin):
             grafik_jenis=grafik_jenis,
             grafik_kelas=grafik_kelas,
             grafik_tren=grafik_tren,
+            tren_detail=tren_detail,
 
             total_status=total_status,
             total_jenis=total_jenis,

@@ -9,9 +9,7 @@
 
 <div class="dashboard-container">
 
-<h1 class="dashboard-title">
-Dashboard Statistik Laporan Bullying
-</h1>
+<h1 class="dashboard-title">Dashboard Statistik Laporan Bullying</h1>
 
 <!-- ================= FILTER ================= -->
 <form method="get" class="filter-bar">
@@ -79,32 +77,13 @@ Dashboard Statistik Laporan Bullying
 
 </form>
 
-
 <!-- ================= SUMMARY ================= -->
 <div class="summary-grid">
-
-<div class="summary-card">
-Total Laporan
-<h2>{{ total_laporan }}</h2>
+<div class="summary-card">Total Laporan <h2>{{ total_laporan }}</h2></div>
+<div class="summary-card">Baru <h2>{{ laporan_baru }}</h2></div>
+<div class="summary-card">Diproses <h2>{{ diproses }}</h2></div>
+<div class="summary-card">Selesai <h2>{{ selesai }}</h2></div>
 </div>
-
-<div class="summary-card">
-Baru
-<h2>{{ laporan_baru }}</h2>
-</div>
-
-<div class="summary-card">
-Diproses
-<h2>{{ diproses }}</h2>
-</div>
-
-<div class="summary-card">
-Selesai
-<h2>{{ selesai }}</h2>
-</div>
-
-</div>
-
 
 <!-- ================= GRAFIK ================= -->
 <div class="chart-grid">
@@ -123,9 +102,7 @@ Selesai
 {% endfor %}
 <span class="info-total">Total : {{ total_status }}</span>
 </div>
-
 </div>
-
 
 <!-- JENIS -->
 <div class="chart-card">
@@ -141,9 +118,7 @@ Selesai
 {% endfor %}
 <span class="info-total">Total : {{ total_jenis }}</span>
 </div>
-
 </div>
-
 
 <!-- KELAS -->
 <div class="chart-card">
@@ -159,9 +134,7 @@ Selesai
 {% endfor %}
 <span class="info-total">Total : {{ total_kelas }}</span>
 </div>
-
 </div>
-
 
 <!-- TREN -->
 <div class="chart-card">
@@ -172,32 +145,43 @@ Selesai
 </div>
 
 <div class="chart-info">
-<span class="info-total">Total Laporan : {{ total_tren }}</span>
+
+{% if tren_detail %}
+    {% for i in tren_detail %}
+        <span class="info-badge">
+            {{ i.label }} = {{ i.total }}
+        </span>
+    {% endfor %}
+{% endif %}
+
+<span class="info-total">
+Total : {{ total_tren }} laporan
+</span>
+
+</div>
 </div>
 
 </div>
-
 </div>
-
-</div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 function chart(id,type,labels,data){
 
-new Chart(document.getElementById(id),{
+let config={
 type:type,
 data:{labels:labels,datasets:[{data:data}]},
-options:{
-responsive:true,
-maintainAspectRatio:false,
-scales:{
+options:{responsive:true,maintainAspectRatio:false}
+};
+
+if(type!=="pie"){
+config.options.scales={
 y:{beginAtZero:true,ticks:{stepSize:1,precision:0}}
+};
 }
-}
-});
+
+new Chart(document.getElementById(id),config);
 }
 
 chart("statusChart","pie",
