@@ -38,7 +38,7 @@
 </section>
 
 
-<!-- ================= FILTER MODERN ================= -->
+<!-- ================= FILTER ================= -->
 <form method="get" class="filter-bar">
 
 <select name="jenis">
@@ -77,12 +77,18 @@
 
 <select name="bulan" id="filterBulan">
 <option value="">Pilih Bulan</option>
-{% for b in "123456789101112"|make_list %}
-<option value="{{ forloop.counter }}"
-{% if request.GET.bulan == forloop.counter|stringformat:"s" %}selected{% endif %}>
-{{ forloop.counter }}
-</option>
-{% endfor %}
+<option value="1" {% if request.GET.bulan == "1" %}selected{% endif %}>Januari</option>
+<option value="2" {% if request.GET.bulan == "2" %}selected{% endif %}>Februari</option>
+<option value="3" {% if request.GET.bulan == "3" %}selected{% endif %}>Maret</option>
+<option value="4" {% if request.GET.bulan == "4" %}selected{% endif %}>April</option>
+<option value="5" {% if request.GET.bulan == "5" %}selected{% endif %}>Mei</option>
+<option value="6" {% if request.GET.bulan == "6" %}selected{% endif %}>Juni</option>
+<option value="7" {% if request.GET.bulan == "7" %}selected{% endif %}>Juli</option>
+<option value="8" {% if request.GET.bulan == "8" %}selected{% endif %}>Agustus</option>
+<option value="9" {% if request.GET.bulan == "9" %}selected{% endif %}>September</option>
+<option value="10" {% if request.GET.bulan == "10" %}selected{% endif %}>Oktober</option>
+<option value="11" {% if request.GET.bulan == "11" %}selected{% endif %}>November</option>
+<option value="12" {% if request.GET.bulan == "12" %}selected{% endif %}>Desember</option>
 </select>
 
 <select name="tahun" id="filterTahun">
@@ -101,7 +107,6 @@
 
 <!-- ================= LAYOUT ================= -->
 <div class="dashboard-layout">
-
 
 <!-- ========= LEFT LAPORAN ========= -->
 <div class="laporan-section">
@@ -147,11 +152,9 @@ Lihat Detail
 <!-- ========= RIGHT CHART ========= -->
 <div class="chart-section">
 
-
 <!-- STATUS -->
 <div class="chart-card">
 <h4>Grafik Status Laporan</h4>
-
 <div class="status-chart-wrapper">
 <canvas id="statusChart"></canvas>
 </div>
@@ -162,7 +165,6 @@ Lihat Detail
 {% endfor %}
 <span class="info-total">Total : {{ total_laporan }}</span>
 </div>
-
 </div>
 
 
@@ -173,9 +175,7 @@ Lihat Detail
 
 <div class="chart-info">
 {% for i in grafik_jenis %}
-<span class="info-badge">
-{{ i.jenis_bullying|title }} = {{ i.total }}
-</span>
+<span class="info-badge">{{ i.jenis_bullying|title }} = {{ i.total }}</span>
 {% endfor %}
 <span class="info-total">Total : {{ total_laporan }}</span>
 </div>
@@ -189,9 +189,7 @@ Lihat Detail
 
 <div class="chart-info">
 {% for i in grafik_kelas %}
-<span class="info-badge">
-{{ i.kelas_korban }} = {{ i.total }}
-</span>
+<span class="info-badge">{{ i.kelas_korban }} = {{ i.total }}</span>
 {% endfor %}
 <span class="info-total">Total : {{ total_laporan }}</span>
 </div>
@@ -204,16 +202,19 @@ Lihat Detail
 <canvas id="trenChart"></canvas>
 
 <div class="chart-info">
+
 {% if tren_detail %}
 {% for i in tren_detail %}
 <span class="info-badge">{{ i.label }} = {{ i.total }}</span>
 {% endfor %}
+{% else %}
+<span class="info-badge">Tidak ada data tren</span>
 {% endif %}
-<span class="info-total">Total : {{ total_laporan }}</span>
-</div>
+
+<span class="info-total">Total : {{ total_laporan }} laporan</span>
 
 </div>
-
+</div>
 
 </div>
 </div>
@@ -259,7 +260,7 @@ chart("kelasChart","bar",
 [{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
 );
 
-/* TREN (SUDAH DINAMIS) */
+/* TREN */
 chart("trenChart","bar",
 [{% for i in grafik_tren %}"{{ i.label }}",{% endfor %}],
 [{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
