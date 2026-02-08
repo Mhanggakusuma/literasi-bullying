@@ -6,43 +6,40 @@
 <div class="bk-dashboard-page">
 <div class="bk-dashboard">
 
-<!-- HEADER -->
+<!-- ================= HEADER ================= -->
 <header class="dashboard-header">
-<div>
-<span class="bk-badge">Akses Khusus Guru BK</span>
-<h1>Dashboard Guru BK</h1>
-<p>Monitoring dan analisis tren kasus bullying</p>
-</div>
-<a href="{% url 'bk_download_laporan' %}" class="btn-download">Download Laporan</a>
+  <div>
+    <span class="bk-badge">Akses Khusus Guru BK</span>
+    <h1>Dashboard Guru BK</h1>
+    <p>Monitoring dan analisis tren kasus bullying</p>
+  </div>
+  <a href="{% url 'bk_download_laporan' %}" class="btn-download">Download Laporan</a>
 </header>
 
 
-<!-- SUMMARY -->
+<!-- ================= SUMMARY ================= -->
 <section class="dashboard-cards">
-<div class="summary-card">
-<p>Total Laporan</p>
-<h2>{{ total_laporan }}</h2>
-</div>
-
-<div class="summary-card">
-<p>Laporan Baru</p>
-<h2>{{ laporan_baru }}</h2>
-</div>
-
-<div class="summary-card">
-<p>Diproses</p>
-<h2>{{ sedang_diproses }}</h2>
-</div>
-
-<div class="summary-card">
-<p>Selesai</p>
-<h2>{{ selesai }}</h2>
-</div>
+  <div class="summary-card">
+    <p>Total Laporan</p>
+    <h2>{{ total_laporan }}</h2>
+  </div>
+  <div class="summary-card">
+    <p>Laporan Baru</p>
+    <h2>{{ laporan_baru }}</h2>
+  </div>
+  <div class="summary-card">
+    <p>Diproses</p>
+    <h2>{{ sedang_diproses }}</h2>
+  </div>
+  <div class="summary-card">
+    <p>Selesai</p>
+    <h2>{{ selesai }}</h2>
+  </div>
 </section>
 
 
-<!-- FILTER -->
-<form method="get" class="filter-bar filter-horizontal">
+<!-- ================= FILTER ================= -->
+<form method="get" class="filter-bar">
 
 <select name="jenis">
 <option value="">Semua Jenis</option>
@@ -103,25 +100,75 @@
 {% endfor %}
 </select>
 
-<button type="submit" class="btn-filter">Filter</button>
+<button type="submit">Filter Data</button>
 
 </form>
 
 
-<!-- CHART SECTION -->
+<!-- ================= LAYOUT ================= -->
+<div class="dashboard-layout">
+
+
+<!-- ========= LEFT LAPORAN ========= -->
+<div class="laporan-section">
+<div class="laporan-card">
+
+<h3>Daftar Laporan</h3>
+
+{% for lap in laporan %}
+<div class="laporan-item">
+
+<div class="laporan-top d-flex justify-content-between">
+<strong>{{ lap.kode_laporan }}</strong>
+<span class="status {{ lap.status }}">
+{{ lap.get_status_display }}
+</span>
+</div>
+
+<p class="laporan-meta">
+<strong>Pelapor:</strong>
+{{ lap.tampilkan_pelapor }}
+• {{ lap.get_jenis_bullying_display }}
+• {{ lap.tanggal|date:"d M Y" }}
+</p>
+
+<p class="laporan-meta">
+<strong>Korban:</strong>
+{{ lap.tampilkan_korban }} ({{ lap.kelas_korban }})
+</p>
+
+<a href="{% url 'bk_tindak_lanjut' lap.id %}" class="btn-detail">
+Lihat Detail
+</a>
+
+</div>
+{% empty %}
+<p>Tidak ada laporan</p>
+{% endfor %}
+
+</div>
+</div>
+
+
+<!-- ========= RIGHT CHART ========= -->
 <div class="chart-section">
+
 
 <!-- STATUS -->
 <div class="chart-card">
 <h4>Grafik Status Laporan</h4>
+
+<div class="status-chart-wrapper">
 <canvas id="statusChart"></canvas>
+</div>
 
 <div class="chart-info">
 {% for i in grafik_status %}
-<span class="info-badge">{{ i.status|title }} = {{ i.total }}</span>
+<span class="info-badge">{{ i.status|title }} : {{ i.total }}</span>
 {% endfor %}
-<span class="info-total">Total = {{ total_laporan }}</span>
+<span class="info-total">Total : {{ total_laporan }}</span>
 </div>
+
 </div>
 
 
@@ -132,9 +179,8 @@
 
 <div class="chart-info">
 {% for i in grafik_jenis %}
-<span class="info-badge">{{ i.jenis_bullying|title }} = {{ i.total }}</span>
+<span class="info-badge">{{ i.jenis_bullying|title }} : {{ i.total }}</span>
 {% endfor %}
-<span class="info-total">Total = {{ total_laporan }}</span>
 </div>
 </div>
 
@@ -146,16 +192,15 @@
 
 <div class="chart-info">
 {% for i in grafik_kelas %}
-<span class="info-badge">{{ i.kelas_korban }} = {{ i.total }}</span>
+<span class="info-badge">{{ i.kelas_korban }} : {{ i.total }}</span>
 {% endfor %}
-<span class="info-total">Total = {{ total_laporan }}</span>
 </div>
 </div>
 
 
 <!-- TREN -->
 <div class="chart-card">
-<h4>Grafik Tren Laporan</h4>
+<h4>Grafik Tren Periode</h4>
 <canvas id="trenChart"></canvas>
 
 <div class="chart-info">
@@ -164,15 +209,19 @@
 <span class="info-badge">{{ i.label }} = {{ i.total }}</span>
 {% endfor %}
 {% endif %}
-<span class="info-total">Total = {{ total_laporan }}</span>
-</div>
+<span class="info-total">Total : {{ total_laporan }}</span>
 </div>
 
-</div>
-</div>
 </div>
 
 
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- ================= CHART JS ================= -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
@@ -192,21 +241,29 @@ config.options.scales={y:{beginAtZero:true,ticks:{stepSize:1}}};
 new Chart(document.getElementById(id),config);
 }
 
+
+/* STATUS */
 chart("statusChart","pie",
 [{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
 [{% for i in grafik_status %}{{ i.total }},{% endfor %}]
 );
 
+
+/* JENIS */
 chart("jenisChart","bar",
 [{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
 [{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
 );
 
+
+/* KELAS */
 chart("kelasChart","bar",
 [{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
 [{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
 );
 
+
+/* TREN */
 chart("trenChart","bar",
 [{% for i in grafik_tren %}"{{ i.waktu|date:'d M Y' }}",{% endfor %}],
 [{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
@@ -215,7 +272,9 @@ chart("trenChart","bar",
 </script>
 
 
+<!-- ================= FILTER DINAMIS ================= -->
 <script>
+
 const periode=document.getElementById("periodeSelect");
 const tanggal=document.getElementById("filterTanggal");
 const bulan=document.getElementById("filterBulan");
@@ -240,6 +299,7 @@ if(periode.value==='tahun') tahun.style.display='inline-block';
 
 periode.addEventListener('change',updateFilter);
 updateFilter();
+
 </script>
 
 {% endblock %}

@@ -1491,13 +1491,12 @@ select {
 
 
 /* ===================================================== */
-/* ================= FILTER ADMIN STYLE ================= */
+/* ================= FILTER MODERN ====================== */
 /* ===================================================== */
 
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   gap: 12px;
   background: white;
   padding: 18px;
@@ -1512,12 +1511,12 @@ select {
   border-radius: 10px;
   border: 1px solid #dcdcdc;
   font-weight: 600;
-  min-width: 150px;
+  min-width: 160px;
   transition: 0.25s ease;
   background: #fff;
 }
 
-/* focus */
+/* focus effect */
 .filter-bar select:focus,
 .filter-bar input:focus {
   border-color: #0d6efd;
@@ -1525,27 +1524,31 @@ select {
   box-shadow: 0 0 6px rgba(13,110,253,0.35);
 }
 
-/* hover */
+/* hover dropdown */
 .filter-bar select:hover,
 .filter-bar input:hover {
   border-color: #0d6efd;
 }
 
-/* tombol */
+/* tombol filter */
 .filter-bar button {
   background: linear-gradient(135deg,#3d72be,#0d6efd);
   color: white;
   border: none;
-  padding: 10px 24px;
+  padding: 10px 22px;
   border-radius: 10px;
   font-weight: 700;
   cursor: pointer;
-  transition: .3s;
+  transition: .3s ease;
 }
 
 .filter-bar button:hover {
   background: linear-gradient(135deg,#2c5aa0,#0a58ca);
   transform: translateY(-1px);
+}
+
+.filter-bar button:active {
+  transform: scale(0.97);
 }
 
 
@@ -1562,6 +1565,10 @@ select {
 
 
 /* ================= LEFT - LAPORAN ================= */
+.laporan-section {
+  height: 100%;
+}
+
 .laporan-card {
   background: white;
   padding: 25px;
@@ -1580,6 +1587,11 @@ select {
   border-radius: 10px;
 }
 
+.laporan-card h3 {
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
 .laporan-item {
   background: #f8f9fa;
   padding: 18px;
@@ -1594,9 +1606,10 @@ select {
 }
 
 
-/* ================= CHART ================= */
+/* ================= RIGHT - CHART ================= */
 .chart-section {
   display: grid;
+  grid-template-columns: 1fr;
   gap: 25px;
 }
 
@@ -1640,7 +1653,7 @@ select {
 }
 
 
-/* ================= PIE WRAPPER ================= */
+/* ================= PIE CHART WRAPPER ================= */
 .status-chart-wrapper {
   width: 100%;
   max-width: 350px;
@@ -1648,7 +1661,7 @@ select {
 }
 
 
-/* ================= CHART INFO ================= */
+/* ================= KETERANGAN GRAFIK ================= */
 .chart-info{
   margin-top:15px;
   display:flex;
@@ -1678,15 +1691,26 @@ select {
 /* ================= RESPONSIVE ========================= */
 /* ===================================================== */
 
+@media(max-width:1200px){
+  .dashboard-cards {
+    grid-template-columns: repeat(2,1fr);
+  }
+}
+
 @media(max-width:992px){
 
   .dashboard-layout {
     grid-template-columns: 1fr;
   }
 
+  .laporan-card {
+    max-height: none;
+  }
+
   .dashboard-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 15px;
   }
 
 }
@@ -1701,10 +1725,8 @@ select {
     grid-template-columns: 1fr;
   }
 
-  /* Filter baru jadi column hanya di HP */
   .filter-bar {
     flex-direction: column;
-    align-items: stretch;
   }
 
   .filter-bar select,
