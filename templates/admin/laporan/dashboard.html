@@ -73,6 +73,7 @@
 <option value="12" {% if request.GET.bulan == "12" %}selected{% endif %}>Desember</option>
 </select>
 
+
 <select name="tahun">
 <option value="">Pilih Tahun</option>
 {% for t in daftar_tahun %}
@@ -99,21 +100,14 @@
 </div>
 
 <div class="chart-info">
-
-<div class="info-group">
 {% for i in grafik_status %}
-<div class="info-item status-{{ i.status }}">
-<span class="info-label">{{ i.status|title }}</span>
-<span class="info-value">{{ i.total }}</span>
-</div>
+<span class="mini-badge status-{{ i.status }}">
+{{ i.status|title }} : {{ i.total }}
+</span>
 {% endfor %}
-</div>
-
-<div class="info-total-box">
-Total Laporan
-<strong>{{ total_status }}</strong>
-</div>
-
+<span class="mini-badge total-badge">
+Total : {{ total_status }}
+</span>
 </div>
 </div>
 
@@ -127,21 +121,14 @@ Total Laporan
 </div>
 
 <div class="chart-info">
-
-<div class="info-group">
 {% for i in grafik_jenis %}
-<div class="info-item jenis-{{ i.jenis_bullying }}">
-<span class="info-label">{{ i.jenis_bullying|title }}</span>
-<span class="info-value">{{ i.total }}</span>
-</div>
+<span class="mini-badge jenis-{{ i.jenis_bullying }}">
+{{ i.jenis_bullying|title }} : {{ i.total }}
+</span>
 {% endfor %}
-</div>
-
-<div class="info-total-box">
-Total Laporan
-<strong>{{ total_jenis }}</strong>
-</div>
-
+<span class="mini-badge total-badge">
+Total : {{ total_jenis }}
+</span>
 </div>
 </div>
 
@@ -155,21 +142,14 @@ Total Laporan
 </div>
 
 <div class="chart-info">
-
-<div class="info-group">
 {% for i in grafik_kelas %}
-<div class="info-item">
-<span class="info-label">{{ i.kelas_korban }}</span>
-<span class="info-value">{{ i.total }}</span>
-</div>
+<span class="mini-badge">
+{{ i.kelas_korban }} : {{ i.total }}
+</span>
 {% endfor %}
-</div>
-
-<div class="info-total-box">
-Total Laporan
-<strong>{{ total_kelas }}</strong>
-</div>
-
+<span class="mini-badge total-badge">
+Total : {{ total_kelas }}
+</span>
 </div>
 </div>
 
@@ -183,33 +163,26 @@ Total Laporan
 </div>
 
 <div class="chart-info">
-
-<div class="info-group">
 {% for i in tren_detail %}
-<div class="info-item">
-<span class="info-label">{{ i.label }}</span>
-<span class="info-value">{{ i.total }}</span>
-</div>
+<span class="mini-badge">
+{{ i.label }} : {{ i.total }}
+</span>
 {% endfor %}
-</div>
-
-<div class="info-total-box">
-Total Laporan
-<strong>{{ total_tren }}</strong>
-</div>
-
+<span class="mini-badge total-badge">
+Total : {{ total_tren }}
+</span>
 </div>
 </div>
 
 </div>
 </div>
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 
-// ===== Gradient =====
 function gradientColor(value,max,start,end){
 let ratio=value/max;
 let r=Math.round(start[0]+(end[0]-start[0])*ratio);
@@ -219,7 +192,6 @@ return `rgb(${r},${g},${b})`;
 }
 
 
-// ===== Status Color =====
 function statusColor(label){
 if(label==="baru") return "#dc3545";
 if(label==="diproses") return "#0d6efd";
@@ -228,7 +200,6 @@ return "#6c757d";
 }
 
 
-// ===== Jenis Color =====
 function jenisColor(label){
 if(label==="fisik") return "#dc3545";
 if(label==="verbal") return "#fd7e14";
@@ -239,7 +210,6 @@ return "#adb5bd";
 }
 
 
-// ===== Build Chart =====
 function buildChart(id,type,labels,data,colorCallback){
 
 let ctx=document.getElementById(id).getContext("2d");
@@ -275,27 +245,27 @@ y:{beginAtZero:true,ticks:{stepSize:1}}
 }
 
 
-// ===== STATUS =====
+// STATUS
 buildChart(
 "statusChart",
 "pie",
-[{% for i in grafik_status %}"{{ i.status|default:'-' }}",{% endfor %}],
+[{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
 [{% for i in grafik_status %}{{ i.total }},{% endfor %}],
 (label)=>statusColor(label)
 );
 
 
-// ===== JENIS =====
+// JENIS
 buildChart(
 "jenisChart",
 "bar",
-[{% for i in grafik_jenis %}"{{ i.jenis_bullying|default:'-' }}",{% endfor %}],
+[{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
 [{% for i in grafik_jenis %}{{ i.total }},{% endfor %}],
 (label)=>jenisColor(label)
 );
 
 
-// ===== KELAS =====
+// KELAS
 buildChart(
 "kelasChart",
 "bar",
@@ -305,7 +275,7 @@ buildChart(
 );
 
 
-// ===== TREN =====
+// TREN
 buildChart(
 "trenChart",
 "bar",
