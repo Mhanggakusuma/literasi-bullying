@@ -52,12 +52,18 @@ Dashboard Statistik Laporan Bullying
 
 <select name="bulan">
 <option value="">Pilih Bulan</option>
-{% for i in "123456789101112" %}
-<option value="{{ forloop.counter }}"
-{% if request.GET.bulan == forloop.counter|stringformat:"s" %}selected{% endif %}>
-{{ forloop.counter }}
-</option>
-{% endfor %}
+<option value="1">Januari</option>
+<option value="2">Februari</option>
+<option value="3">Maret</option>
+<option value="4">April</option>
+<option value="5">Mei</option>
+<option value="6">Juni</option>
+<option value="7">Juli</option>
+<option value="8">Agustus</option>
+<option value="9">September</option>
+<option value="10">Oktober</option>
+<option value="11">November</option>
+<option value="12">Desember</option>
 </select>
 
 <select name="tahun">
@@ -72,6 +78,7 @@ Dashboard Statistik Laporan Bullying
 <button type="submit">Filter</button>
 
 </form>
+
 
 <!-- ================= SUMMARY ================= -->
 <div class="summary-grid">
@@ -98,78 +105,82 @@ Selesai
 
 </div>
 
+
 <!-- ================= GRAFIK ================= -->
 <div class="chart-grid">
 
 <!-- STATUS -->
 <div class="chart-card">
 <h3>Grafik Status Laporan</h3>
+
+<div class="chart-wrapper">
 <canvas id="statusChart"></canvas>
+</div>
 
 <div class="chart-info">
 {% for i in grafik_status %}
-<span class="info-badge">
-{{ i.status|title }} : {{ i.total }}
-</span>
+<span class="info-badge">{{ i.status|title }} : {{ i.total }}</span>
 {% endfor %}
+<span class="info-total">Total : {{ total_status }}</span>
+</div>
 
-<span class="info-total">
-Total : {{ total_status }}
-</span>
 </div>
-</div>
+
 
 <!-- JENIS -->
 <div class="chart-card">
 <h3>Grafik Jenis Bullying</h3>
+
+<div class="chart-wrapper">
 <canvas id="jenisChart"></canvas>
+</div>
 
 <div class="chart-info">
 {% for i in grafik_jenis %}
-<span class="info-badge">
-{{ i.jenis_bullying|title }} : {{ i.total }}
-</span>
+<span class="info-badge">{{ i.jenis_bullying|title }} : {{ i.total }}</span>
 {% endfor %}
+<span class="info-total">Total : {{ total_jenis }}</span>
+</div>
 
-<span class="info-total">
-Total : {{ total_jenis }}
-</span>
 </div>
-</div>
+
 
 <!-- KELAS -->
 <div class="chart-card">
 <h3>Grafik Berdasarkan Kelas Korban</h3>
+
+<div class="chart-wrapper">
 <canvas id="kelasChart"></canvas>
+</div>
 
 <div class="chart-info">
 {% for i in grafik_kelas %}
-<span class="info-badge">
-{{ i.kelas_korban }} : {{ i.total }}
-</span>
+<span class="info-badge">{{ i.kelas_korban }} : {{ i.total }}</span>
 {% endfor %}
+<span class="info-total">Total : {{ total_kelas }}</span>
+</div>
 
-<span class="info-total">
-Total : {{ total_kelas }}
-</span>
 </div>
-</div>
+
 
 <!-- TREN -->
 <div class="chart-card">
 <h3>Grafik Tren Laporan</h3>
+
+<div class="chart-wrapper">
 <canvas id="trenChart"></canvas>
+</div>
 
 <div class="chart-info">
-<span class="info-total">
-Total Laporan : {{ total_tren }}
-</span>
-</div>
+<span class="info-total">Total Laporan : {{ total_tren }}</span>
 </div>
 
 </div>
 
 </div>
+
+</div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -178,23 +189,12 @@ function chart(id,type,labels,data){
 
 new Chart(document.getElementById(id),{
 type:type,
-data:{
-labels:labels,
-datasets:[{data:data}]
-},
-
+data:{labels:labels,datasets:[{data:data}]},
 options:{
 responsive:true,
 maintainAspectRatio:false,
-
 scales:{
-y:{
-beginAtZero:true,
-ticks:{
-stepSize:1,
-precision:0
-}
-}
+y:{beginAtZero:true,ticks:{stepSize:1,precision:0}}
 }
 }
 });
