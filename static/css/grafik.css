@@ -4,6 +4,7 @@ max-width:1400px;
 margin:auto;
 }
 
+
 /* SUMMARY */
 .summary-grid{
 display:grid;
@@ -45,15 +46,6 @@ border-radius:8px;
 border:1px solid #ddd;
 }
 
-.filter-bar button{
-background:#0d6efd;
-color:white;
-border:none;
-padding:9px 18px;
-border-radius:8px;
-cursor:pointer;
-}
-
 
 /* CHART */
 .chart-grid{
@@ -74,14 +66,60 @@ height:260px;
 }
 
 
+/* ===== CHART INFO ===== */
+
+.chart-info{
+margin-top:15px;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.info-group{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+gap:8px;
+}
+
+.info-item{
+display:flex;
+justify-content:space-between;
+padding:8px 12px;
+border-radius:10px;
+background:#f1f3f5;
+font-size:13px;
+}
+
+.info-total-box{
+background:#0d6efd;
+color:white;
+padding:10px;
+border-radius:12px;
+text-align:center;
+}
+
+.info-total-box strong{
+display:block;
+font-size:20px;
+}
+
+
+/* STATUS COLORS */
+.status-baru{background:#f8d7da;color:#842029;}
+.status-diproses{background:#cfe2ff;color:#084298;}
+.status-selesai{background:#d1e7dd;color:#0f5132;}
+
+
+/* JENIS COLORS */
+.jenis-fisik{background:#f8d7da;color:#842029;}
+.jenis-verbal{background:#fff3cd;color:#664d03;}
+.jenis-sosial{background:#e2d9f3;color:#3d2c8d;}
+.jenis-siber{background:#cff4fc;color:#055160;}
+.jenis-psikologis{background:#d1e7dd;color:#0f5132;}
+
+
 /* MOBILE */
 @media(max-width:768px){
-
-.chart-grid{
-grid-template-columns:1fr;
-}
-
-.filter-bar{
-flex-direction:column;
-}
+.chart-grid{grid-template-columns:1fr;}
+.filter-bar{flex-direction:column;}
 }
