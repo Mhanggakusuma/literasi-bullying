@@ -101,45 +101,70 @@ Selesai
 <!-- ================= GRAFIK ================= -->
 <div class="chart-grid">
 
+<!-- STATUS -->
 <div class="chart-card">
 <h3>Grafik Status Laporan</h3>
 <canvas id="statusChart"></canvas>
-<p class="chart-info">
+
+<div class="chart-info">
 {% for i in grafik_status %}
-{{ i.status|title }} = {{ i.total }} |
+<span class="info-badge">
+{{ i.status|title }} : {{ i.total }}
+</span>
 {% endfor %}
-Total = {{ total_status }}
-</p>
+
+<span class="info-total">
+Total : {{ total_status }}
+</span>
+</div>
 </div>
 
+<!-- JENIS -->
 <div class="chart-card">
 <h3>Grafik Jenis Bullying</h3>
 <canvas id="jenisChart"></canvas>
-<p class="chart-info">
+
+<div class="chart-info">
 {% for i in grafik_jenis %}
-{{ i.jenis_bullying|title }} = {{ i.total }} |
+<span class="info-badge">
+{{ i.jenis_bullying|title }} : {{ i.total }}
+</span>
 {% endfor %}
-Total = {{ total_jenis }}
-</p>
+
+<span class="info-total">
+Total : {{ total_jenis }}
+</span>
+</div>
 </div>
 
+<!-- KELAS -->
 <div class="chart-card">
 <h3>Grafik Berdasarkan Kelas Korban</h3>
 <canvas id="kelasChart"></canvas>
-<p class="chart-info">
+
+<div class="chart-info">
 {% for i in grafik_kelas %}
-{{ i.kelas_korban }} = {{ i.total }} |
+<span class="info-badge">
+{{ i.kelas_korban }} : {{ i.total }}
+</span>
 {% endfor %}
-Total = {{ total_kelas }}
-</p>
+
+<span class="info-total">
+Total : {{ total_kelas }}
+</span>
+</div>
 </div>
 
+<!-- TREN -->
 <div class="chart-card">
 <h3>Grafik Tren Laporan</h3>
 <canvas id="trenChart"></canvas>
-<p class="chart-info">
-Total Laporan = {{ total_tren }}
-</p>
+
+<div class="chart-info">
+<span class="info-total">
+Total Laporan : {{ total_tren }}
+</span>
+</div>
 </div>
 
 </div>
@@ -172,7 +197,6 @@ precision:0
 }
 }
 }
-
 });
 }
 
