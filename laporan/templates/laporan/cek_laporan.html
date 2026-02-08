@@ -12,136 +12,142 @@
       Kerahasiaan identitas dijaga untuk keamanan semua pihak
     </p>
 
-    <!-- INPUT KODE -->
+    <!-- ================= INPUT ================= -->
     <div class="cek-laporan-card mx-auto mt-5">
+
       <img src="{% static 'img/shield.png' %}" class="cek-laporan-icon">
 
       <h3 class="cek-laporan-card-title">Masukkan Kode Laporan</h3>
 
       <form method="post">
         {% csrf_token %}
-        <input type="text"
-               name="kode"
-               class="cek-laporan-input form-control text-center mb-4"
-               placeholder="Masukkan kode laporan"
-               required>
+        <div class="cek-input-group">
+          <input type="text"
+                 name="kode"
+                 class="cek-laporan-input"
+                 placeholder="Contoh: LP-2025-001"
+                 required>
+        </div>
 
-        <button type="submit" class="cek-laporan-btn-primary w-100">
-          Cek Status
+        <button type="submit" class="cek-laporan-btn-primary">
+          🔍 Cek Status
         </button>
       </form>
     </div>
 
     {% if laporan %}
-    <div class="cek-laporan-detail-card mx-auto mt-5 p-4">
+    <!-- ================= DETAIL ================= -->
+    <div class="cek-laporan-detail-card mx-auto mt-5">
 
-      <div class="text-center">
-        <img src="{% static 'img/ribbon.png' %}" class="cek-laporan-icon mb-3">
-        <h3 class="cek-laporan-detail-title">Detail Laporan</h3>
+      <div class="cek-header-detail">
+        <img src="{% static 'img/ribbon.png' %}" class="cek-laporan-icon-small">
+        <h3>Detail Laporan</h3>
       </div>
 
-      <div class="mt-4 text-start">
+      <!-- GRID INFORMASI -->
+      <div class="cek-grid">
 
-        <!-- PELAPOR SELALU ANONIM -->
-        <p>
-          <strong>Pelapor :</strong> Anonim 🔒
-        </p>
+        <div class="cek-item">
+          <label>Pelapor</label>
+          <span>Anonim 🔒</span>
+        </div>
 
-        <!-- ✅ FIX DISINI -->
-        <p>
-          <strong>Korban :</strong>
-          {{ laporan.tampilkan_korban }}
-          ({{ laporan.kelas_korban }})
-        </p>
+        <div class="cek-item">
+          <label>Korban</label>
+          <span>{{ laporan.tampilkan_korban }} ({{ laporan.kelas_korban }})</span>
+        </div>
 
         {% if laporan.nama_terlapor %}
-        <p>
-          <strong>Terlapor :</strong>
-          {{ laporan.nama_terlapor }}
-          {% if laporan.kelas_terlapor %}
+        <div class="cek-item">
+          <label>Terlapor</label>
+          <span>
+            {{ laporan.nama_terlapor }}
+            {% if laporan.kelas_terlapor %}
             ({{ laporan.kelas_terlapor }})
-          {% endif %}
-        </p>
+            {% endif %}
+          </span>
+        </div>
         {% endif %}
 
-        <p>
-          <strong>Jenis Perundungan :</strong>
-          {{ laporan.get_jenis_bullying_display }}
-        </p>
+        <div class="cek-item">
+          <label>Jenis Perundungan</label>
+          <span>{{ laporan.get_jenis_bullying_display }}</span>
+        </div>
 
-        <hr>
+        <div class="cek-item">
+          <label>Tanggal Kejadian</label>
+          <span>
+            {{ laporan.tanggal_kejadian|date:"d M Y" }}
+            {% if laporan.perkiraan_waktu %}
+              ({{ laporan.get_perkiraan_waktu_display }})
+            {% endif %}
+          </span>
+        </div>
 
-        <p>
-          <strong>Waktu Kejadian :</strong>
-          {{ laporan.tanggal_kejadian|date:"d M Y" }}
-          {% if laporan.perkiraan_waktu %}
-            ({{ laporan.get_perkiraan_waktu_display }})
-          {% endif %}
-        </p>
+        <div class="cek-item">
+          <label>Lokasi</label>
+          <span>{{ laporan.lokasi_kejadian|default:"-" }}</span>
+        </div>
 
-        <p>
-          <strong>Lokasi :</strong>
-          {{ laporan.lokasi_kejadian|default:"-" }}
-        </p>
+      </div>
 
-        <hr>
-
-        <p><strong>Kronologi :</strong></p>
+      <!-- ================= KRONOLOGI ================= -->
+      <div class="cek-section">
+        <h5>Kronologi Kejadian</h5>
         <p>{{ laporan.isi_laporan|linebreaksbr }}</p>
+      </div>
 
-        {% if laporan.dampak_korban %}
-        <p><strong>Dampak :</strong></p>
+      <!-- ================= DAMPAK ================= -->
+      {% if laporan.dampak_korban %}
+      <div class="cek-section">
+        <h5>Dampak Korban</h5>
         <ul>
           {% for d in laporan.dampak_korban %}
             <li>{{ d }}</li>
           {% endfor %}
         </ul>
-        {% endif %}
+      </div>
+      {% endif %}
 
-        {% if laporan.dampak_lainnya %}
-        <p>
-          <strong>Dampak Lainnya :</strong>
-          {{ laporan.dampak_lainnya }}
-        </p>
-        {% endif %}
-
-        {% if laporan.harapan_pelapor %}
-        <hr>
-        <p><strong>Harapan Pelapor :</strong></p>
+      {% if laporan.harapan_pelapor %}
+      <div class="cek-section">
+        <h5>Harapan Pelapor</h5>
         <p>{{ laporan.harapan_pelapor|linebreaksbr }}</p>
-        {% endif %}
-
       </div>
+      {% endif %}
 
-      <hr>
-
-      <div class="text-center">
-        <h3>Status Laporan</h3>
-        <p class="cek-laporan-status">
+      <!-- ================= STATUS ================= -->
+      <div class="cek-status-box">
+        <span>Status Laporan</span>
+        <div class="status-badge">
           {{ laporan.get_status_display }}
-        </p>
+        </div>
       </div>
 
+      <!-- ================= CATATAN BK ================= -->
       {% if laporan.catatan_bk %}
-      <div class="card bg-light border-0 p-3 mb-3">
+      <div class="cek-catatan">
         <h5>Catatan Guru BK</h5>
         <p>{{ laporan.catatan_bk|linebreaksbr }}</p>
       </div>
       {% endif %}
 
-      <div class="d-grid gap-2">
+      <!-- ================= BUTTON ================= -->
+      <div class="cek-action">
+
         {% if laporan.bukti_tindak_lanjut %}
         <a href="{{ laporan.bukti_tindak_lanjut.url }}"
            target="_blank"
-           class="cek-laporan-btn-success w-100">
-          📎 Lihat Bukti Tindak Lanjut
+           class="cek-laporan-btn-success">
+           📎 Bukti Tindak Lanjut
         </a>
         {% endif %}
 
         <a href="{% url 'laporan_home' %}"
-           class="btn btn-outline-secondary w-100">
-          ← Kembali
+           class="btn btn-outline-secondary">
+           ← Kembali
         </a>
+
       </div>
 
     </div>

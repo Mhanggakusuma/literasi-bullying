@@ -1206,154 +1206,155 @@ select {
 /* ===================================================== */
 /* ============ CEK LAPORAN (FINAL FIXED) ============== */
 /* ===================================================== */
-
-/* Override margin body khusus halaman ini */
-.cek-laporan-page {
-  margin-top: -90px;
-  padding-top: 160px;
-}
-
-/* HERO */
+/* ================= HERO ================= */
 .cek-laporan-hero {
   min-height: 100vh;
-  background: linear-gradient(
-    180deg,
-    rgba(13, 106, 198, 0.81),
-    rgba(7, 51, 96, 0.81)
-  );
+  background: linear-gradient(180deg,#0d6efd,#073360);
+  padding-top: 160px;
   padding-bottom: 120px;
-  color: #ffffff;
+  color: white;
 }
 
-/* TITLE */
+/* ================= TITLE ================= */
 .cek-laporan-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 52px;
+  font-size: 48px;
   font-weight: 700;
 }
 
 .cek-laporan-subtitle {
-  font-size: 18px;
-  color: #e5e7eb;
-  margin-top: 8px;
+  color: #dbeafe;
 }
 
-/* SMALL TEXT */
-.cek-laporan-small {
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 5px;
-}
-
-/* CARD */
+/* ================= CARD ================= */
 .cek-laporan-card,
 .cek-laporan-detail-card {
-  background: #ffffff;
-  max-width: 850px;
-  padding: 45px 55px;
-  border-radius: 14px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
-  color: #000000;
+  background: white;
+  max-width: 900px;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+  color: black;
 }
 
-/* ICON */
-.cek-laporan-icon {
-  width: 90px;
-  display: block;
-  margin: 0 auto 15px;
-}
-
-/* TITLES */
-.cek-laporan-card-title {
-  font-size: 30px;
-  font-weight: 700;
-  margin-bottom: 25px;
-}
-
-.cek-laporan-detail-title {
-  font-size: 26px;
-  font-weight: 700;
+/* ================= INPUT ================= */
+.cek-input-group {
   margin-bottom: 20px;
 }
 
-/* TEXT */
-.cek-laporan-text {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.cek-laporan-status {
-  font-size: 20px;
-  font-weight: 500;
-}
-
-/* INPUT (ANTI BOOTSTRAP) */
 .cek-laporan-input {
-  border: 1px solid #4285F4 !important;
-  border-radius: 12px !important;
-  padding: 12px !important;
-  font-size: 15px !important;
-}
-
-.cek-laporan-input::placeholder {
-  color: #9ca3af;
-}
-
-/* BUTTON PRIMARY */
-.cek-laporan-btn-primary {
-  background: #1C6BEF !important;
-  color: #ffffff !important;
-  border: none !important;
-  font-size: 18px !important;
-  font-weight: 700;
-  padding: 14px !important;
-  border-radius: 12px !important;
-}
-
-.cek-laporan-btn-primary:hover {
-  background: #155bd6 !important;
-}
-
-/* BUTTON SUCCESS */
-.cek-laporan-btn-success {
-  background: #209C45;
-  color: #ffffff;
-  display: block;
-  text-align: center;
-  font-size: 17px;
-  padding: 14px;
+  width: 100%;
   border-radius: 12px;
+  border: 1px solid #d1d5db;
+  padding: 14px;
+  text-align: center;
+}
+
+/* ================= BUTTON ================= */
+.cek-laporan-btn-primary {
+  width: 100%;
+  background: #2563eb;
+  border: none;
+  padding: 14px;
+  color: white;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.cek-laporan-btn-success {
+  background: #16a34a;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
   text-decoration: none;
 }
 
-.cek-laporan-btn-success:hover {
-  background: #188a3a;
+/* ================= HEADER DETAIL ================= */
+.cek-header-detail {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .cek-laporan-title {
-    font-size: 38px;
+.cek-laporan-icon-small {
+  width: 55px;
+}
+
+/* ================= GRID INFO ================= */
+.cek-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.cek-item {
+  background: #f8fafc;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.cek-item label {
+  font-size: 13px;
+  color: #6b7280;
+  display: block;
+}
+
+.cek-item span {
+  font-weight: 600;
+}
+
+/* ================= SECTION ================= */
+.cek-section {
+  margin-bottom: 25px;
+}
+
+.cek-section h5 {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* ================= STATUS ================= */
+.cek-status-box {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.status-badge {
+  display: inline-block;
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 10px 25px;
+  border-radius: 30px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+/* ================= CATATAN ================= */
+.cek-catatan {
+  background: #fff7ed;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 25px;
+}
+
+/* ================= ACTION ================= */
+.cek-action {
+  margin-top: 30px;
+  display: grid;
+  gap: 10px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width:768px){
+  .cek-grid {
+    grid-template-columns: 1fr;
   }
 
   .cek-laporan-card,
   .cek-laporan-detail-card {
-    padding: 35px 25px;
+    padding: 25px;
   }
-}
-
-/* ================= DETAIL LAPORAN – FINAL FIX ================= */
-
-.cek-laporan-detail-card p {
-  margin-bottom: 6px;
-}
-
-.cek-laporan-detail-card strong {
-  font-weight: 600;
-}
-
-.cek-laporan-detail-card .cek-laporan-detail-title {
-  margin-bottom: 18px;
 }
 
 
