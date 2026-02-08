@@ -1749,134 +1749,88 @@ select {
 /* ============ BK TINDAK LANJUT (FINAL FIX) ============ */
 /* ===================================================== */
 
-/* HERO */
-.bk-tl-hero{
-min-height:105vh;
-background:linear-gradient(180deg,#0d6efd,#06386a);
-padding:120px 20px 140px;
-color:white;
-}
-
-.bk-tl-title{
-font-size:44px;
-font-weight:700;
-}
-
-.bk-tl-subtitle{
-font-size:18px;
-color:#e5e7eb;
-}
-
-
-/* CARD */
-.bk-tl-card{
-background:white;
-max-width:850px;
-padding:40px 45px;
-border-radius:16px;
-box-shadow:0 20px 45px rgba(0,0,0,0.25);
-color:#111;
-}
-
-.bk-tl-icon{
-width:80px;
-display:block;
-margin:0 auto 25px;
-}
-
-
-/* SECTION */
+/* ================= SECTION BOX ================= */
 .bk-section{
-margin-bottom:32px;
-padding-bottom:20px;
-border-bottom:1px solid #eee;
+background:#f9fafc;
+padding:20px;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.08);
+margin-bottom:20px;
 }
 
 .bk-section h5{
 font-weight:700;
-margin-bottom:18px;
+margin-bottom:14px;
 color:#0d6efd;
 }
 
-
-/* GRID LABEL VALUE */
-.bk-grid{
-display:grid;
-grid-template-columns:180px 1fr;
-row-gap:12px;
-column-gap:15px;
-font-size:16px;
+/* CARD */
+.bk-tl-card{
+background:#fff;
+max-width:1100px;
+margin:auto;
+padding:40px;
+border-radius:16px;
+box-shadow:0 20px 40px rgba(0,0,0,0.25);
 }
 
-.bk-grid div:first-child{
-font-weight:600;
-color:#444;
-}
-
-
-/* TEXT BOX */
-.bk-textbox{
-background:#f8f9fa;
-padding:15px;
-border-radius:10px;
+/* TEXT */
+.bk-tl-info p{
+font-size:17px;
 line-height:1.6;
 }
 
-
-/* LIST */
-.bk-list{
-padding-left:18px;
-line-height:1.7;
-}
-
-
-/* FORM */
-.bk-tl-label{
-font-weight:600;
-margin-bottom:6px;
-display:block;
-}
-
-textarea,
-input[type="file"]{
-width:100%;
-border:1px solid #ddd;
-border-radius:10px;
-padding:10px;
-}
-
-
-/* BUTTON */
+/* BUTTON PRIMARY */
 .bk-tl-btn-primary{
-background:#0d6efd;
-color:white;
+background:linear-gradient(135deg,#0d6efd,#084298);
 border:none;
-padding:12px;
-border-radius:10px;
+color:white;
+padding:14px;
 font-weight:600;
+border-radius:10px;
+transition:0.3s;
 }
 
+.bk-tl-btn-primary:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 18px rgba(0,0,0,0.2);
+}
+
+/* BUTTON SUCCESS */
 .bk-tl-btn-success{
 background:#198754;
 color:white;
-text-align:center;
 padding:12px;
 border-radius:10px;
+text-align:center;
 display:block;
-text-decoration:none;
 font-weight:600;
 }
 
+/* FORM */
+textarea,
+input[type="file"]{
+width:100%;
+border-radius:10px;
+border:1px solid #ced4da;
+padding:10px;
+}
+
+/* DETAILS */
+details summary{
+font-weight:600;
+cursor:pointer;
+}
 
 /* RESPONSIVE */
 @media(max-width:768px){
 
-.bk-grid{
-grid-template-columns:1fr;
+.bk-tl-card{
+padding:25px;
 }
 
-.bk-tl-card{
-padding:25px 20px;
+.bk-section{
+padding:16px;
 }
 
 }
