@@ -59,19 +59,19 @@
 
 <select name="status">
 <option value="">Semua Status</option>
-<option value="baru">Baru</option>
-<option value="diproses">Diproses</option>
-<option value="selesai">Selesai</option>
+<option value="baru" {% if selected_status == "baru" %}selected{% endif %}>Baru</option>
+<option value="diproses" {% if selected_status == "diproses" %}selected{% endif %}>Diproses</option>
+<option value="selesai" {% if selected_status == "selesai" %}selected{% endif %}>Selesai</option>
 </select>
 
 <select name="periode" id="periodeSelect">
-<option value="semua">Semua Waktu</option>
-<option value="hari">Per Hari</option>
-<option value="bulan">Per Bulan</option>
-<option value="tahun">Per Tahun</option>
+<option value="semua" {% if periode == "semua" %}selected{% endif %}>Semua Waktu</option>
+<option value="hari" {% if periode == "hari" %}selected{% endif %}>Per Hari</option>
+<option value="bulan" {% if periode == "bulan" %}selected{% endif %}>Per Bulan</option>
+<option value="tahun" {% if periode == "tahun" %}selected{% endif %}>Per Tahun</option>
 </select>
 
-<input type="date" name="tanggal" id="filterTanggal">
+<input type="date" name="tanggal" id="filterTanggal" value="{{ request.GET.tanggal }}">
 
 <select name="bulan" id="filterBulan">
 <option value="">Pilih Bulan</option>
@@ -111,10 +111,33 @@
 
 {% for lap in laporan %}
 <div class="laporan-item">
+
+<div class="laporan-top d-flex justify-content-between">
 <strong>{{ lap.kode_laporan }}</strong>
-<span class="status {{ lap.status }}">{{ lap.get_status_display }}</span>
-<p>{{ lap.tampilkan_pelapor }} • {{ lap.get_jenis_bullying_display }}</p>
+<span class="status {{ lap.status }}">
+{{ lap.get_status_display }}
+</span>
 </div>
+
+<p class="laporan-meta">
+<strong>Pelapor:</strong>
+{{ lap.tampilkan_pelapor }}
+• {{ lap.get_jenis_bullying_display }}
+• {{ lap.tanggal|date:"d M Y" }}
+</p>
+
+<p class="laporan-meta">
+<strong>Korban:</strong>
+{{ lap.tampilkan_korban }} ({{ lap.kelas_korban }})
+</p>
+
+<a href="{% url 'bk_tindak_lanjut' lap.id %}" class="btn-detail">
+Lihat Detail
+</a>
+
+</div>
+{% empty %}
+<p>Tidak ada laporan</p>
 {% endfor %}
 
 </div>
@@ -124,7 +147,7 @@
 <div class="chart-section">
 
 <div class="chart-card">
-<h4>Grafik Status</h4>
+<h4>Grafik Status Laporan</h4>
 <canvas id="statusChart"></canvas>
 </div>
 
@@ -139,7 +162,7 @@
 </div>
 
 <div class="chart-card">
-<h4>Grafik Tren</h4>
+<h4>Grafik Tren Periode</h4>
 <canvas id="trenChart"></canvas>
 </div>
 
@@ -148,25 +171,26 @@
 </div>
 </div>
 
+<!-- CHART JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 
-// ===== GRADASI MERAH =====
+// ===== GRADASI MERAH (KELAS) =====
 function redGradient(data){
 const max=Math.max(...data);
 return data.map(v=>{
-let r=max===0?0:v/max;
-return `rgba(220,53,69,${0.3 + r*0.7})`;
+let ratio=max===0?0:v/max;
+return `rgba(220,53,69,${0.3 + ratio*0.7})`;
 });
 }
 
-// ===== MERAH KE KUNING =====
+// ===== GRADASI KUNING KE MERAH (TREN) =====
 function redYellowGradient(data){
 const max=Math.max(...data);
 return data.map(v=>{
-let r=max===0?0:v/max;
-let g=Math.round(220 - r*180);
+let ratio=max===0?0:v/max;
+let g=Math.round(220 - ratio*180);
 return `rgb(255,${g},0)`;
 });
 }
@@ -194,7 +218,7 @@ return "#6c757d";
 }
 
 // ===== CHART UNIVERSAL =====
-function chart(id,type,labels,data,label){
+function chart(id,type,labels,data,labelName){
 
 let colors=[];
 
@@ -208,39 +232,69 @@ type:type,
 data:{
 labels:labels,
 datasets:[{
-label:label,
+label:labelName,
 data:data,
-backgroundColor:colors
+backgroundColor:colors,
+borderColor:"#fff",
+borderWidth:1
 }]
+},
+options:{
+responsive:true,
+maintainAspectRatio:false,
+scales:type!=="pie"?{
+y:{beginAtZero:true,ticks:{stepSize:1}}
+}:{}
 }
 });
+
 }
 
 // LOAD CHART
 chart("statusChart","pie",
 [{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
 [{% for i in grafik_status %}{{ i.total }},{% endfor %}],
-"Status"
+"Status Laporan"
 );
 
 chart("jenisChart","bar",
 [{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
 [{% for i in grafik_jenis %}{{ i.total }},{% endfor %}],
-"Jenis"
+"Jenis Bullying"
 );
 
 chart("kelasChart","bar",
 [{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
 [{% for i in grafik_kelas %}{{ i.total }},{% endfor %}],
-"Kelas"
+"Kelas Korban"
 );
 
 chart("trenChart","bar",
 [{% for i in grafik_tren %}"{{ i.label }}",{% endfor %}],
 [{% for i in grafik_tren %}{{ i.total }},{% endfor %}],
-"Tren"
+"Tren Laporan"
 );
 
+</script>
+
+<script>
+const periode=document.getElementById("periodeSelect");
+const tanggal=document.getElementById("filterTanggal");
+const bulan=document.getElementById("filterBulan");
+const tahun=document.getElementById("filterTahun");
+
+function updateFilter(){
+tanggal.style.display='none';
+bulan.style.display='none';
+tahun.style.display='none';
+
+if(periode.value==='hari') tanggal.style.display='inline-block';
+if(periode.value==='bulan'){bulan.style.display='inline-block';tahun.style.display='inline-block';}
+if(periode.value==='tahun') tahun.style.display='inline-block';
+}
+
+periode.addEventListener('change',updateFilter);
+updateFilter();
 </script>
 
 {% endblock %}
