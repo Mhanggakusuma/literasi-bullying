@@ -16,7 +16,6 @@
   <a href="{% url 'bk_download_laporan' %}" class="btn-download">Download Laporan</a>
 </header>
 
-
 <!-- ================= SUMMARY ================= -->
 <section class="dashboard-cards">
   <div class="summary-card">
@@ -37,9 +36,9 @@
   </div>
 </section>
 
-
 <!-- ================= FILTER ================= -->
 <form method="get" class="filter-bar">
+
 <select name="jenis">
 <option value="">Semua Jenis</option>
 {% for val,label in jenis_choices %}
@@ -89,19 +88,19 @@
 <select name="tahun" id="filterTahun">
 <option value="">Pilih Tahun</option>
 {% for t in daftar_tahun %}
-<option value="{{ t.year }}">{{ t.year }}</option>
+<option value="{{ t.year }}" {% if request.GET.tahun == t.year|stringformat:"s" %}selected{% endif %}>
+{{ t.year }}
+</option>
 {% endfor %}
 </select>
 
 <button type="submit" class="btn btn-primary">Filter</button>
 </form>
 
-
-<!-- ================= LAYOUT BARU ================= -->
+<!-- ================= LAYOUT ================= -->
 <div class="dashboard-layout">
 
-
-<!-- ========= KIRI : LAPORAN ========= -->
+<!-- ========= LEFT LAPORAN ========= -->
 <div class="laporan-section">
 <div class="laporan-card">
 <h3>Daftar Laporan</h3>
@@ -140,31 +139,61 @@ Lihat Detail
 </div>
 </div>
 
-
-
-<!-- ========= KANAN : GRAFIK ========= -->
+<!-- ========= RIGHT CHART ========= -->
 <div class="chart-section">
 
+<!-- STATUS -->
 <div class="chart-card">
 <h4>Grafik Status Laporan</h4>
 <div class="status-chart-wrapper">
-   <canvas id="statusChart"></canvas>
+<canvas id="statusChart"></canvas>
 </div>
 
+<div class="chart-info">
+{% for i in grafik_status %}
+<span class="info-badge">{{ i.status|title }} : {{ i.total }}</span>
+{% endfor %}
+<span class="info-total">Total : {{ total_laporan }}</span>
+</div>
+</div>
 
+<!-- JENIS -->
 <div class="chart-card">
 <h4>Grafik Jenis Bullying</h4>
 <canvas id="jenisChart"></canvas>
+
+<div class="chart-info">
+{% for i in grafik_jenis %}
+<span class="info-badge">{{ i.jenis_bullying|title }} : {{ i.total }}</span>
+{% endfor %}
+</div>
 </div>
 
+<!-- KELAS -->
 <div class="chart-card">
 <h4>Grafik Kelas Korban</h4>
 <canvas id="kelasChart"></canvas>
+
+<div class="chart-info">
+{% for i in grafik_kelas %}
+<span class="info-badge">{{ i.kelas_korban }} : {{ i.total }}</span>
+{% endfor %}
+</div>
 </div>
 
+<!-- TREN -->
 <div class="chart-card">
 <h4>Grafik Tren Periode</h4>
 <canvas id="trenChart"></canvas>
+
+<div class="chart-info">
+{% if tren_detail %}
+{% for i in tren_detail %}
+<span class="info-badge">{{ i.label }} = {{ i.total }}</span>
+{% endfor %}
+{% endif %}
+<span class="info-total">Total : {{ total_laporan }}</span>
+</div>
 </div>
 
 </div>
@@ -172,125 +201,53 @@ Lihat Detail
 </div>
 </div>
 </div>
-
 
 <!-- ================= CHART JS ================= -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+function chart(id,type,labels,data){
 
-const sharedOptions = {
-responsive:true,
-maintainAspectRatio:false,
-scales:{
-y:{
-beginAtZero:true,
-ticks:{
-precision:0,
-stepSize:1
-}
-}
-}
+let config={
+type:type,
+data:{labels:labels,datasets:[{data:data}]},
+options:{responsive:true,maintainAspectRatio:false}
 };
 
-
-/* STATUS */
-new Chart(document.getElementById("statusChart"), {
-type:'pie',
-data:{
-labels:[{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
-datasets:[{
-data:[{% for i in grafik_status %}{{ i.total }},{% endfor %}],
-backgroundColor:[
-'rgba(13,110,253,0.85)',
-'rgba(255,99,132,0.85)',
-'rgba(25,135,84,0.85)'
-]
-}]
-},
-options:{
-responsive:true,
-maintainAspectRatio:true,
-plugins:{
-legend:{
-position:'bottom',
-labels:{
-padding:15,
-boxWidth:20
+if(type!=="pie"){
+config.options.scales={y:{beginAtZero:true,ticks:{stepSize:1}}};
 }
+
+new Chart(document.getElementById(id),config);
 }
-}
-}
-});
 
+chart("statusChart","pie",
+[{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
+[{% for i in grafik_status %}{{ i.total }},{% endfor %}]
+);
 
-/* JENIS */
-new Chart(document.getElementById("jenisChart"), {
-type:'bar',
-data:{
-labels:[{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
-datasets:[{
-label:'Jumlah',
-data:[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}],
-backgroundColor:'rgba(13,110,253,0.8)'
-}]
-},
-options:sharedOptions
-});
+chart("jenisChart","bar",
+[{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
+[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
+);
 
+chart("kelasChart","bar",
+[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
+[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
+);
 
-/* KELAS */
-new Chart(document.getElementById("kelasChart"), {
-type:'bar',
-data:{
-labels:[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
-datasets:[{
-label:'Jumlah',
-data:[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}],
-backgroundColor:'rgba(75,192,192,0.7)'
-}]
-},
-options:sharedOptions
-});
-
-
-/* ===== TREN (WARNA DISAMAKAN DENGAN KELAS) ===== */
-
-new Chart(document.getElementById("trenChart"), {
-type:'bar',
-data:{
-labels:[
-{% for i in grafik_tren %}
-{% if periode == "bulan" %}
-"{{ i.waktu|date:'d' }}",
-{% elif periode == "tahun" %}
-"{{ i.waktu|date:'M' }}",
-{% elif periode == "hari" %}
-"{{ i.waktu|date:'d M Y' }}",
-{% else %}
-"{{ i.waktu|date:'M Y' }}",
-{% endif %}
-{% endfor %}
-],
-datasets:[{
-label:'Jumlah Laporan',
-data:[{% for i in grafik_tren %}{{ i.total }},{% endfor %}],
-backgroundColor:'rgba(75,192,192,0.7)',
-borderRadius:6
-}]
-},
-options:sharedOptions
-});
-
+chart("trenChart","bar",
+[{% for i in grafik_tren %}"{{ i.waktu|date:'d M Y' }}",{% endfor %}],
+[{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
+);
 </script>
-
 
 <!-- ================= FILTER DINAMIS ================= -->
 <script>
-const periode = document.getElementById("periodeSelect");
-const tanggal = document.getElementById("filterTanggal");
-const bulan = document.getElementById("filterBulan");
-const tahun = document.getElementById("filterTahun");
+const periode=document.getElementById("periodeSelect");
+const tanggal=document.getElementById("filterTanggal");
+const bulan=document.getElementById("filterBulan");
+const tahun=document.getElementById("filterTahun");
 
 function updateFilter(){
 tanggal.style.display='none';
