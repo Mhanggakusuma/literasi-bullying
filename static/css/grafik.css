@@ -4,7 +4,7 @@ max-width:1400px;
 margin:auto;
 }
 
-/* ================= SUMMARY ================= */
+/* SUMMARY */
 .summary-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
@@ -26,7 +26,7 @@ font-weight:600;
 .summary-card.selesai{background:#198754;}
 
 
-/* ================= FILTER ================= */
+/* FILTER */
 .filter-bar{
 display:flex;
 flex-wrap:wrap;
@@ -55,7 +55,7 @@ cursor:pointer;
 }
 
 
-/* ================= CHART ================= */
+/* CHART */
 .chart-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(400px,1fr));
@@ -74,7 +74,7 @@ height:260px;
 }
 
 
-/* ================= MOBILE ================= */
+/* MOBILE */
 @media(max-width:768px){
 
 .chart-grid{
@@ -83,9 +83,5 @@ grid-template-columns:1fr;
 
 .filter-bar{
 flex-direction:column;
-}
-
-.summary-card{
-padding:14px;
 }
 }
