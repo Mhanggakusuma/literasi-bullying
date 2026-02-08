@@ -123,9 +123,7 @@ def bk_dashboard(request):
         )
 
     elif periode == "tahun" and tahun:
-        laporan_qs = laporan_qs.filter(
-            tanggal__year=tahun
-        )
+        laporan_qs = laporan_qs.filter(tanggal__year=tahun)
 
     # ===== GRAFIK STATUS / JENIS / KELAS =====
     grafik_status = laporan_qs.values("status").annotate(total=Count("id"))
@@ -133,39 +131,55 @@ def bk_dashboard(request):
     grafik_kelas = laporan_qs.values("kelas_korban").annotate(total=Count("id"))
 
     # =================================================
-    # GRAFIK TREN FINAL
+    # ⭐ GRAFIK TREN FINAL STABIL
     # =================================================
-    # Periode BULAN → X = tanggal dalam 1 bulan
+    grafik_tren = []
+    tren_detail = []
+
     if periode == "bulan" and bulan and tahun:
-        grafik_tren = (
-            laporan_qs
-            .annotate(waktu=TruncDay("tanggal"))
-            .values("waktu")
-            .annotate(total=Count("id"))
-            .order_by("waktu")
-        )
 
-    # Periode TAHUN → X = bulan dalam 1 tahun
+        tren = laporan_qs.annotate(
+            waktu=TruncDay("tanggal")
+        ).values("waktu").annotate(total=Count("id")).order_by("waktu")
+
+        for t in tren:
+            label = t["waktu"].strftime("%d %b")
+            grafik_tren.append({"label": label, "total": t["total"]})
+            tren_detail.append({"label": label, "total": t["total"]})
+
+
     elif periode == "tahun" and tahun:
-        grafik_tren = (
-            laporan_qs
-            .annotate(waktu=TruncMonth("tanggal"))
-            .values("waktu")
-            .annotate(total=Count("id"))
-            .order_by("waktu")
-        )
 
-    # Default → tren semua waktu per bulan
+        tren = laporan_qs.annotate(
+            waktu=TruncMonth("tanggal")
+        ).values("waktu").annotate(total=Count("id")).order_by("waktu")
+
+        for t in tren:
+            label = t["waktu"].strftime("%B")
+            grafik_tren.append({"label": label, "total": t["total"]})
+            tren_detail.append({"label": label, "total": t["total"]})
+
+
+    elif periode == "hari" and tanggal:
+
+        total = laporan_qs.count()
+        label = laporan_qs.first().tanggal.strftime("%d %b") if total else "Tidak Ada"
+
+        grafik_tren.append({"label": label, "total": total})
+        tren_detail.append({"label": label, "total": total})
+
+
     else:
-        grafik_tren = (
-            laporan_qs
-            .annotate(waktu=TruncMonth("tanggal"))
-            .values("waktu")
-            .annotate(total=Count("id"))
-            .order_by("waktu")
-        )
 
-    # ===== OPTION TAHUN DINAMIS =====
+        tren = laporan_qs.annotate(
+            waktu=TruncMonth("tanggal")
+        ).values("waktu").annotate(total=Count("id")).order_by("waktu")
+
+        for t in tren:
+            label = t["waktu"].strftime("%b %Y")
+            grafik_tren.append({"label": label, "total": t["total"]})
+
+    # ===== OPTION TAHUN =====
     daftar_tahun = Laporan.objects.dates("tanggal", "year")
 
     context = {
@@ -179,7 +193,9 @@ def bk_dashboard(request):
         "grafik_status": list(grafik_status),
         "grafik_jenis": list(grafik_jenis),
         "grafik_kelas": list(grafik_kelas),
-        "grafik_tren": list(grafik_tren),
+
+        "grafik_tren": grafik_tren,
+        "tren_detail": tren_detail,
 
         "periode": periode,
         "jenis_choices": Laporan.JENIS_BULLYING_CHOICES,
@@ -192,7 +208,6 @@ def bk_dashboard(request):
     }
 
     return render(request, "laporan/bk_dashboard.html", context)
-
 
 # =================================================
 # TINDAK LANJUT BK
