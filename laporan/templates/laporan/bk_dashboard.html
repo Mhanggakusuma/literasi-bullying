@@ -158,43 +158,19 @@ Lihat Detail
 <div class="status-chart-wrapper">
 <canvas id="statusChart"></canvas>
 </div>
-
-<div class="chart-info">
-{% for i in grafik_status %}
-<span class="info-badge">{{ i.status|title }} : {{ i.total }}</span>
-{% endfor %}
-<span class="info-total">Total : {{ total_laporan }}</span>
 </div>
-</div>
-
 
 <!-- JENIS -->
 <div class="chart-card">
 <h4>Grafik Jenis Bullying</h4>
 <canvas id="jenisChart"></canvas>
-
-<div class="chart-info">
-{% for i in grafik_jenis %}
-<span class="info-badge">{{ i.jenis_bullying|title }} = {{ i.total }}</span>
-{% endfor %}
-<span class="info-total">Total : {{ total_laporan }}</span>
 </div>
-</div>
-
 
 <!-- KELAS -->
 <div class="chart-card">
 <h4>Grafik Kelas Korban</h4>
 <canvas id="kelasChart"></canvas>
-
-<div class="chart-info">
-{% for i in grafik_kelas %}
-<span class="info-badge">{{ i.kelas_korban }} = {{ i.total }}</span>
-{% endfor %}
-<span class="info-total">Total : {{ total_laporan }}</span>
 </div>
-</div>
-
 
 <!-- TREN -->
 <div class="chart-card">
@@ -202,7 +178,6 @@ Lihat Detail
 <canvas id="trenChart"></canvas>
 
 <div class="chart-info">
-
 {% if tren_detail %}
 {% for i in tren_detail %}
 <span class="info-badge">{{ i.label }} = {{ i.total }}</span>
@@ -212,58 +187,82 @@ Lihat Detail
 {% endif %}
 
 <span class="info-total">Total : {{ total_laporan }} laporan</span>
-
-</div>
 </div>
 
 </div>
+
+</div>
 </div>
 </div>
 </div>
 
 
-<!-- ================= CHART JS ================= -->
+<!-- ================= CHART JS FINAL ================= -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 
-function chart(id,type,labels,data){
+function chart(id,type,labels,data,labelName){
 
-let config={
+const colors=[
+"#0d6efd","#198754","#ffc107","#dc3545",
+"#6f42c1","#fd7e14","#20c997","#0dcaf0",
+"#6610f2","#adb5bd"
+];
+
+new Chart(document.getElementById(id),{
 type:type,
-data:{labels:labels,datasets:[{data:data}]},
-options:{responsive:true,maintainAspectRatio:false}
-};
+data:{
+labels:labels,
+datasets:[{
+label:labelName,
+data:data,
+backgroundColor:colors,
+borderColor:"#fff",
+borderWidth:1
+}]
+},
+options:{
+responsive:true,
+maintainAspectRatio:false,
+scales:type!=="pie"?{
+y:{beginAtZero:true,ticks:{stepSize:1}}
+}:{}
+}
+});
 
-if(type!=="pie"){
-config.options.scales={y:{beginAtZero:true,ticks:{stepSize:1}}};
 }
 
-new Chart(document.getElementById(id),config);
-}
 
 /* STATUS */
 chart("statusChart","pie",
 [{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
-[{% for i in grafik_status %}{{ i.total }},{% endfor %}]
+[{% for i in grafik_status %}{{ i.total }},{% endfor %}],
+"Status Laporan"
 );
+
 
 /* JENIS */
 chart("jenisChart","bar",
 [{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
-[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
+[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}],
+"Jenis Bullying"
 );
+
 
 /* KELAS */
 chart("kelasChart","bar",
 [{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
-[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
+[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}],
+"Kelas Korban"
 );
+
 
 /* TREN */
 chart("trenChart","bar",
 [{% for i in grafik_tren %}"{{ i.label }}",{% endfor %}],
-[{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
+[{% for i in grafik_tren %}{{ i.total }},{% endfor %}],
+"Tren Laporan"
 );
 
 </script>
@@ -271,32 +270,23 @@ chart("trenChart","bar",
 
 <!-- ================= FILTER DINAMIS ================= -->
 <script>
-
 const periode=document.getElementById("periodeSelect");
 const tanggal=document.getElementById("filterTanggal");
 const bulan=document.getElementById("filterBulan");
 const tahun=document.getElementById("filterTahun");
 
 function updateFilter(){
-
 tanggal.style.display='none';
 bulan.style.display='none';
 tahun.style.display='none';
 
 if(periode.value==='hari') tanggal.style.display='inline-block';
-
-if(periode.value==='bulan'){
-bulan.style.display='inline-block';
-tahun.style.display='inline-block';
-}
-
+if(periode.value==='bulan'){bulan.style.display='inline-block';tahun.style.display='inline-block';}
 if(periode.value==='tahun') tahun.style.display='inline-block';
-
 }
 
 periode.addEventListener('change',updateFilter);
 updateFilter();
-
 </script>
 
 {% endblock %}
