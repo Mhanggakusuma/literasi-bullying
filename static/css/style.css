@@ -1749,121 +1749,123 @@ select {
 /* ============ BK TINDAK LANJUT (FINAL FIX) ============ */
 /* ===================================================== */
 
-.bk-tindak-lanjut {
-  margin-top: -90px;
-}
-
-/* HERO */
-.bk-tl-hero {
-  min-height: 105dvh;
-  background: linear-gradient(
-    180deg,
-    rgba(13,106,198,0.81),
-    rgba(7,51,96,0.81)
-  );
-  padding: 120px 20px 140px;
-  color: #ffffff;
+/* ================= HERO ================= */
+.bk-tl-hero{
+min-height:105dvh;
+background:linear-gradient(180deg,#0d6efd,#052c65);
+padding:120px 20px 140px;
+color:white;
 }
 
 /* TITLE */
-.bk-tl-title {
-  font-size: 52px;
-  font-weight: 700;
+.bk-tl-title{
+font-size:44px;
+font-weight:700;
 }
 
-.bk-tl-subtitle {
-  font-size: 20px;
-  color: #e5e7eb;
+.bk-tl-subtitle{
+font-size:18px;
+color:#e5e7eb;
 }
 
 /* CARD */
-.bk-tl-card {
-  background: #ffffff;
-  max-width: 900px;
-  padding: 45px 55px;
-  border-radius: 14px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
-  color: #000;
+.bk-tl-card{
+background:white;
+max-width:1100px;
+margin:auto;
+padding:45px;
+border-radius:18px;
+box-shadow:0 15px 40px rgba(0,0,0,0.2);
+color:#111;
 }
 
 /* ICON */
-.bk-tl-icon {
-  width: 90px;
-  display: block;
-  margin: 0 auto 25px;
+.bk-tl-icon{
+width:80px;
+display:block;
+margin:0 auto 30px;
 }
 
-/* INFO */
-.bk-tl-info p {
-  font-size: 20px;
-  margin-bottom: 8px;
+/* SECTION */
+.bk-tl-section{
+background:#f9fafb;
+padding:18px 20px;
+border-radius:12px;
+margin-bottom:18px;
 }
 
-/* NIS */
-.bk-tl-nis-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.bk-tl-section h5{
+font-weight:700;
+margin-bottom:10px;
 }
 
-.bk-tl-nis {
-  background: #1C6BEF;
-  color: #fff;
-  padding: 6px 16px;
-  border-radius: 10px;
-  font-weight: 700;
+/* BOX TEXT */
+.bk-tl-box{
+background:white;
+padding:12px;
+border-radius:10px;
+border:1px solid #e5e7eb;
+}
+
+/* DETAILS */
+.bk-tl-details{
+margin-top:10px;
+}
+
+.bk-tl-details summary{
+cursor:pointer;
+font-weight:600;
+}
+
+/* DIVIDER */
+.bk-tl-divider{
+margin:35px 0;
+opacity:0.2;
 }
 
 /* FORM */
-.bk-tl-label {
-  font-weight: 700;
-  font-size: 18px;
-  margin-bottom: 6px;
-}
-
-.bk-tl-textarea,
-.bk-tl-file {
-  width: 100%;
-  border: 1px solid #000;
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 10px;
+textarea,
+input[type=file]{
+width:100%;
+border-radius:10px;
+border:1px solid #d1d5db;
+padding:12px;
 }
 
 /* BUTTON */
-.bk-tl-btn-primary {
-  background: #1C6BEF;
-  color: #fff;
-  border: none;
-  padding: 14px;
-  font-size: 20px;
-  border-radius: 12px;
+.bk-tl-btn-primary{
+background:#0d6efd;
+border:none;
+padding:14px;
+font-size:18px;
+border-radius:12px;
+color:white;
 }
 
-.bk-tl-btn-success {
-  background: #209C45;
-  color: #fff;
-  text-align: center;
-  padding: 14px;
-  border-radius: 12px;
-  text-decoration: none;
-  display: block;
+.bk-tl-btn-success{
+background:#198754;
+color:white;
+padding:14px;
+border-radius:12px;
+display:block;
+text-align:center;
+text-decoration:none;
+margin-top:15px;
 }
 
 /* RESPONSIVE */
-@media (max-width: 768px) {
-  .bk-tl-title {
-    font-size: 38px;
-  }
+@media(max-width:768px){
 
-  .bk-tl-card {
-    padding: 30px 22px;
-  }
-
-  .bk-tl-info p {
-    font-size: 18px;
-  }
+.bk-tl-card{
+padding:25px;
 }
+
+.bk-tl-title{
+font-size:32px;
+}
+
+}
+
 /* ===================================================== */
 /* ============ TENTANG BULLYING – FULL CSS ============= */
 /* ===================================================== */
