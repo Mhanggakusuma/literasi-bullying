@@ -202,7 +202,7 @@
 
 /* GRADIENT KELAS ORANGE → MERAH */
 function gradientKelas(data){
-const max=Math.max(...data);
+const max=Math.max(...data,1);
 return data.map(v=>{
 let ratio=v/max;
 let r=255;
@@ -215,7 +215,7 @@ return `rgba(${r},${g},0,${opacity})`;
 
 /* GRADIENT TREN KUNING → MERAH */
 function gradientTrend(data){
-const max=Math.max(...data);
+const max=Math.max(...data,1);
 return data.map(v=>{
 let ratio=v/max;
 let r=255;
@@ -228,6 +228,10 @@ return `rgba(${r},${g},0,${opacity})`;
 
 function chart(id,type,labels,data){
 
+/* HILANGKAN NULL ATAU UNDEFINED */
+labels = labels.map(l => l ? l : "Tidak diketahui");
+data = data.map(d => d ? d : 0);
+
 let colors=[];
 
 if(id==="statusChart"){
@@ -235,6 +239,7 @@ colors=labels.map(l=>{
 if(l==="baru") return "#dc3545";
 if(l==="diproses") return "#0d6efd";
 if(l==="selesai") return "#198754";
+return "#6c757d";
 });
 }
 
@@ -257,11 +262,13 @@ else if(id==="trenChart"){
 colors=gradientTrend(data);
 }
 
+
 new Chart(document.getElementById(id),{
 type:type,
 data:{
 labels:labels,
 datasets:[{
+label:"Jumlah Laporan",
 data:data,
 backgroundColor:colors
 }]
@@ -269,33 +276,43 @@ backgroundColor:colors
 options:{
 responsive:true,
 maintainAspectRatio:false,
-scales:type!=="pie"?{y:{beginAtZero:true}}:{}
+scales:type!=="pie"?{
+y:{
+beginAtZero:true,
+ticks:{
+precision:0,
+callback:function(value){
+return Number.isInteger(value)?value:null;
+}
+}
+}
+}:{}
 }
 });
 }
 
 /* STATUS */
 chart("statusChart","pie",
-[{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
-[{% for i in grafik_status %}{{ i.total }},{% endfor %}]
+[{% for i in grafik_status %}"{{ i.status|default:'Tidak diketahui' }}",{% endfor %}],
+[{% for i in grafik_status %}{{ i.total|default:0 }},{% endfor %}]
 );
 
 /* JENIS */
 chart("jenisChart","bar",
-[{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
-[{% for i in grafik_jenis %}{{ i.total }},{% endfor %}]
+[{% for i in grafik_jenis %}"{{ i.jenis_bullying|default:'Tidak diketahui' }}",{% endfor %}],
+[{% for i in grafik_jenis %}{{ i.total|default:0 }},{% endfor %}]
 );
 
 /* KELAS */
 chart("kelasChart","bar",
-[{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
-[{% for i in grafik_kelas %}{{ i.total }},{% endfor %}]
+[{% for i in grafik_kelas %}"{{ i.kelas_korban|default:'Tidak diketahui' }}",{% endfor %}],
+[{% for i in grafik_kelas %}{{ i.total|default:0 }},{% endfor %}]
 );
 
 /* TREN */
 chart("trenChart","bar",
-[{% for i in grafik_tren %}"{{ i.label }}",{% endfor %}],
-[{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
+[{% for i in grafik_tren %}"{{ i.label|default:'Tidak diketahui' }}",{% endfor %}],
+[{% for i in grafik_tren %}{{ i.total|default:0 }},{% endfor %}]
 );
 
 </script>
