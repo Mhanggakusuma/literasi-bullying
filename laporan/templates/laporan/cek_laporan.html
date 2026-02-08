@@ -5,154 +5,160 @@
 
 {% block content %}
 <section class="cek-laporan-hero cek-laporan-page">
-  <div class="container text-center">
+<div class="container text-center">
 
-    <h1 class="cek-laporan-title">Cek Status Laporan</h1>
-    <p class="cek-laporan-subtitle">
-      Kerahasiaan identitas dijaga untuk keamanan semua pihak
-    </p>
+<h1 class="cek-laporan-title">Cek Status Laporan</h1>
+<p class="cek-laporan-subtitle">
+Kerahasiaan identitas dijaga untuk keamanan semua pihak
+</p>
 
-    <!-- ================= INPUT ================= -->
-    <div class="cek-laporan-card mx-auto mt-5">
+<!-- ================= INPUT KODE ================= -->
+<div class="cek-laporan-card cek-card-small mx-auto mt-5">
 
-      <img src="{% static 'img/shield.png' %}" class="cek-laporan-icon">
+<img src="{% static 'img/shield.png' %}" class="cek-laporan-icon-small">
 
-      <h3 class="cek-laporan-card-title">Masukkan Kode Laporan</h3>
+<h3 class="cek-laporan-card-title">Masukkan Kode Laporan</h3>
 
-      <form method="post">
-        {% csrf_token %}
-        <div class="cek-input-group">
-          <input type="text"
-                 name="kode"
-                 class="cek-laporan-input"
-                 placeholder="Contoh: LP-2025-001"
-                 required>
-        </div>
+<form method="post">
+{% csrf_token %}
 
-        <button type="submit" class="cek-laporan-btn-primary">
-          🔍 Cek Status
-        </button>
-      </form>
-    </div>
+<input type="text"
+name="kode"
+class="cek-laporan-input"
+placeholder="Contoh: LP-2025-001"
+required>
 
-    {% if laporan %}
-    <!-- ================= DETAIL ================= -->
-    <div class="cek-laporan-detail-card mx-auto mt-5">
+<button type="submit" class="cek-laporan-btn-primary mt-3">
+🔍 Cek Status
+</button>
 
-      <div class="cek-header-detail">
-        <img src="{% static 'img/ribbon.png' %}" class="cek-laporan-icon-small">
-        <h3>Detail Laporan</h3>
-      </div>
+</form>
+</div>
 
-      <!-- GRID INFORMASI -->
-      <div class="cek-grid">
+{% if laporan %}
 
-        <div class="cek-item">
-          <label>Pelapor</label>
-          <span>Anonim 🔒</span>
-        </div>
+<!-- ================= DETAIL LAPORAN ================= -->
+<div class="cek-laporan-detail-card mx-auto mt-5">
 
-        <div class="cek-item">
-          <label>Korban</label>
-          <span>{{ laporan.tampilkan_korban }} ({{ laporan.kelas_korban }})</span>
-        </div>
+<!-- HEADER -->
+<div class="cek-detail-header">
+<div class="cek-detail-title-wrap">
+<img src="{% static 'img/ribbon.png' %}" class="cek-detail-icon">
+<h4>Detail Laporan</h4>
+</div>
+</div>
 
-        {% if laporan.nama_terlapor %}
-        <div class="cek-item">
-          <label>Terlapor</label>
-          <span>
-            {{ laporan.nama_terlapor }}
-            {% if laporan.kelas_terlapor %}
-            ({{ laporan.kelas_terlapor }})
-            {% endif %}
-          </span>
-        </div>
-        {% endif %}
+<!-- GRID INFORMASI -->
+<div class="cek-grid">
 
-        <div class="cek-item">
-          <label>Jenis Perundungan</label>
-          <span>{{ laporan.get_jenis_bullying_display }}</span>
-        </div>
+<div class="cek-item">
+<label>Pelapor</label>
+<span>Anonim 🔒</span>
+</div>
 
-        <div class="cek-item">
-          <label>Tanggal Kejadian</label>
-          <span>
-            {{ laporan.tanggal_kejadian|date:"d M Y" }}
-            {% if laporan.perkiraan_waktu %}
-              ({{ laporan.get_perkiraan_waktu_display }})
-            {% endif %}
-          </span>
-        </div>
+<div class="cek-item">
+<label>Korban</label>
+<span>{{ laporan.tampilkan_korban }} ({{ laporan.kelas_korban }})</span>
+</div>
 
-        <div class="cek-item">
-          <label>Lokasi</label>
-          <span>{{ laporan.lokasi_kejadian|default:"-" }}</span>
-        </div>
+{% if laporan.nama_terlapor %}
+<div class="cek-item">
+<label>Terlapor</label>
+<span>
+{{ laporan.nama_terlapor }}
+{% if laporan.kelas_terlapor %}
+({{ laporan.kelas_terlapor }})
+{% endif %}
+</span>
+</div>
+{% endif %}
 
-      </div>
+<div class="cek-item">
+<label>Jenis Perundungan</label>
+<span>{{ laporan.get_jenis_bullying_display }}</span>
+</div>
 
-      <!-- ================= KRONOLOGI ================= -->
-      <div class="cek-section">
-        <h5>Kronologi Kejadian</h5>
-        <p>{{ laporan.isi_laporan|linebreaksbr }}</p>
-      </div>
+<div class="cek-item">
+<label>Tanggal Kejadian</label>
+<span>
+{{ laporan.tanggal_kejadian|date:"d M Y" }}
+{% if laporan.perkiraan_waktu %}
+({{ laporan.get_perkiraan_waktu_display }})
+{% endif %}
+</span>
+</div>
 
-      <!-- ================= DAMPAK ================= -->
-      {% if laporan.dampak_korban %}
-      <div class="cek-section">
-        <h5>Dampak Korban</h5>
-        <ul>
-          {% for d in laporan.dampak_korban %}
-            <li>{{ d }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-      {% endif %}
+<div class="cek-item">
+<label>Lokasi</label>
+<span>{{ laporan.lokasi_kejadian|default:"-" }}</span>
+</div>
 
-      {% if laporan.harapan_pelapor %}
-      <div class="cek-section">
-        <h5>Harapan Pelapor</h5>
-        <p>{{ laporan.harapan_pelapor|linebreaksbr }}</p>
-      </div>
-      {% endif %}
+</div>
 
-      <!-- ================= STATUS ================= -->
-      <div class="cek-status-box">
-        <span>Status Laporan</span>
-        <div class="status-badge">
-          {{ laporan.get_status_display }}
-        </div>
-      </div>
+<!-- KRONOLOGI -->
+<div class="cek-section-box">
+<h5>Kronologi Kejadian</h5>
+<p>{{ laporan.isi_laporan|linebreaksbr }}</p>
+</div>
 
-      <!-- ================= CATATAN BK ================= -->
-      {% if laporan.catatan_bk %}
-      <div class="cek-catatan">
-        <h5>Catatan Guru BK</h5>
-        <p>{{ laporan.catatan_bk|linebreaksbr }}</p>
-      </div>
-      {% endif %}
+<!-- DAMPAK -->
+{% if laporan.dampak_korban %}
+<div class="cek-section-box">
+<h5>Dampak Korban</h5>
+<ul>
+{% for d in laporan.dampak_korban %}
+<li>{{ d }}</li>
+{% endfor %}
+</ul>
+</div>
+{% endif %}
 
-      <!-- ================= BUTTON ================= -->
-      <div class="cek-action">
+<!-- HARAPAN -->
+{% if laporan.harapan_pelapor %}
+<div class="cek-section-box">
+<h5>Harapan Pelapor</h5>
+<p>{{ laporan.harapan_pelapor|linebreaksbr }}</p>
+</div>
+{% endif %}
 
-        {% if laporan.bukti_tindak_lanjut %}
-        <a href="{{ laporan.bukti_tindak_lanjut.url }}"
-           target="_blank"
-           class="cek-laporan-btn-success">
-           📎 Bukti Tindak Lanjut
-        </a>
-        {% endif %}
+<!-- STATUS -->
+<div class="cek-status-wrapper">
+<span>Status Laporan</span>
 
-        <a href="{% url 'laporan_home' %}"
-           class="btn btn-outline-secondary">
-           ← Kembali
-        </a>
+<div class="status-pill">
+{{ laporan.get_status_display }}
+</div>
+</div>
 
-      </div>
+<!-- CATATAN BK -->
+{% if laporan.catatan_bk %}
+<div class="cek-catatan-box">
+<h6>Catatan Guru BK</h6>
+<p>{{ laporan.catatan_bk|linebreaksbr }}</p>
+</div>
+{% endif %}
 
-    </div>
-    {% endif %}
+<!-- BUTTON -->
+<div class="cek-action">
 
-  </div>
+{% if laporan.bukti_tindak_lanjut %}
+<a href="{{ laporan.bukti_tindak_lanjut.url }}"
+target="_blank"
+class="cek-laporan-btn-success">
+📎 Bukti Tindak Lanjut
+</a>
+{% endif %}
+
+<a href="{% url 'laporan_home' %}"
+class="btn btn-outline-secondary">
+← Kembali
+</a>
+
+</div>
+
+</div>
+{% endif %}
+
+</div>
 </section>
 {% endblock %}

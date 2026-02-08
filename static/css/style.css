@@ -1207,154 +1207,193 @@ select {
 /* ============ CEK LAPORAN (FINAL FIXED) ============== */
 /* ===================================================== */
 /* ================= HERO ================= */
-.cek-laporan-hero {
-  min-height: 100vh;
-  background: linear-gradient(180deg,#0d6efd,#073360);
-  padding-top: 160px;
-  padding-bottom: 120px;
-  color: white;
+.cek-laporan-hero{
+min-height:100vh;
+background:linear-gradient(180deg,#0d6efd,#073360);
+padding-top:150px;
+padding-bottom:120px;
+color:white;
 }
 
-/* ================= TITLE ================= */
-.cek-laporan-title {
-  font-size: 48px;
-  font-weight: 700;
+.cek-laporan-title{
+font-size:46px;
+font-weight:700;
 }
 
-.cek-laporan-subtitle {
-  color: #dbeafe;
+.cek-laporan-subtitle{
+color:#dbeafe;
 }
 
 /* ================= CARD ================= */
 .cek-laporan-card,
-.cek-laporan-detail-card {
-  background: white;
-  max-width: 900px;
-  padding: 40px;
-  border-radius: 16px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-  color: black;
+.cek-laporan-detail-card{
+background:white;
+max-width:900px;
+padding:35px;
+border-radius:16px;
+box-shadow:0 15px 35px rgba(0,0,0,0.25);
+color:black;
+}
+
+/* Input card kecil */
+.cek-card-small{
+max-width:520px;
+padding:28px 32px;
+}
+
+/* ================= ICON ================= */
+.cek-laporan-icon-small{
+width:70px;
+margin-bottom:10px;
+}
+
+/* ================= TITLE ================= */
+.cek-laporan-card-title{
+font-size:22px;
+font-weight:600;
+margin-bottom:15px;
 }
 
 /* ================= INPUT ================= */
-.cek-input-group {
-  margin-bottom: 20px;
-}
-
-.cek-laporan-input {
-  width: 100%;
-  border-radius: 12px;
-  border: 1px solid #d1d5db;
-  padding: 14px;
-  text-align: center;
+.cek-laporan-input{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:1px solid #d1d5db;
+text-align:center;
+font-size:14px;
 }
 
 /* ================= BUTTON ================= */
-.cek-laporan-btn-primary {
-  width: 100%;
-  background: #2563eb;
-  border: none;
-  padding: 14px;
-  color: white;
-  border-radius: 12px;
-  font-weight: 600;
+.cek-laporan-btn-primary{
+width:100%;
+background:#2563eb;
+border:none;
+padding:12px;
+color:white;
+border-radius:10px;
+font-weight:600;
 }
 
-.cek-laporan-btn-success {
-  background: #16a34a;
-  color: white;
-  padding: 12px 20px;
-  border-radius: 10px;
-  text-decoration: none;
+.cek-laporan-btn-success{
+background:#16a34a;
+color:white;
+padding:12px;
+border-radius:10px;
+text-decoration:none;
+display:block;
+text-align:center;
 }
 
 /* ================= HEADER DETAIL ================= */
-.cek-header-detail {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 25px;
+.cek-detail-header{
+border-bottom:1px solid #e5e7eb;
+padding-bottom:15px;
+margin-bottom:25px;
 }
 
-.cek-laporan-icon-small {
-  width: 55px;
+.cek-detail-title-wrap{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.cek-detail-icon{
+width:40px;
+}
+
+.cek-detail-title-wrap h4{
+margin:0;
+font-weight:700;
 }
 
 /* ================= GRID INFO ================= */
-.cek-grid {
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-  gap: 18px;
-  margin-bottom: 30px;
+.cek-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+margin-bottom:25px;
 }
 
-.cek-item {
-  background: #f8fafc;
-  padding: 15px;
-  border-radius: 10px;
+.cek-item{
+background:#f1f5f9;
+padding:12px 15px;
+border-radius:8px;
+text-align:left;
 }
 
-.cek-item label {
-  font-size: 13px;
-  color: #6b7280;
-  display: block;
+.cek-item label{
+font-size:12px;
+color:#64748b;
+display:block;
 }
 
-.cek-item span {
-  font-weight: 600;
+.cek-item span{
+font-weight:600;
+font-size:14px;
 }
 
 /* ================= SECTION ================= */
-.cek-section {
-  margin-bottom: 25px;
+.cek-section-box{
+background:#f8fafc;
+padding:18px;
+border-radius:10px;
+margin-bottom:18px;
 }
 
-.cek-section h5 {
-  font-weight: 700;
-  margin-bottom: 8px;
+.cek-section-box h5{
+font-weight:700;
+margin-bottom:8px;
 }
 
 /* ================= STATUS ================= */
-.cek-status-box {
-  text-align: center;
-  margin-top: 30px;
+.cek-status-wrapper{
+text-align:center;
+margin:25px 0;
 }
 
-.status-badge {
-  display: inline-block;
-  background: #e0f2fe;
-  color: #0369a1;
-  padding: 10px 25px;
-  border-radius: 30px;
-  font-weight: 600;
-  margin-top: 10px;
+.status-pill{
+display:inline-block;
+padding:8px 25px;
+border-radius:30px;
+background:#e0f2fe;
+color:#0369a1;
+font-weight:600;
+font-size:14px;
+margin-top:6px;
 }
 
 /* ================= CATATAN ================= */
-.cek-catatan {
-  background: #fff7ed;
-  padding: 20px;
-  border-radius: 12px;
-  margin-top: 25px;
+.cek-catatan-box{
+background:#fff7ed;
+border-left:4px solid #fb923c;
+padding:18px;
+border-radius:10px;
+margin-top:15px;
+}
+
+.cek-catatan-box h6{
+font-weight:700;
+margin-bottom:5px;
 }
 
 /* ================= ACTION ================= */
-.cek-action {
-  margin-top: 30px;
-  display: grid;
-  gap: 10px;
+.cek-action{
+margin-top:25px;
+display:grid;
+gap:10px;
 }
 
 /* ================= RESPONSIVE ================= */
-@media (max-width:768px){
-  .cek-grid {
-    grid-template-columns: 1fr;
-  }
+@media(max-width:768px){
+.cek-grid{
+grid-template-columns:1fr;
+}
 
-  .cek-laporan-card,
-  .cek-laporan-detail-card {
-    padding: 25px;
-  }
+.cek-laporan-card,
+.cek-laporan-detail-card{
+padding:25px;
+}
 }
 
 
