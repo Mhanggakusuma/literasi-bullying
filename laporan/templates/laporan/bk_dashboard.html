@@ -6,7 +6,7 @@
 <div class="bk-dashboard-page">
 <div class="bk-dashboard">
 
-<!-- HEADER -->
+<!-- ================= HEADER ================= -->
 <header class="dashboard-header">
   <div>
     <span class="bk-badge">Akses Khusus Guru BK</span>
@@ -16,7 +16,8 @@
   <a href="{% url 'bk_download_laporan' %}" class="btn-download">Download Laporan</a>
 </header>
 
-<!-- SUMMARY -->
+
+<!-- ================= SUMMARY ================= -->
 <section class="dashboard-cards">
   <div class="summary-card">
     <p>Total Laporan</p>
@@ -36,7 +37,8 @@
   </div>
 </section>
 
-<!-- FILTER -->
+
+<!-- ================= FILTER ================= -->
 <form method="get" class="filter-bar">
 
 <select name="jenis">
@@ -75,24 +77,26 @@
 
 <select name="bulan" id="filterBulan">
 <option value="">Pilih Bulan</option>
-<option value="1">Januari</option>
-<option value="2">Februari</option>
-<option value="3">Maret</option>
-<option value="4">April</option>
-<option value="5">Mei</option>
-<option value="6">Juni</option>
-<option value="7">Juli</option>
-<option value="8">Agustus</option>
-<option value="9">September</option>
-<option value="10">Oktober</option>
-<option value="11">November</option>
-<option value="12">Desember</option>
+<option value="1" {% if request.GET.bulan == "1" %}selected{% endif %}>Januari</option>
+<option value="2" {% if request.GET.bulan == "2" %}selected{% endif %}>Februari</option>
+<option value="3" {% if request.GET.bulan == "3" %}selected{% endif %}>Maret</option>
+<option value="4" {% if request.GET.bulan == "4" %}selected{% endif %}>April</option>
+<option value="5" {% if request.GET.bulan == "5" %}selected{% endif %}>Mei</option>
+<option value="6" {% if request.GET.bulan == "6" %}selected{% endif %}>Juni</option>
+<option value="7" {% if request.GET.bulan == "7" %}selected{% endif %}>Juli</option>
+<option value="8" {% if request.GET.bulan == "8" %}selected{% endif %}>Agustus</option>
+<option value="9" {% if request.GET.bulan == "9" %}selected{% endif %}>September</option>
+<option value="10" {% if request.GET.bulan == "10" %}selected{% endif %}>Oktober</option>
+<option value="11" {% if request.GET.bulan == "11" %}selected{% endif %}>November</option>
+<option value="12" {% if request.GET.bulan == "12" %}selected{% endif %}>Desember</option>
 </select>
 
 <select name="tahun" id="filterTahun">
 <option value="">Pilih Tahun</option>
 {% for t in daftar_tahun %}
-<option value="{{ t.year }}">{{ t.year }}</option>
+<option value="{{ t.year }}" {% if request.GET.tahun == t.year|stringformat:"s" %}selected{% endif %}>
+{{ t.year }}
+</option>
 {% endfor %}
 </select>
 
@@ -100,10 +104,11 @@
 
 </form>
 
-<!-- LAYOUT -->
+
+<!-- ================= LAYOUT ================= -->
 <div class="dashboard-layout">
 
-<!-- LEFT -->
+<!-- ========= LEFT LAPORAN ========= -->
 <div class="laporan-section">
 <div class="laporan-card">
 
@@ -143,27 +148,47 @@ Lihat Detail
 </div>
 </div>
 
-<!-- RIGHT -->
+
+<!-- ========= RIGHT CHART ========= -->
 <div class="chart-section">
 
+<!-- STATUS -->
 <div class="chart-card">
 <h4>Grafik Status Laporan</h4>
+<div class="status-chart-wrapper">
 <canvas id="statusChart"></canvas>
 </div>
+</div>
 
+<!-- JENIS -->
 <div class="chart-card">
 <h4>Grafik Jenis Bullying</h4>
 <canvas id="jenisChart"></canvas>
 </div>
 
+<!-- KELAS -->
 <div class="chart-card">
 <h4>Grafik Kelas Korban</h4>
 <canvas id="kelasChart"></canvas>
 </div>
 
+<!-- TREN -->
 <div class="chart-card">
 <h4>Grafik Tren Periode</h4>
 <canvas id="trenChart"></canvas>
+
+<div class="chart-info">
+{% if tren_detail %}
+{% for i in tren_detail %}
+<span class="info-badge">{{ i.label }} = {{ i.total }}</span>
+{% endfor %}
+{% else %}
+<span class="info-badge">Tidak ada data tren</span>
+{% endif %}
+
+<span class="info-total">Total : {{ total_laporan }} laporan</span>
+</div>
+
 </div>
 
 </div>
@@ -171,61 +196,19 @@ Lihat Detail
 </div>
 </div>
 
-<!-- CHART JS -->
+
+<!-- ================= CHART JS FINAL ================= -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 
-// ===== GRADASI MERAH (KELAS) =====
-function redGradient(data){
-const max=Math.max(...data);
-return data.map(v=>{
-let ratio=max===0?0:v/max;
-return `rgba(220,53,69,${0.3 + ratio*0.7})`;
-});
-}
-
-// ===== GRADASI KUNING KE MERAH (TREN) =====
-function redYellowGradient(data){
-const max=Math.max(...data);
-return data.map(v=>{
-let ratio=max===0?0:v/max;
-let g=Math.round(220 - ratio*180);
-return `rgb(255,${g},0)`;
-});
-}
-
-// ===== STATUS COLOR =====
-function statusColor(labels){
-return labels.map(l=>{
-if(l==="baru") return "#dc3545";
-if(l==="diproses") return "#0d6efd";
-if(l==="selesai") return "#198754";
-return "#6c757d";
-});
-}
-
-// ===== JENIS COLOR =====
-function jenisColor(labels){
-return labels.map(l=>{
-l=l.toLowerCase();
-if(l.includes("fisik")) return "#dc3545";
-if(l.includes("verbal")) return "#fd7e14";
-if(l.includes("sosial")) return "#6f42c1";
-if(l.includes("cyber")) return "#0d6efd";
-return "#6c757d";
-});
-}
-
-// ===== CHART UNIVERSAL =====
 function chart(id,type,labels,data,labelName){
 
-let colors=[];
-
-if(id==="statusChart") colors=statusColor(labels);
-else if(id==="jenisChart") colors=jenisColor(labels);
-else if(id==="kelasChart") colors=redGradient(data);
-else if(id==="trenChart") colors=redYellowGradient(data);
+const colors=[
+"#0d6efd","#198754","#ffc107","#dc3545",
+"#6f42c1","#fd7e14","#20c997","#0dcaf0",
+"#6610f2","#adb5bd"
+];
 
 new Chart(document.getElementById(id),{
 type:type,
@@ -250,25 +233,32 @@ y:{beginAtZero:true,ticks:{stepSize:1}}
 
 }
 
-// LOAD CHART
+
+/* STATUS */
 chart("statusChart","pie",
 [{% for i in grafik_status %}"{{ i.status }}",{% endfor %}],
 [{% for i in grafik_status %}{{ i.total }},{% endfor %}],
 "Status Laporan"
 );
 
+
+/* JENIS */
 chart("jenisChart","bar",
 [{% for i in grafik_jenis %}"{{ i.jenis_bullying }}",{% endfor %}],
 [{% for i in grafik_jenis %}{{ i.total }},{% endfor %}],
 "Jenis Bullying"
 );
 
+
+/* KELAS */
 chart("kelasChart","bar",
 [{% for i in grafik_kelas %}"{{ i.kelas_korban }}",{% endfor %}],
 [{% for i in grafik_kelas %}{{ i.total }},{% endfor %}],
 "Kelas Korban"
 );
 
+
+/* TREN */
 chart("trenChart","bar",
 [{% for i in grafik_tren %}"{{ i.label }}",{% endfor %}],
 [{% for i in grafik_tren %}{{ i.total }},{% endfor %}],
@@ -277,6 +267,8 @@ chart("trenChart","bar",
 
 </script>
 
+
+<!-- ================= FILTER DINAMIS ================= -->
 <script>
 const periode=document.getElementById("periodeSelect");
 const tanggal=document.getElementById("filterTanggal");
