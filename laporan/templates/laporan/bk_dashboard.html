@@ -192,15 +192,38 @@
 </div>
 </div>
 
-
-<!-- ================= CHART JS ================= -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+
+/* ================= GRADIENT FUNCTION ================= */
+
+function gradientRed(data){
+const max=Math.max(...data);
+return data.map(v=>{
+let ratio=v/max;
+return `rgba(${Math.round(255*ratio)},0,0,0.8)`;
+});
+}
+
+function gradientTrend(data){
+const max=Math.max(...data);
+return data.map(v=>{
+let ratio=v/max;
+let r=Math.round(255*ratio);
+let g=Math.round(200*(1-ratio));
+return `rgba(${r},${g},0,0.8)`;
+});
+}
+
+
+/* ================= CHART FUNCTION ================= */
+
 function chart(id,type,labels,data){
 
 let colors=[];
 
+/* STATUS */
 if(id==="statusChart"){
 colors=labels.map(l=>{
 if(l==="baru") return "#dc3545";
@@ -209,23 +232,38 @@ if(l==="selesai") return "#198754";
 });
 }
 
+/* JENIS */
 else if(id==="jenisChart"){
 colors=labels.map(l=>{
 l=l.toLowerCase();
 if(l.includes("fisik")) return "#dc3545";
 if(l.includes("verbal")) return "#fd7e14";
 if(l.includes("sosial")) return "#6f42c1";
+if(l.includes("cyber")) return "#0d6efd";
 return "#6c757d";
 });
 }
 
-else{
-colors=data.map(()=>"#0d6efd");
+/* KELAS (Gradient Merah) */
+else if(id==="kelasChart"){
+colors=gradientRed(data);
 }
+
+/* TREN (Gradient Dinamis) */
+else if(id==="trenChart"){
+colors=gradientTrend(data);
+}
+
 
 new Chart(document.getElementById(id),{
 type:type,
-data:{labels:labels,datasets:[{data:data,backgroundColor:colors}]},
+data:{
+labels:labels,
+datasets:[{
+data:data,
+backgroundColor:colors
+}]
+},
 options:{
 responsive:true,
 maintainAspectRatio:false,
@@ -233,6 +271,9 @@ scales:type!=="pie"?{y:{beginAtZero:true}}:{}
 }
 });
 }
+
+
+/* ================= RENDER CHART ================= */
 
 /* STATUS */
 chart("statusChart","pie",
@@ -257,31 +298,5 @@ chart("trenChart","bar",
 [{% for i in grafik_tren %}"{{ i.label }}",{% endfor %}],
 [{% for i in grafik_tren %}{{ i.total }},{% endfor %}]
 );
+
 </script>
-
-
-<!-- ================= FILTER DINAMIS ================= -->
-<script>
-const periode=document.getElementById("periodeSelect");
-const tanggal=document.getElementById("filterTanggal");
-const bulan=document.getElementById("filterBulan");
-const tahun=document.getElementById("filterTahun");
-
-function updateFilter(){
-tanggal.style.display='none';
-bulan.style.display='none';
-tahun.style.display='none';
-
-if(periode.value==='hari') tanggal.style.display='inline-block';
-if(periode.value==='bulan'){
-bulan.style.display='inline-block';
-tahun.style.display='inline-block';
-}
-if(periode.value==='tahun') tahun.style.display='inline-block';
-}
-
-periode.addEventListener('change',updateFilter);
-updateFilter();
-</script>
-
-{% endblock %}
