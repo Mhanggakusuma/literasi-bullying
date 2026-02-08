@@ -5,25 +5,30 @@
 {% block content %}
 <section class="bk-tindak-lanjut">
 <div class="bk-tl-hero">
+
 <div class="container text-center">
 
 <h1 class="bk-tl-title">Tindak Lanjut Kasus Bullying</h1>
 <p class="bk-tl-subtitle">
-Jaga kerahasiaan data demi keamanan semua pihak
+Jaga kerahasiaan data demi keamanan dan kenyamanan semua pihak
 </p>
 
 <div class="bk-tl-card mx-auto mt-5">
+
 <img src="{% static 'img/ribbon.png' %}" class="bk-tl-icon">
 
-<div class="bk-tl-info text-start">
+<div class="bk-tl-info">
 
-<!-- ================= INFORMASI LAPORAN ================= -->
-<h2 class="bk-section-title">📄 Informasi Laporan</h2>
+<!-- ================= DATA UMUM ================= -->
+<div class="bk-section">
+<h5>📄 Informasi Laporan</h5>
 
-<div class="bk-info-grid">
-<div><label>Kode Laporan</label><span>{{ laporan.kode_laporan }}</span></div>
+<div class="bk-grid">
+<div>Kode Laporan</div>
+<div>{{ laporan.kode_laporan }}</div>
+
+<div>Status</div>
 <div>
-<label>Status</label>
 <span class="badge
 {% if laporan.status == 'selesai' %}bg-success
 {% elif laporan.status == 'diproses' %}bg-warning
@@ -31,129 +36,109 @@ Jaga kerahasiaan data demi keamanan semua pihak
 {{ laporan.get_status_display }}
 </span>
 </div>
-<div><label>Tanggal Lapor</label>
-<span>{{ laporan.tanggal|date:"d M Y" }}</span>
+
+<div>Tanggal Lapor</div>
+<div>{{ laporan.tanggal|date:"d M Y" }}</div>
 </div>
 </div>
 
 
-<!-- ================= WAKTU & LOKASI ================= -->
-<h2 class="bk-section-title">📍 Waktu & Lokasi</h2>
+<!-- ================= WAKTU ================= -->
+<div class="bk-section">
+<h5>🕒 Waktu & Lokasi</h5>
 
-<div class="bk-info-grid">
+<div class="bk-grid">
+<div>Waktu Kejadian</div>
 <div>
-<label>Waktu Kejadian</label>
-<span>
 {{ laporan.tanggal_kejadian|date:"d M Y" }}
 {% if laporan.perkiraan_waktu %}
 ({{ laporan.get_perkiraan_waktu_display }})
 {% endif %}
-</span>
 </div>
 
-<div>
-<label>Lokasi</label>
-<span>{{ laporan.lokasi_kejadian|default:"-" }}</span>
+<div>Lokasi</div>
+<div>{{ laporan.lokasi_kejadian|default:"-" }}</div>
 </div>
 </div>
 
 
-<!-- ================= DATA PIHAK TERLIBAT ================= -->
-<h2 class="bk-section-title">👥 Pihak Terlibat</h2>
+<!-- ================= PIHAK TERLIBAT ================= -->
+<div class="bk-section">
+<h5>👥 Pihak Terlibat</h5>
 
-<div class="bk-info-grid">
-<div>
-<label>Korban</label>
-<span>{{ laporan.tampilkan_korban }} ({{ laporan.kelas_korban }})</span>
-</div>
+<div class="bk-grid">
+<div>Korban</div>
+<div>{{ laporan.tampilkan_korban }} ({{ laporan.kelas_korban }})</div>
 
 {% if laporan.nama_terlapor %}
-<div>
-<label>Terlapor</label>
-<span>
-{{ laporan.nama_terlapor }}
-{% if laporan.kelas_terlapor %} ({{ laporan.kelas_terlapor }}) {% endif %}
-</span>
-</div>
+<div>Terlapor</div>
+<div>{{ laporan.nama_terlapor }} ({{ laporan.kelas_terlapor }})</div>
 {% endif %}
 
-<div>
-<label>Jenis Bullying</label>
-<span>{{ laporan.get_jenis_bullying_display }}</span>
+<div>Jenis Bullying</div>
+<div>{{ laporan.get_jenis_bullying_display }}</div>
 </div>
 </div>
-
-
-<!-- INTERNAL KORBAN -->
-{% if laporan.is_korban_anonim %}
-<details class="bk-detail">
-<summary>🔐 Identitas Korban (Internal BK)</summary>
-<div class="bk-detail-box">
-<p><strong>Nama :</strong> {{ laporan.nama_korban }}</p>
-<p><strong>Kelas :</strong> {{ laporan.kelas_korban }}</p>
-</div>
-</details>
-{% endif %}
 
 
 <!-- ================= KRONOLOGI ================= -->
-<h2 class="bk-section-title">📝 Kronologi Kejadian</h2>
-<div class="bk-text-box">
+<div class="bk-section">
+<h5>📝 Kronologi Kejadian</h5>
+
+<div class="bk-textbox">
 {{ laporan.isi_laporan|linebreaksbr }}
+</div>
 </div>
 
 
 <!-- ================= DAMPAK ================= -->
 {% if laporan.dampak_korban %}
-<h2 class="bk-section-title">⚠ Dampak Korban</h2>
+<div class="bk-section">
+<h5>⚠️ Dampak Korban</h5>
+
 <ul class="bk-list">
 {% for d in laporan.dampak_korban %}
 <li>{{ d }}</li>
 {% endfor %}
 </ul>
+
+{% if laporan.dampak_lainnya %}
+<p class="mt-2"><strong>Lainnya:</strong> {{ laporan.dampak_lainnya }}</p>
+{% endif %}
+</div>
 {% endif %}
 
 
+<!-- ================= HARAPAN ================= -->
 {% if laporan.harapan_pelapor %}
-<h2 class="bk-section-title">💬 Harapan Pelapor</h2>
-<div class="bk-text-box">
+<div class="bk-section">
+<h5>💬 Harapan Pelapor</h5>
+
+<div class="bk-textbox">
 {{ laporan.harapan_pelapor|linebreaksbr }}
+</div>
 </div>
 {% endif %}
 
 
 <!-- ================= BUKTI ================= -->
 {% if laporan.bukti %}
-<a href="{{ laporan.bukti.url }}" target="_blank"
-class="bk-tl-btn-success w-100 my-4">
+<a href="{{ laporan.bukti.url }}"
+target="_blank"
+class="bk-tl-btn-success w-100 mb-4">
 📎 Lihat Bukti Pelapor
 </a>
 {% endif %}
 
 
-<!-- ================= IDENTITAS INTERNAL ================= -->
-<details class="bk-detail">
-<summary>🔐 Identitas Pelapor (Internal BK)</summary>
-<div class="bk-detail-box">
-<p><strong>Nama :</strong>
-{{ laporan.pelapor.get_full_name|default:laporan.pelapor.username }}</p>
-
-<p><strong>NIS :</strong>
-{{ laporan.pelapor.profile.nis }}</p>
-
-<p><strong>Kelas :</strong>
-{{ laporan.pelapor.profile.kelas }}</p>
-</div>
-</details>
-
-
 <!-- ================= FORM BK ================= -->
-<h2 class="bk-section-title">📌 Form Tindak Lanjut BK</h2>
+<div class="bk-section">
+<h5>✍️ Catatan Guru BK</h5>
 
 <form method="post" enctype="multipart/form-data">
 {% csrf_token %}
 
-<label class="bk-tl-label">Catatan Guru BK</label>
+<label class="bk-tl-label">Catatan BK</label>
 {{ form.catatan_bk }}
 
 <label class="bk-tl-label mt-3">Bukti Tindak Lanjut</label>
@@ -164,12 +149,16 @@ Simpan Tindak Lanjut
 </button>
 
 {% if laporan.status != "selesai" %}
-<button type="submit" name="selesai" value="1"
+<button type="submit"
+name="selesai"
+value="1"
 class="btn btn-success w-100 mt-2">
 Tandai Selesai
 </button>
 {% endif %}
 </form>
+</div>
+
 
 <a href="{% url 'bk_dashboard' %}"
 class="btn btn-outline-secondary w-100 mt-3">
