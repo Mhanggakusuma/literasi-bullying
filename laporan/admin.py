@@ -12,7 +12,7 @@ class LaporanAdmin(admin.ModelAdmin):
     list_display = (
         "kode_laporan",
         "get_pelapor_admin",
-        "nama_korban",
+        "get_korban_admin",   # ⭐ GANTI disini
         "kelas_korban",
         "jenis_bullying",
         "status",
@@ -21,15 +21,33 @@ class LaporanAdmin(admin.ModelAdmin):
 
     list_filter = ("status", "jenis_bullying", "kelas_korban")
 
+    # ================= SIMPAN REQUEST =================
+    def get_queryset(self, request):
+        self.request = request
+        return super().get_queryset(request)
+
+    # ================= PELAPOR =================
+    @admin.display(description="Pelapor")
+    def get_pelapor_admin(self, obj):
+        return obj.tampilkan_pelapor(self.request.user)
+
+    # ================= KORBAN =================
+    @admin.display(description="Korban")
+    def get_korban_admin(self, obj):
+        return obj.tampilkan_korban(self.request.user)
+
     # ================= URL DASHBOARD =================
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path("dashboard/",
-                 self.admin_site.admin_view(self.dashboard_view),
-                 name="laporan_dashboard"),
+            path(
+                "dashboard/",
+                self.admin_site.admin_view(self.dashboard_view),
+                name="laporan_dashboard"
+            ),
         ]
         return custom_urls + urls
+
 
     # ================= DASHBOARD VIEW =================
     def dashboard_view(self, request):

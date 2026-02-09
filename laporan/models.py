@@ -197,12 +197,17 @@ class Laporan(models.Model):
     # =================================================
     def tampilkan_korban(self, user=None):
 
+        # Jika korban anonim
         if self.is_korban_anonim:
+
+            # HANYA Guru BK yang boleh melihat asli
             if user and user.groups.filter(name="gurubk").exists():
                 return self.nama_korban
+
             return "Anonim 🔒"
 
         return self.nama_korban
+
 
     # =================================================
     # REPRESENTASI STRING MODEL
