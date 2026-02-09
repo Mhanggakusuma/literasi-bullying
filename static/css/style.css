@@ -1528,32 +1528,35 @@ padding:25px;
 
 
 /* ===================================================== */
-/* ================= FILTER PREMIUM STYLE =============== */
+/* ================= FILTER STYLE MODERN ================= */
 /* ===================================================== */
 
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  background: #f1f3f5;
-  padding: 16px 20px;
-  border-radius: 18px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  background: #e9ecef;
+  padding: 14px;
+  border-radius: 16px;
   align-items: center;
 }
 
-/* dropdown + input */
+/* dropdown + date */
 .filter-bar select,
 .filter-bar input {
-  padding: 10px 18px;
-  border-radius: 14px;
-  border: 1px solid #dcdcdc;
-  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid #ced4da;
   background: #f8f9fa;
-  min-width: 150px;
+  font-weight: 500;
+  min-width: 160px;
   transition: 0.25s;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* icon date agar sejajar */
+.filter-bar input[type="date"] {
+  padding-right: 12px;
 }
 
 /* hover */
@@ -1568,31 +1571,40 @@ padding:25px;
 .filter-bar input:focus {
   outline: none;
   border-color: #0d6efd;
-  background: #ffffff;
-  box-shadow: 0 0 6px rgba(13,110,253,0.3);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
 }
 
 /* tombol filter */
 .filter-bar button {
-  background: #0d6efd;
-  color: white;
-  border: none;
-  padding: 10px 26px;
-  border-radius: 14px;
-  font-weight: 700;
+  background: white;
+  border: 2px solid #212529;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.25s;
+  transition: 0.2s;
 }
 
+/* hover tombol */
 .filter-bar button:hover {
-  background: #0b5ed7;
-  transform: translateY(-1px);
+  background: #212529;
+  color: white;
 }
 
-.filter-bar button:active {
-  transform: scale(0.96);
-}
+/* responsive */
+@media(max-width:768px){
+  .filter-bar{
+    flex-direction: column;
+    align-items: stretch;
+  }
 
+  .filter-bar select,
+  .filter-bar input,
+  .filter-bar button{
+    width: 100%;
+  }
+}
 
 /* ===================================================== */
 /* ================= DASHBOARD LAYOUT =================== */
