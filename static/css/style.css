@@ -1526,22 +1526,28 @@ padding:25px;
   color: #0d6efd;
 }
 
-
 /* ===================================================== */
-/* ================= FILTER STYLE MODERN ================= */
+/* ================= FILTER TOOLBAR STYLE =============== */
 /* ===================================================== */
 
 .filter-bar {
   display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
+  flex-wrap: nowrap; /* ⭐ supaya tidak turun */
+  gap: 12px;
   background: #e9ecef;
   padding: 14px;
-  border-radius: 16px;
+  border-radius: 18px;
   align-items: center;
+  overflow-x: auto; /* ⭐ jika layar kecil bisa scroll */
 }
 
-/* dropdown + date */
+/* supaya semua elemen tidak full width */
+.filter-bar > * {
+  flex: 0 0 auto;
+}
+
+
+/* dropdown + input */
 .filter-bar select,
 .filter-bar input {
   padding: 10px 16px;
@@ -1549,15 +1555,12 @@ padding:25px;
   border: 1px solid #ced4da;
   background: #f8f9fa;
   font-weight: 500;
-  min-width: 160px;
+  min-width: 170px;
   transition: 0.25s;
   cursor: pointer;
+  width: auto !important; /* ⭐ override bootstrap */
 }
 
-/* icon date agar sejajar */
-.filter-bar input[type="date"] {
-  padding-right: 12px;
-}
 
 /* hover */
 .filter-bar select:hover,
@@ -1565,6 +1568,7 @@ padding:25px;
   border-color: #0d6efd;
   background: #ffffff;
 }
+
 
 /* focus */
 .filter-bar select:focus,
@@ -1575,35 +1579,22 @@ padding:25px;
   box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
 }
 
+
 /* tombol filter */
 .filter-bar button {
   background: white;
   border: 2px solid #212529;
   padding: 10px 20px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
+  white-space: nowrap;
 }
 
-/* hover tombol */
 .filter-bar button:hover {
   background: #212529;
   color: white;
-}
-
-/* responsive */
-@media(max-width:768px){
-  .filter-bar{
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .filter-bar select,
-  .filter-bar input,
-  .filter-bar button{
-    width: 100%;
-  }
 }
 
 /* ===================================================== */
