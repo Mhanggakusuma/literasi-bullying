@@ -107,3 +107,50 @@ font-weight:600;
 .chart-grid{grid-template-columns:1fr;}
 .filter-bar{flex-direction:column;}
 }
+
+
+/* ================= OBJECT TOOLS BUTTON ================= */
+
+.object-tools{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+/* tombol dashboard */
+.dashboard-btn{
+background: linear-gradient(135deg,#0d6efd,#0b5ed7);
+color:white !important;
+padding:8px 16px;
+border-radius:8px;
+font-weight:600;
+display:inline-flex;
+align-items:center;
+gap:6px;
+transition:all 0.3s ease;
+box-shadow:0 2px 6px rgba(13,110,253,0.3);
+}
+
+/* hover effect */
+.dashboard-btn:hover{
+background: linear-gradient(135deg,#0b5ed7,#084298);
+transform: translateY(-2px);
+box-shadow:0 4px 10px rgba(13,110,253,0.4);
+}
+
+/* klik effect */
+.dashboard-btn:active{
+transform:scale(0.97);
+box-shadow:0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* responsive */
+@media(max-width:768px){
+.object-tools{
+flex-wrap:wrap;
+}
+.dashboard-btn{
+width:100%;
+justify-content:center;
+}
+}
