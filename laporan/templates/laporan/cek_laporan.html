@@ -12,7 +12,7 @@
 Kerahasiaan identitas dijaga untuk keamanan semua pihak
 </p>
 
-<!-- ================= INPUT KODE ================= -->
+<!-- ================= INPUT ================= -->
 <div class="cek-laporan-card cek-card-small mx-auto mt-5">
 
 <img src="{% static 'img/shield.png' %}" class="cek-laporan-icon-small">
@@ -40,12 +40,10 @@ required>
 <!-- ================= DETAIL LAPORAN ================= -->
 <div class="cek-laporan-detail-card mx-auto mt-5">
 
-<!-- HEADER -->
-<div class="cek-detail-header">
-<div class="cek-detail-title-wrap">
-<img src="{% static 'img/ribbon.png' %}" class="cek-detail-icon">
+<!-- HEADER TENGAH -->
+<div class="cek-detail-header-center">
+<img src="{% static 'img/ribbon.png' %}" class="cek-detail-icon-center">
 <h4>Detail Laporan</h4>
-</div>
 </div>
 
 <!-- GRID INFORMASI -->
@@ -95,51 +93,58 @@ required>
 
 </div>
 
+<!-- ================= GRID SECTION ================= -->
+<div class="cek-grid-section">
+
 <!-- KRONOLOGI -->
-<div class="cek-section-box">
-<h5>Kronologi Kejadian</h5>
+<div class="cek-item-box">
+<h5>Kronologi</h5>
 <p>{{ laporan.isi_laporan|linebreaksbr }}</p>
 </div>
 
 <!-- DAMPAK -->
+<div class="cek-item-box">
+<h5>Dampak</h5>
+
 {% if laporan.dampak_korban %}
-<div class="cek-section-box">
-<h5>Dampak Korban</h5>
 <ul>
 {% for d in laporan.dampak_korban %}
 <li>{{ d }}</li>
 {% endfor %}
 </ul>
-</div>
+{% else %}
+<p>-</p>
 {% endif %}
+</div>
 
 <!-- HARAPAN -->
-{% if laporan.harapan_pelapor %}
-<div class="cek-section-box">
+<div class="cek-item-box">
 <h5>Harapan Pelapor</h5>
-<p>{{ laporan.harapan_pelapor|linebreaksbr }}</p>
+<p>{{ laporan.harapan_pelapor|default:"-"|linebreaksbr }}</p>
 </div>
-{% endif %}
 
 <!-- STATUS -->
-<div class="cek-status-wrapper">
-<span>Status Laporan</span>
+<div class="cek-item-box text-center">
+<h5>Status Laporan</h5>
 
 <div class="status-pill">
 {{ laporan.get_status_display }}
 </div>
+
+</div>
+
 </div>
 
 <!-- CATATAN BK -->
 {% if laporan.catatan_bk %}
-<div class="cek-catatan-box">
+<div class="cek-catatan-box mt-4">
 <h6>Catatan Guru BK</h6>
 <p>{{ laporan.catatan_bk|linebreaksbr }}</p>
 </div>
 {% endif %}
 
 <!-- BUTTON -->
-<div class="cek-action">
+<div class="cek-action mt-4">
 
 {% if laporan.bukti_tindak_lanjut %}
 <a href="{{ laporan.bukti_tindak_lanjut.url }}"

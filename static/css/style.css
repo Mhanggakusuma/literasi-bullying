@@ -1235,7 +1235,6 @@ box-shadow:0 15px 35px rgba(0,0,0,0.25);
 color:black;
 }
 
-/* Input card kecil */
 .cek-card-small{
 max-width:520px;
 padding:28px 32px;
@@ -1247,11 +1246,19 @@ width:70px;
 margin-bottom:10px;
 }
 
-/* ================= TITLE ================= */
-.cek-laporan-card-title{
-font-size:22px;
-font-weight:600;
-margin-bottom:15px;
+.cek-detail-icon-center{
+width:55px;
+margin-bottom:8px;
+}
+
+/* ================= HEADER CENTER ================= */
+.cek-detail-header-center{
+text-align:center;
+margin-bottom:25px;
+}
+
+.cek-detail-header-center h4{
+font-weight:700;
 }
 
 /* ================= INPUT ================= */
@@ -1285,28 +1292,6 @@ display:block;
 text-align:center;
 }
 
-/* ================= HEADER DETAIL ================= */
-.cek-detail-header{
-border-bottom:1px solid #e5e7eb;
-padding-bottom:15px;
-margin-bottom:25px;
-}
-
-.cek-detail-title-wrap{
-display:flex;
-align-items:center;
-gap:12px;
-}
-
-.cek-detail-icon{
-width:40px;
-}
-
-.cek-detail-title-wrap h4{
-margin:0;
-font-weight:700;
-}
-
 /* ================= GRID INFO ================= */
 .cek-grid{
 display:grid;
@@ -1333,34 +1318,42 @@ font-weight:600;
 font-size:14px;
 }
 
-/* ================= SECTION ================= */
-.cek-section-box{
+/* ================= GRID SECTION ================= */
+.cek-grid-section{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:18px;
+margin-top:20px;
+}
+
+/* ================= BOX SECTION ================= */
+.cek-item-box{
 background:#f8fafc;
 padding:18px;
 border-radius:10px;
-margin-bottom:18px;
+text-align:center;
 }
 
-.cek-section-box h5{
+.cek-item-box h5{
 font-weight:700;
 margin-bottom:8px;
 }
 
-/* ================= STATUS ================= */
-.cek-status-wrapper{
-text-align:center;
-margin:25px 0;
+.cek-item-box p{
+font-size:14px;
+margin:0;
 }
 
+/* ================= STATUS ================= */
 .status-pill{
 display:inline-block;
-padding:8px 25px;
-border-radius:30px;
+padding:8px 22px;
+border-radius:25px;
 background:#e0f2fe;
 color:#0369a1;
 font-weight:600;
 font-size:14px;
-margin-top:6px;
+margin-top:5px;
 }
 
 /* ================= CATATAN ================= */
@@ -1386,7 +1379,9 @@ gap:10px;
 
 /* ================= RESPONSIVE ================= */
 @media(max-width:768px){
-.cek-grid{
+
+.cek-grid,
+.cek-grid-section{
 grid-template-columns:1fr;
 }
 
@@ -1394,6 +1389,7 @@ grid-template-columns:1fr;
 .cek-laporan-detail-card{
 padding:25px;
 }
+
 }
 
 
